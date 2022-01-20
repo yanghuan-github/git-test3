@@ -19,10 +19,10 @@ trait Search
     protected $type;
     // 特殊方法类型
     protected $specifySearchFun = [
-        'status',
+        'statusView','pjView','environView'
     ];
     // 表单数据
-    protected $search;
+    protected $search = [];
 
 
 
@@ -50,8 +50,6 @@ trait Search
                 $this->search[] = $val;
             }
         }
-        if ($this->search) {
-            $this->assign('search',$this->search);
-        }
+        $this->assign('search',$this->search);
     }
 }

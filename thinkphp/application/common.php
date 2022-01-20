@@ -209,9 +209,15 @@ function KV($name,$refresh = false)
  * @author 1305964327@qq.com
  * @date 2022-01-19
  */
-function pageToLimit($page=1,$pageSize=20)
+function pageToLimit($page = 1,$limit = 20)
 {
-    return ($page-1)*$pageSize.','.$pageSize;
+    $page       = input('page',1,'int');
+    $limit      = input('limit',20,'int');
+    if ($limit == -1) {
+        // 取全部条数
+        return false;
+    }
+    return ($page-1)*$limit.','.$limit;
 }
 
 /**

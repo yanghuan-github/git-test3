@@ -14,14 +14,14 @@ class User extends BaseController
     {
         $this->search([
             ['input','realName','realName','真实姓名','支持模糊查询'],
-            ['status',[0=>'全部',3=>'软删除'],true]
+            ['statusView',[0=>'全部',3=>'软删除'],true]
         ]);
         return view('userList');
     }
 
     /**
      * 用户列表数据
-     * @return array
+     * @return json
      * @author yanghuan
      * @author 1305964327@qq.com
      * @date 2022-01-19
@@ -30,10 +30,8 @@ class User extends BaseController
     {
         $realName   = input('realName','','string');
         $status     = input('status',0,'int');
-        $page       = input('page',1,'int');
-        $limit      = input('limit',10,'int');
-        $pageLimit = pageToLimit($page,$limit);
-        return model('User','logic')->userListData($realName,$status,$pageLimit);
+        $pageLimit  = pageToLimit();
+        return json(model('User','logic')->userListData($realName,$status,$pageLimit));
     }
 
     /**
@@ -67,8 +65,8 @@ class User extends BaseController
         $this->form([
             ['input','realName','realName','真实姓名','真实姓名',$userInfo['real_name']],
             $nameInput,
-            ['password',$id,$userInfo['login_pwd']],
-            ['status','软删除',$userInfo['status']]
+            ['passwordView',$id,$userInfo['login_pwd']],
+            ['statusView','软删除',$userInfo['status']]
         ]);
         return view('userEdit');
     }
@@ -87,7 +85,7 @@ class User extends BaseController
         $status     = input('status',2,'int');
 
         // 编辑
-        return model('User','logic')->userEditSave($adminId,$realName,$status);
+        return json(model('User','logic')->userEditSave($adminId,$realName,$status));
        
     }
 
@@ -107,6 +105,6 @@ class User extends BaseController
         $status     = input('status',2,'int');
 
         // 新增
-        return model('User','logic')->userAddSave($realName,$loginName,$password,$confirmPwd,$status);
+        return json(model('User','logic')->userAddSave($realName,$loginName,$password,$confirmPwd,$status));
     }
 }

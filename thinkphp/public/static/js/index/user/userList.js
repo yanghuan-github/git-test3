@@ -121,29 +121,6 @@ layui.use(['form', 'table'], function () {
         })
     }
 
-
-    /**
-     * 状态类型
-     * @param {*} status 状态
-     * @returns 
-     */
-    function statusFun(status)
-    {
-        switch (status) {
-            case 1:
-                return statusJson[status];
-            break;
-            case 2:
-                return `<span style='color:red;'>`+statusJson[status]+`</span>`;
-            break;
-            case 3:
-                return `<span style='color:green;'>`+statusJson[status]+`</span>`;
-            break;
-            default:
-                return '-';
-            break;
-        }
-    }
 })
 
 function add() {

@@ -48,4 +48,16 @@ class Role extends BaseLogic
         }
         return model('AdminRole')->getDetail($field,$where,$order);
     }
+
+    /**
+     * 获取角色组id,name值
+     * @return array
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-20
+     */
+    public function getRoleIdName()
+    {
+        return model('AdminRole')->getColumn([],'role_id,role_name');
+    }
 }
