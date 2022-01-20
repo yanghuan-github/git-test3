@@ -31,9 +31,9 @@ class Index extends BaseController
     }
 
     
-    public function test()
+    public function test2()
     {
-        echo '这是测试页面';
+        echo '这是测试2页面';
     }
 
     /**

@@ -56,7 +56,11 @@ class User extends BaseLogic
         }
         $field  = 'admin_id,login_name,real_name,status,create_time,update_time,laston_ip,laston_time';
         $model = model('AdminUser');
-        $data   = $model->field($field)->where($where)->page($pageLimit)->select();
+        $model   = $model->field($field)->where($where);
+        if ($pageLimit) {
+            $model = $model->limit($pageLimit);
+        }
+        $data = $model->select();
         $count  = $model->count();
         return  ['code' => 0, 'msg' => '','count' => $count,'data' => $data];
     }

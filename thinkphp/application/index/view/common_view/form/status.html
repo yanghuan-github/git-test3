@@ -2,7 +2,7 @@
     <label class="layui-form-label">状态：</label>
     <div class="layui-input-block">
         <select name="status" id="status" lay-search="">
-            {foreach $status as $key => $val}
+            {foreach $statusView as $key => $val}
                 <option value="{$key}" {if condition="$key eq $value" }selected{/if} >{$val}</option>
             {/foreach}
         </select>

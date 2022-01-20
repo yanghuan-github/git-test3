@@ -25,7 +25,8 @@ class BaseController extends Controller
     protected $nodeUrl;     //  用户菜单权限url
 
     // 基本配置
-    protected $userDbType;
+    protected $environId;
+    protected $pjId;
 
 
     // 常用工具类
@@ -59,10 +60,12 @@ class BaseController extends Controller
         $this->userInfo = $userData['user_info'];
         $this->roleInfo = $userData['role_info'];
         $this->userMenu = $userData['user_menu'];
-        $this->nodeUrl  = array_unique(array_column($this->userMenu, 'data'));;
+        $this->nodeUrl  = array_filter(array_unique(array_column($this->userMenu, 'data')));
         unset($userData);
+
         // 设置基本配置
-        $this->userDbType = C('user_db_type');
+        $this->environId = C('environ_id');
+        $this->pjId = C('pj_id');
 
         // 检查访问权限 超级管理员跳过
         // if (!$this->isRoot) {
@@ -70,8 +73,14 @@ class BaseController extends Controller
             $url = '/'.$request->module().'/'.$request->controller().'/'.$request->action(true).'.html';
             if (!in_array($url,$this->nodeUrl)) {
                 if (!in_array($url,$this->urlWhileList)) {
-                    pp($url,false);
-                    pp($this->nodeUrl,false);
+                    $data = [
+                        'msg'   =>  '无权访问',
+                        'data'  =>  [
+                            'url'       =>  $url,
+                            'nodeUrl'   =>  $this->nodeUrl,
+                        ]
+                    ];
+                    logs(__FUNCTION__,json_encode($data));
                     exit('无权访问!');
                 }
             }

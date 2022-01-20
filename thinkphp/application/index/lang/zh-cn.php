@@ -20,4 +20,13 @@ return [
     'userEdit'      =>  [
         
     ],
+
+    'menuList'      =>  [
+        'title'             =>  '菜单列表',
+        'addTitle'          =>  '菜单新增页面',
+        'editTitle'         =>  '菜单编辑页面',
+    ],
+    'menuAdd'       =>  [
+        'title'             =>  '菜单新增页面',
+    ],
 ];

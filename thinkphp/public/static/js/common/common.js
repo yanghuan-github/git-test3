@@ -47,3 +47,27 @@ function timeFun(time)
         return '-';
     }
 }
+
+
+/**
+ * 状态类型
+ * @param {*} status 状态
+ * @returns 
+ */
+function statusFun(status)
+{
+    switch (status) {
+        case 1:
+            return statusViewJson[status];
+        break;
+        case 2:
+            return `<span style='color:red;'>`+statusViewJson[status]+`</span>`;
+        break;
+        case 3:
+            return `<span style='color:green;'>`+statusViewJson[status]+`</span>`;
+        break;
+        default:
+            return '-';
+        break;
+    }
+}

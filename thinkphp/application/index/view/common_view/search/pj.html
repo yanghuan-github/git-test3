@@ -1,13 +1,12 @@
 <div class="layui-inline" style="margin-top:0.5%;margin-bottom: 0.5%;">
     <div class="layui-input-inline layui-form">
-        <label class="layui-form-label">状态：</label>
+        <label class="layui-form-label">项目：</label>
         <div class="layui-input-block">
-            <select name="status" id="status" lay-search="">
-                {foreach $statusView as $key => $val}
+            <select name="pjId" id="pjId" lay-search="">
+                {foreach $pjView as $key => $val}
                     <option value="{$key}" {if condition="$key eq $value" }selected{/if} >{$val}</option>
                 {/foreach}
             </select>
         </div>
     </div>
 </div>
-

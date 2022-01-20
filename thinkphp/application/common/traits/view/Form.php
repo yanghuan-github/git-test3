@@ -18,10 +18,10 @@ trait Form
     protected $type;
     // 特殊方法类型
     protected $specifyFormFun = [
-        'status','password',
+        'statusView','passwordView',
     ];
     // 表单数据
-    protected $form;
+    protected $form = [];
 
 
     /**
@@ -49,9 +49,7 @@ trait Form
             }
         }
 
-        if ($this->form) {
-            $this->assign('form',$this->form);
-        }
+        $this->assign('form',$this->form);
     }
 
     /**
@@ -65,7 +63,7 @@ trait Form
      * @author 1305964327@qq.com
      * @date 2022-01-19
      */
-    protected function password($array)
+    protected function passwordView($array)
     {
         if ($array[1] && $array[2]) {
             $this->assign([

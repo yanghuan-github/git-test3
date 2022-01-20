@@ -8,8 +8,12 @@ namespace app\common\traits;
  * @author 1305964327@qq.com
  * @date 2022-01-19
  */
+use app\common\traits\Cache;
+
 trait Common
 {
+    use Cache;
+
     /**
      * 记录操作日志
      * @param stirng $funName
@@ -42,5 +46,33 @@ trait Common
             ];
             logs(__FUNCTION__,json_encode($log));
         }
+    }
+
+    /**
+     * 获取项目数据 
+     * 拼装为 id => name 格式
+     * @param int $environId
+     * @param boolean $refresh
+     * @return void
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-20
+     */
+    protected function pjIdName($environId,$refresh = false)
+    {
+        $cache = '__common_pjIdName_'.$environId;
+        $data = $this->cache('file')->get($cache);
+        if (empty($data) || $refresh) {
+            $data = [];
+            $where = [
+                'environ_id' =>  $environId
+            ];
+            $field = 'pj_id,pj_title';
+            $data = model('ConfigPj')->getColumn($where,$field);
+            if ($data) {
+                $this->cache('file')->set($cache,$data);
+            }
+        }
+        return $data;
     }
 }

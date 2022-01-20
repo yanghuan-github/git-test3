@@ -1,0 +1,114 @@
+{extend name="template/base" /}
+{block name="title"}
+{:lang('menuAdd')['title']}
+{/block}
+{block name="style"}
+<style>
+    .modular input {
+        width: 70%;
+        display: inline-block;
+    }
+
+    .modular button {
+        display: inline-block;
+        margin-left: 10%;
+    }
+
+    .menuData {
+        width: 100%;
+        height: 100%;
+    }
+
+    .menuData input {
+        width: 10.5%;
+        display: inline-block;
+    }
+
+    .layui-form-select dl {
+        max-height: 200px;
+    }
+
+    .layui-select-title input {
+        width: 100%;
+    }
+
+    .layui-form-item .layui-input-inline {
+        float: unset;
+    }
+</style>
+{/block}
+{block name="body"}
+<div id="obj">
+    <form class="layui-form" lay-filter="layuiadmin-form-admin" style="padding: 15px" id="form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">父级菜单</label>
+            <div class="layui-input-block layui-form">
+                <select name="nodePid" id="nodePid" lay-search="">
+                    <option value="0">顶级菜单</option>
+                    {foreach $nodeIdName as $ke => $va }
+                    <option value="{$ke}" {present name="$nodePidvalue" } {if condition="$ke eq $nodePidvalue" }
+                        selected {/if} {/present}>{$va}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <hr>
+        <div class="layui-form-item">
+            <label class="layui-form-label">模块名</label>
+            <div class="layui-input-block modular">
+                <input type="text" id="modular" name="modular" lay-verify="required" placeholder="" value=""
+                    autocomplete="off" class="layui-input">
+                <a class="layui-btn layui-btn-sm" id="node_line" data-num="1" onclick="addNodeLine();"><i class="layui-icon"></i></a>
+            </div>
+        </div>
+        <hr>
+        {include file="common_view/form"}
+        <div class="layui-form-item menuData">
+            <label class="input-group-addon">节点[1]:</label>
+            <input type="text"name="actionName[0][action]" data-name="action"
+                lay-verify="required" placeholder="" value="" autocomplete="off" class="layui-input">
+            <span class="input-group-addon">名称</span>
+            <input type="text" name="actionName[0][node_title]" data-name="node_title"
+                lay-verify="required" placeholder="" value="" autocomplete="off" class="layui-input">
+            <span class="input-group-addon">显示</span>
+            <div class="layui-input-inline layui-form" style="width: 11.5%;">
+                <select name="actionName[0][show_type]" data-name="show_type" lay-search="">
+                    {foreach $showType as $ke => $va }
+                    <option value="{$ke}">{$va}</option>
+                    {/foreach}
+                </select>
+            </div>
+            <span class="input-group-addon">类型</span>
+            <div class="layui-input-inline layui-form" style="width: 10.5%;">
+                <select name="actionName[0][node_type]" data-name="node_type" lay-search="">
+                    {foreach $nodeType as $ke => $va }
+                    <option value="{$ke}">{$va}</option>
+                    {/foreach}
+                </select>
+            </div>
+            <span class="input-group-addon">排序</span>
+            <input type="text" name="actionName[0][sort]" data-name="sort"
+                lay-verify="required" placeholder="" value="" autocomplete="off" class="layui-input">
+            <span class="input-group-addon">图标样式</span>
+            <input type="text" name="actionName[0][remark]" data-name="remark"
+                lay-verify="required" placeholder="" value="" autocomplete="off" class="layui-input">
+            <span class="layui-btn layui-btn-sm" onclick="delNodeLine(this);"><i class="layui-icon"></i></span>
+        </div>
+        <div class="layui-form-item" id="powerRole">
+            <label class="layui-form-label">更新角色组</label>
+            <div class="layui-input-block layui-form">
+                {foreach $roleIdName as $ke => $va }
+                <input type="checkbox" name="role[{$ke}]" title="{$va}" checked>
+                {/foreach}
+            </div>
+        </div>
+        <hr>
+    </form>
+</div>
+{/block}
+{block name="script"}
+<script>
+    const msg = {$msg | raw};
+</script>
+<script src="__JS__/index/menu/menuAdd.js"></script>
+{/block}
