@@ -1,0 +1,19 @@
+{foreach $search as $key => $val }
+    {switch $val[0]}
+        {case search_status}
+            <!-- 状态 -->
+            {include file="common_view/search/status" }
+            <!-- 状态结束 -->
+        {/case}
+        {case select}
+            <!-- 下拉框开始 -->
+            {include file="common_view/search/select" }
+            <!-- 下拉框结束 -->
+        {/case}
+        {case input}
+            <!-- 输入框开始 -->
+            {include file="common_view/search/input" }
+            <!-- 输入框结束 -->
+        {/case}
+    {/switch}
+{/foreach}

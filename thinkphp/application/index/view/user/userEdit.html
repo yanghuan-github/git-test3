@@ -1,0 +1,17 @@
+{extend name="template/base" /}
+{block name="title"}
+{:lang('userList')['title']}
+{/block}
+{block name="body"}
+<div id="obj">
+    <div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 15px">
+        <input type="hidden" id="id" value="{$id}">
+        {include file="common_view/form"}
+    </div>
+{/block}
+{block name="script"}
+<script>
+  const msg         = {$msg | raw};
+</script>
+<script src="__JS__/index/user/userEdit.js"></script>
+{/block}

@@ -1,0 +1,127 @@
+</head>
+
+<body class="layui-layout-body">
+  <div id="LAY_app">
+    <div class="layui-layout layui-layout-admin">
+      <div class="layui-header">
+        <!-- 头部区域 -->
+        <ul class="layui-nav layui-layout-left">
+          <li class="layui-nav-item layadmin-flexible" lay-unselect>
+            <a href="javascript:;" layadmin-event="flexible" title="{:lang('index')['side_extension']}">
+              <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
+            </a>
+          </li>
+          <li class="layui-nav-item" lay-unselect>
+            <a href="javascript:;" layadmin-event="refresh" title="{:lang('index')['refresh']}">
+              <i class="layui-icon layui-icon-refresh-3"></i>
+            </a>
+          </li>
+          <li class="layui-nav-item layui-hide-xs" lay-unselect>
+            <input type="text" placeholder="{:lang('index')['search']}..." autocomplete="off"
+              class="layui-input layui-input-search" layadmin-event="serach"
+              lay-action="template/search.html?keywords=">
+          </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
+          <li class="layui-nav-item" lay-unselect>
+            <a href="javascript:;">
+              <cite>{$Think.session.loginName}</cite>
+            </a>
+            <dl class="layui-nav-child">
+              <dd><a lay-href="set/user/password.html">{:lang('index')['change_password']}</a></dd>
+              <hr>
+              <dd><a href="/index/Index/loginOut.html">{:lang('index')['logout']}</a></dd>
+            </dl>
+          </li>
+        </ul>
+      </div>
+      <!-- 侧边菜单 -->
+      <div class="layui-side layui-side-menu">
+        <div class="layui-side-scroll">
+          <div class="layui-logo" lay-href="/index/Index/console.html">
+            <span>{:lang('index')['title']}</span>
+          </div>
+
+          <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
+            {foreach $__menu__ as $key => $val}
+              {if $val.node_pid == 0 && $val.show_type == 1}
+                <li data-name="{$val.node_title}" class="layui-nav-item">
+                  <a href="javascript:;" lay-tips="{$val.node_title}" lay-direction="2">
+                    <i class="layui-icon {$val.remark}"></i>
+                    <cite>{$val.node_title}</cite>
+                  </a>
+                  {present name="$val._child"}
+                    <dl class="layui-nav-child">
+                      {foreach $val._child as $ke => $va}
+                        {if $va.show_type == 2}
+                          {present name="$va._child"}
+                            <dd data-name="{$va.node_title}">
+                              <a href="javascript:;">{$va.node_title}</a>
+                              <dl class="layui-nav-child">
+                                {foreach $va._child as $k => $v}
+                                  <dd data-name="{$v.node_title}">
+                                    <a lay-href="{$va.data}">{$v.node_title}</a>
+                                  </dd>
+                                {/foreach}
+                              </dl>
+                            </dd>
+                          {else /}
+                            <dd data-name="{$va.node_title}">
+                              <a lay-href="{$va.data}">{$va.node_title}</a>
+                            </dd>
+                          {/present}
+                        {/if}
+                      {/foreach}
+                    </dl>
+                  {/present}
+                </li>
+              {/if}
+            {/foreach}
+          </ul>
+        </div>
+      </div>
+      <!-- 页面标签 -->
+      <div class="layadmin-pagetabs" id="LAY_app_tabs">
+        <div class="layui-icon layadmin-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
+        <div class="layui-icon layadmin-tabs-control layui-icon-next" layadmin-event="rightPage"></div>
+        <div class="layui-icon layadmin-tabs-control layui-icon-down">
+          <ul class="layui-nav layadmin-tabs-select" lay-filter="layadmin-pagetabs-nav">
+            <li class="layui-nav-item" lay-unselect>
+              <a href="javascript:;"></a>
+              <dl class="layui-nav-child layui-anim-fadein">
+                <dd layadmin-event="closeThisTabs"><a href="javascript:;">{:lang('index')['close_current_tab']}</a></dd>
+                <dd layadmin-event="closeOtherTabs"><a href="javascript:;">{:lang('index')['close_other_tabs']}</a></dd>
+                <dd layadmin-event="closeAllTabs"><a href="javascript:;">{:lang('index')['close_all_tabs']}</a></dd>
+              </dl>
+            </li>
+          </ul>
+        </div>
+        <div class="layui-tab" lay-unauto lay-allowClose="true" lay-filter="layadmin-layout-tabs">
+          <ul class="layui-tab-title" id="LAY_app_tabsheader">
+            <li lay-id="/index/Index/console.html" lay-attr="/index/Index/console.html" class="layui-this"><i
+                class="layui-icon layui-icon-home"></i></li>
+          </ul>
+        </div>
+      </div>
+
+
+      <!-- 主体内容 -->
+      <div class="layui-body" id="LAY_app_body">
+        <div class="layadmin-tabsbody-item layui-show">
+          <iframe src="/index/Index/console.html" frameborder="0" class="layadmin-iframe"></iframe>
+        </div>
+      </div>
+
+      <!-- 辅助元素，一般用于移动设备下遮罩 -->
+      <div class="layadmin-body-shade" layadmin-event="shade"></div>
+    </div>
+  </div>
+</body>
+<script src="__LAYUI__/layui/layui.all.js"></script>
+<script>
+  layui.config({
+    base: '__LAYUI__/' //静态资源所在路径
+  }).extend({
+    index: './lib/index' //主入口模块
+  }).use('index');
+</script>

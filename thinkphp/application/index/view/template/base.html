@@ -1,0 +1,61 @@
+{include file="/template/header" }
+{block name="title"}
+{/block}
+</title>
+    <link rel="stylesheet" href="__LAYUI__/layui/css/layui.css" media="all"> 
+    <style>
+        html,body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .layui-col-md12{
+            padding: 15px;
+        }
+        .layui-card-header,.layui-card-body {
+            height: 100%;
+        }
+        .layui-form-select .layui-input{
+            padding-right: 0;
+        }
+        .obj-title {
+            color: #1c84c6;
+            font-weight: bolder;
+        }
+        .obj-btu {
+            float: right;
+        }
+        .obj-btu i{
+            font-size: 20px;
+            cursor:pointer;
+            font-weight: bolder;
+        }
+        hr {
+            width: 100%;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .layui-form-item{
+            margin-top: 15px;
+        }
+    </style>
+    {block name="style"}
+
+    {/block}
+
+</head>
+<body>
+    <div class="body">
+        {block name="body"}
+
+        {/block}
+    </div>
+</body>
+    <script src="__JS__/common/jquery.min.js"></script>
+    <script src="__LAYUI__/layui/layui.all.js"></script>
+    <script src="__JS__/common/common.js"></script>
+    <script src="__JS__/common/md5.js"></script>
+    {block name="script"}
+    {/block}
+</html>
