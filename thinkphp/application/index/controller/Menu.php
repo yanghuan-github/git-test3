@@ -95,7 +95,7 @@ class Menu extends BaseController
         $actionName     =   $data['actionName']; 
         $role           =   $data['role'] ?? []; 
         
-        return json(model('Menu','logic')->menuAddSave($nodePid,$modular,$controller,$actionName,$role));
+        return model('Menu','logic')->menuAddSave($nodePid,$modular,$controller,$actionName,$role);
     }
 
     /**
@@ -179,7 +179,7 @@ class Menu extends BaseController
             return MenuConstant::USER_AUTH_ERROR;
         }
         // 编辑
-        return json(model('Menu','logic')->menuEditSave($nodeId,$nodeTitle,$nodePid,$showType,$nodeType,$status,$modular,$controller,$action,$sort,$remark));
+        return model('Menu','logic')->menuEditSave($nodeId,$nodeTitle,$nodePid,$showType,$nodeType,$status,$modular,$controller,$action,$sort,$remark);
     }
 
     /**
@@ -196,6 +196,6 @@ class Menu extends BaseController
             return MenuConstant::USER_AUTH_ERROR;
         }
 
-        return json(model('Menu','logic')->menuDele($nodeId));
+        return model('Menu','logic')->menuDele($nodeId);
     }
 }

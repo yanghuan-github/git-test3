@@ -90,11 +90,13 @@ class BaseController extends Controller
         $this->assign('__menu__',list_to_tree($this->userMenu, 'node_id', 'node_pid'));
 
         // 载入模板语言信息
-        setMessAge(request()->module());
+        setMessAge($request->module());
         // 初始化页面基本信息
-        $commonMsg = lang('common');
-        $msg = is_array(lang($request->action())) ? lang($request->action()) : [];
-        $msg = array_merge($commonMsg,$msg);
+        $commonMsg  = lang('common');
+        $msg        = is_array(lang($request->action())) ? lang($request->action()) : [];
+        $errorName  = strtolower($request->controller()).'Error';
+        $error      = is_array(lang($errorName)) ? lang($errorName) : [];
+        $msg        = array_merge($commonMsg,$msg,$error);
         $this->assign('msg',json_encode($msg));
     }
 

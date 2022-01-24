@@ -79,9 +79,9 @@ function statusFun(status)
 function commonSaveReturn(code)
 {
     if (code == 1) {
-        msgFun(msg['success']);
+        msgFun(msg['success_'+code]);
     } else {
-        msgFun(msg['error'])
+        msgFun(msg['error_'+code])
     }
     setTimeout(()=>{
         let index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
@@ -100,9 +100,9 @@ function commonSaveReturn(code)
 function commonDeleReturn(code,index)
 {
     if (code == 1) {
-        msgFun(msg['success']);
+        msgFun(msg['success_'+code]);
     } else {
-        msgFun(msg['error'])
+        msgFun(msg['error_'+code])
     }
     setTimeout(()=>{
         layer.close(index);

@@ -11,6 +11,8 @@ namespace app\common\constant;
  */
 class Base
 {
-    const ERROR         =   -1; //  error
-    const SUCCESS       =   1;  // success
+    const ERROR             =   -1; //  error
+    const SUCCESS           =   1;  //  success
+    const USER_AUTH_ERROR   =   2;  //  当前用户没权限操作
+    const LACK_PARAMS       =   3;  //  缺少必要参数
 }
