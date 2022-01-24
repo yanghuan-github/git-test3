@@ -11,7 +11,7 @@
  Target Server Version : 50562
  File Encoding         : 65001
 
- Date: 20/01/2022 10:52:10
+ Date: 24/01/2022 14:46:17
 */
 
 SET NAMES utf8mb4;
@@ -36,22 +36,33 @@ CREATE TABLE `t_admin_node`  (
   PRIMARY KEY (`node_id`) USING BTREE,
   INDEX `nodeType`(`show_type`) USING BTREE,
   INDEX `dataType`(`node_type`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '后台系统节点表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 33 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '后台系统节点表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of t_admin_node
 -- ----------------------------
 INSERT INTO `t_admin_node` VALUES (1, 0, '主页（默认存在）', 1, 0, 1, '/index/Index/index.html', 1, 1, 1, '');
-INSERT INTO `t_admin_node` VALUES (2, 0, '测试', 2, 1, 1, '/index/Index/test.html', 1, 2, 2, '');
+INSERT INTO `t_admin_node` VALUES (2, 0, '测试', 2, 1, 1, '', 1, 2, 2, '');
 INSERT INTO `t_admin_node` VALUES (3, 0, '测试二级', 3, 2, 1, '/index/Index/test2.html', 1, 3, 3, '');
 INSERT INTO `t_admin_node` VALUES (4, 0, '控制台', 3, 1, 1, '/index/Index/console.html', 1, 4, 2, '');
 INSERT INTO `t_admin_node` VALUES (6, 0, '主页1', 2, 1, 1, '/index/Index/home1.html', 1, 5, 2, '');
 INSERT INTO `t_admin_node` VALUES (7, 0, '主页2', 2, 1, 1, '/index/Index/home2.html', 1, 6, 2, '');
-INSERT INTO `t_admin_node` VALUES (8, 0, '用户', 2, 1, 1, '/index/User/userList.html', 1, 7, 2, '');
-INSERT INTO `t_admin_node` VALUES (9, 0, '用户数据', 3, 8, 1, '/index/User/userListData.html', 1, 8, 3, '');
-INSERT INTO `t_admin_node` VALUES (10, 0, '用户新增/编辑页面', 3, 9, 1, '/index/User/userEdit.html', 1, 9, 4, '');
-INSERT INTO `t_admin_node` VALUES (11, 0, '用户新增保存', 3, 9, 1, '/index/User/userAddSave.html', 1, 10, 4, '');
-INSERT INTO `t_admin_node` VALUES (12, 0, '用户编辑保存', 3, 9, 1, '/index/User/userEditSave.html', 1, 10, 4, '');
+INSERT INTO `t_admin_node` VALUES (8, 0, '用户', 2, 1, 1, '', 1, 7, 2, '');
+INSERT INTO `t_admin_node` VALUES (9, 0, '用户数据', 3, 15, 1, '/index/User/userListData.html', 1, 8, 4, '');
+INSERT INTO `t_admin_node` VALUES (10, 0, '用户新增/编辑页面', 3, 15, 1, '/index/User/userEdit.html', 1, 9, 4, '');
+INSERT INTO `t_admin_node` VALUES (11, 0, '用户新增保存', 3, 15, 1, '/index/User/userAddSave.html', 1, 10, 4, '');
+INSERT INTO `t_admin_node` VALUES (12, 0, '用户编辑保存', 3, 15, 1, '/index/User/userEditSave.html', 1, 11, 4, '');
+INSERT INTO `t_admin_node` VALUES (13, 0, '通用', 2, 1, 1, '', 1, 12, 2, '');
+INSERT INTO `t_admin_node` VALUES (14, 0, '菜单列表', 2, 13, 1, '/index/Menu/menuList.html', 1, 13, 3, '');
+INSERT INTO `t_admin_node` VALUES (15, 0, '用户列表', 2, 8, 1, '/index/User/userList.html', 1, 14, 3, '');
+INSERT INTO `t_admin_node` VALUES (16, 0, '菜单数据', 3, 14, 1, '/index/Menu/menuListData.html', 1, 15, 4, '');
+INSERT INTO `t_admin_node` VALUES (17, 0, '菜单新增页面', 3, 14, 1, '/index/Menu/menuAdd.html', 1, 16, 4, '');
+INSERT INTO `t_admin_node` VALUES (18, 0, '菜单新增保存', 3, 14, 1, '/index/Menu/menuAddSave.html', 1, 17, 4, '');
+INSERT INTO `t_admin_node` VALUES (19, 0, '菜单编辑保存', 3, 14, 1, '/index/Menu/menuEditSave.html', 1, 18, 4, '');
+INSERT INTO `t_admin_node` VALUES (20, 0, '菜单编辑页面', 3, 14, 1, '/index/Menu/menuEdit.html', 1, 19, 4, '');
+INSERT INTO `t_admin_node` VALUES (27, 0, '角色列表', 2, 8, 1, '/index/Role/roleList.html', 1, 0, 3, '');
+INSERT INTO `t_admin_node` VALUES (28, 0, '角色数据', 3, 27, 1, '/index/Role/roleListData.html', 1, 0, 4, '');
+INSERT INTO `t_admin_node` VALUES (30, 0, '菜单删除', 3, 14, 4, '/index/Menu/menuDele.html', 1, 0, 4, '');
 
 -- ----------------------------
 -- Table structure for t_admin_operation_log
@@ -65,7 +76,7 @@ CREATE TABLE `t_admin_operation_log`  (
   `create_time` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `admin_name`(`admin_name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户操作记录表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 30 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户操作记录表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of t_admin_operation_log
@@ -80,6 +91,17 @@ INSERT INTO `t_admin_operation_log` VALUES (7, 'app\\index\\logic\\User::userEdi
 INSERT INTO `t_admin_operation_log` VALUES (8, 'app\\index\\logic\\User::userEditSave', 'yanghuan', '{\"type\":1,\"oldData\":{\"real_name\":\"\\u6d4b\\u8bd5\",\"status\":3},\"data\":{\"real_name\":\"\\u6d4b\\u8bd53\",\"status\":3,\"update_time\":1642642556}}', 1642642556);
 INSERT INTO `t_admin_operation_log` VALUES (9, 'app\\index\\logic\\User::userEditSave', 'yanghuan', '{\"type\":1,\"oldData\":{\"real_name\":\"\\u6d4b\\u8bd53\",\"status\":3},\"data\":{\"real_name\":\"\\u6d4b\\u8bd53\",\"status\":3,\"update_time\":1642643974}}', 1642643974);
 INSERT INTO `t_admin_operation_log` VALUES (10, 'app\\index\\logic\\User::userEditSave', 'yanghuan', '{\"type\":1,\"oldData\":{\"real_name\":\"\\u6d4b\\u8bd53\",\"status\":3},\"data\":{\"status\":3,\"update_time\":1642643985}}', 1642643985);
+INSERT INTO `t_admin_operation_log` VALUES (11, 'app\\index\\logic\\Menu::menuAddSave', 'yanghuan', '{\"type\":2,\"oldData\":[],\"data\":{\"nodePid\":\"8\",\"modular\":\"index\",\"controller\":\"Role\",\"actionName\":[{\"node_title\":\"\\u89d2\\u8272\\u5217\\u8868\",\"show_type\":\"2\",\"node_type\":\"1\",\"sort\":\"\",\"remark\":\"\",\"node_pid\":\"8\",\"data\":\"index\\/Role\\/roleList.html\",\"pj_id\":0,\"status\":1,\"level\":3}],\"role\":{\"1\":\"on\",\"2\":\"on\"}}}', 1642991321);
+INSERT INTO `t_admin_operation_log` VALUES (12, 'app\\index\\logic\\Menu::menuAddSave', 'yanghuan', '{\"type\":2,\"oldData\":[],\"data\":{\"nodePid\":\"0\",\"modular\":\"index\",\"controller\":\"Role\",\"actionName\":[{\"node_title\":\"\\u89d2\\u8272\\u6570\\u636e\",\"show_type\":\"3\",\"node_type\":\"1\",\"sort\":\"\",\"remark\":\"\",\"node_pid\":\"0\",\"data\":\"\\/index\\/Role\\/roleListData.html\",\"pj_id\":0,\"status\":1,\"level\":1}],\"role\":{\"1\":\"on\"}}}', 1642991519);
+INSERT INTO `t_admin_operation_log` VALUES (13, 'app\\index\\logic\\Menu::menuEditSave', 'yanghuan', '{\"type\":1,\"oldData\":{\"node_id\":13,\"pj_id\":0,\"node_title\":\"\\u901a\\u7528\",\"show_type\":2,\"node_pid\":1,\"node_type\":1,\"data\":\"\",\"status\":1,\"sort\":12,\"level\":2,\"remark\":\"\"},\"data\":{\"node_title\":\"\\u901a\\u7528\",\"node_pid\":1,\"show_type\":2,\"node_type\":1,\"status\":1,\"sort\":12}}', 1643004974);
+INSERT INTO `t_admin_operation_log` VALUES (14, 'app\\index\\logic\\Menu::menuEditSave', 'yanghuan', '{\"type\":1,\"oldData\":{\"node_id\":13,\"pj_id\":0,\"node_title\":\"\\u901a\\u7528\",\"show_type\":2,\"node_pid\":1,\"node_type\":1,\"data\":\"\",\"status\":1,\"sort\":12,\"level\":2,\"remark\":\"\"},\"data\":{\"node_title\":\"\\u901a\\u7528\",\"node_pid\":1,\"show_type\":2,\"node_type\":1,\"status\":1,\"sort\":12}}', 1643005019);
+INSERT INTO `t_admin_operation_log` VALUES (15, 'app\\index\\logic\\Menu::menuAddSave', 'yanghuan', '{\"type\":2,\"oldData\":[],\"data\":{\"actionName\":[{\"node_title\":\"test\",\"show_type\":\"1\",\"node_type\":\"1\",\"sort\":\"\",\"remark\":\"\",\"node_pid\":\"0\",\"data\":\"\\/test\\/test\\/test.html\",\"pj_id\":0,\"status\":1,\"level\":1}],\"roleAccess\":[]}}', 1643005513);
+INSERT INTO `t_admin_operation_log` VALUES (16, 'app\\index\\logic\\Menu::menuAddSave', 'yanghuan', '{\"type\":2,\"oldData\":[],\"data\":{\"actionName\":[{\"node_title\":\"\\u83dc\\u5355\\u5220\\u9664\",\"show_type\":\"3\",\"node_type\":\"4\",\"sort\":\"\",\"remark\":\"\",\"node_pid\":\"14\",\"data\":\"\\/index\\/Menu\\/menuDele.html\",\"pj_id\":0,\"status\":1,\"level\":4}],\"roleAccess\":[{\"role_id\":1,\"node_id\":\"30\"}]}}', 1643005647);
+INSERT INTO `t_admin_operation_log` VALUES (17, 'app\\index\\logic\\Menu::menuDele', 'yanghuan', '{\"type\":3,\"oldData\":{\"node_id\":29,\"pj_id\":0,\"node_title\":\"test\",\"show_type\":1,\"node_pid\":0,\"node_type\":1,\"data\":\"\\/test\\/test\\/test.html\",\"status\":1,\"sort\":0,\"level\":1,\"remark\":\"\"}}', 1643006082);
+INSERT INTO `t_admin_operation_log` VALUES (18, 'app\\index\\logic\\Menu::menuAddSave', 'yanghuan', '{\"type\":2,\"oldData\":[],\"data\":{\"actionName\":[{\"node_title\":\"test\",\"show_type\":\"3\",\"node_type\":\"1\",\"sort\":\"\",\"remark\":\"\",\"node_pid\":\"0\",\"data\":\"\\/test\\/test\\/test.html\",\"pj_id\":0,\"status\":1,\"level\":1}],\"roleAccess\":[]}}', 1643006111);
+INSERT INTO `t_admin_operation_log` VALUES (19, 'app\\index\\logic\\Menu::menuDele', 'yanghuan', '{\"type\":3,\"oldData\":{\"node_id\":31,\"pj_id\":0,\"node_title\":\"test\",\"show_type\":3,\"node_pid\":0,\"node_type\":1,\"data\":\"\\/test\\/test\\/test.html\",\"status\":1,\"sort\":0,\"level\":1,\"remark\":\"\"}}', 1643006117);
+INSERT INTO `t_admin_operation_log` VALUES (20, 'app\\index\\logic\\Menu::menuAddSave', 'yanghuan', '{\"type\":2,\"oldData\":[],\"data\":{\"actionName\":[{\"node_title\":\"tes\",\"show_type\":\"1\",\"node_type\":\"1\",\"sort\":\"\",\"remark\":\"\",\"node_pid\":\"0\",\"data\":\"\\/test\\/test\\/test.html\",\"pj_id\":0,\"status\":1,\"level\":1}],\"roleAccess\":[]}}', 1643006169);
+INSERT INTO `t_admin_operation_log` VALUES (29, 'app\\index\\logic\\Menu::menuDele', 'yanghuan', '{\"type\":3,\"oldData\":{\"node_id\":32,\"pj_id\":0,\"node_title\":\"tes\",\"show_type\":1,\"node_pid\":0,\"node_type\":1,\"data\":\"\\/test\\/test\\/test.html\",\"status\":1,\"sort\":0,\"level\":1,\"remark\":\"\"}}', 1643006296);
 
 -- ----------------------------
 -- Table structure for t_admin_role
@@ -101,6 +123,7 @@ CREATE TABLE `t_admin_role`  (
 -- Records of t_admin_role
 -- ----------------------------
 INSERT INTO `t_admin_role` VALUES (1, '超级管理员', 0, 1, 0, 0);
+INSERT INTO `t_admin_role` VALUES (2, '测试', 1, 1, 0, 0);
 
 -- ----------------------------
 -- Table structure for t_admin_role_access
@@ -129,6 +152,18 @@ INSERT INTO `t_admin_role_access` VALUES (1, 9);
 INSERT INTO `t_admin_role_access` VALUES (1, 10);
 INSERT INTO `t_admin_role_access` VALUES (1, 11);
 INSERT INTO `t_admin_role_access` VALUES (1, 12);
+INSERT INTO `t_admin_role_access` VALUES (1, 13);
+INSERT INTO `t_admin_role_access` VALUES (1, 14);
+INSERT INTO `t_admin_role_access` VALUES (1, 15);
+INSERT INTO `t_admin_role_access` VALUES (1, 16);
+INSERT INTO `t_admin_role_access` VALUES (1, 17);
+INSERT INTO `t_admin_role_access` VALUES (1, 18);
+INSERT INTO `t_admin_role_access` VALUES (1, 19);
+INSERT INTO `t_admin_role_access` VALUES (1, 20);
+INSERT INTO `t_admin_role_access` VALUES (1, 27);
+INSERT INTO `t_admin_role_access` VALUES (1, 28);
+INSERT INTO `t_admin_role_access` VALUES (1, 29);
+INSERT INTO `t_admin_role_access` VALUES (1, 30);
 
 -- ----------------------------
 -- Table structure for t_admin_user
@@ -146,14 +181,14 @@ CREATE TABLE `t_admin_user`  (
   `laston_ip` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '最后登录ip',
   `laston_time` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '最后登录时间',
   PRIMARY KEY (`admin_id`) USING BTREE,
-  INDEX `status`(`status`) USING BTREE,
-  UNIQUE INDEX `login_name`(`login_name`) USING BTREE
+  UNIQUE INDEX `login_name`(`login_name`) USING BTREE,
+  INDEX `status`(`status`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '后台用户表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of t_admin_user
 -- ----------------------------
-INSERT INTO `t_admin_user` VALUES (1, 'yanghuan', '3b280b4d380facd4f0f5b6c717d79005', '杨欢', 1, '0cabc555ad4221b844e04b9f88681896', 1642575022, 1642586097, '127.0.0.1', 1642646847);
+INSERT INTO `t_admin_user` VALUES (1, 'yanghuan', '3b280b4d380facd4f0f5b6c717d79005', '杨欢', 1, '0cabc555ad4221b844e04b9f88681896', 1642575022, 1642586097, '127.0.0.1', 1643005654);
 INSERT INTO `t_admin_user` VALUES (2, 'test', '0192023a7bbd73250516f069df18b500', '测试', 2, '9deed250a088da2a040c2bab4a1fcbb9', 1642586545, 1642592184, '127.0.0.1', 0);
 INSERT INTO `t_admin_user` VALUES (10, 'test2', '0192023a7bbd73250516f069df18b500', '测试2', 3, '0ee5466f7e480f81c1d2b56a6e555c13', 1642592256, 1642642154, '127.0.0.1', 0);
 INSERT INTO `t_admin_user` VALUES (11, 'test3', '8ad8757baa8564dc136c1e07507f4a98', '测试3', 3, '6bb8070a3bdfca18d9b62e40545038e5', 1642642534, 1642643985, '', 0);
@@ -187,7 +222,7 @@ CREATE TABLE `t_config_params`  (
   `date_time` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
   `status` tinyint(2) UNSIGNED NOT NULL DEFAULT 1 COMMENT '是否启用',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '配置参数表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '配置参数表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of t_config_params
@@ -195,5 +230,33 @@ CREATE TABLE `t_config_params`  (
 INSERT INTO `t_config_params` VALUES (1, 'authSign', '{\"0\":\"IwteRGXK33oiCnnR\"}', 'auto秘钥', 0, 0, 1);
 INSERT INTO `t_config_params` VALUES (2, 'jwtSign', '{\"0\":\"BQETsZPCUKVI6F00\"}', 'jwt秘钥', 0, 0, 1);
 INSERT INTO `t_config_params` VALUES (3, 'status', '{\"1\":\"启用\",\"2\":\"停用\"}', '通用状态', 0, 0, 1);
+INSERT INTO `t_config_params` VALUES (4, 'environType', '{\"1\":\"内网\",\"2\":\"外测\",\"3\":\"正式\"}', '环境类型', 0, 0, 1);
+INSERT INTO `t_config_params` VALUES (5, 'showType', '{\"1\":\"导航栏\",\"2\":\"列表菜单\",\"3\":\"不显示\"}', '菜单显示类型', 0, 0, 1);
+INSERT INTO `t_config_params` VALUES (6, 'nodeType', '{\"1\":\"查看\",\"2\":\"新增\",\"3\":\"修改\",\"4\":\"删除\",\"5\":\"导出\",\"6\":\"导入\",\"7\":\"审核\"}', '节点类型', 0, 0, 1);
+INSERT INTO `t_config_params` VALUES (7, 'blackListMenu', '{\"0\":\"1\"}', '黑名单菜单(不可修改)', 0, 0, 1);
+
+-- ----------------------------
+-- Table structure for t_config_pj
+-- ----------------------------
+DROP TABLE IF EXISTS `t_config_pj`;
+CREATE TABLE `t_config_pj`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `pj_id` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'pjId',
+  `environ_id` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '环境ID 标识 1内测 2外测 3正式环境',
+  `pj_title` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '项目名称',
+  `is_view` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否有管理界面',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `pj_id`(`pj_id`) USING BTREE,
+  INDEX `environ_id`(`environ_id`) USING BTREE,
+  INDEX `is_view`(`is_view`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '项目配置表' ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of t_config_pj
+-- ----------------------------
+INSERT INTO `t_config_pj` VALUES (1, 0, 1, 'system', 1);
+INSERT INTO `t_config_pj` VALUES (2, 0, 2, 'system', 1);
+INSERT INTO `t_config_pj` VALUES (3, 0, 3, 'system', 1);
+INSERT INTO `t_config_pj` VALUES (4, 1, 1, 'issue', 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
