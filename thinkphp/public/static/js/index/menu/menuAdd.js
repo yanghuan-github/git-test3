@@ -4,7 +4,7 @@ function addNodeLine() {
     num = parseInt(num);
     var nodeDiv = $('.menuData:eq(0)').clone();
     var lableNum = num + 1;
-    $(nodeDiv).find('label:first').text('节点[' + lableNum + ']：');
+    $(nodeDiv).find('label:first').text('节点[' + lableNum + ']:');
     $.each($(nodeDiv).find('input,select'), function (i, v) {
         eleName = $(v).attr('data-name');
         $(v).attr('name', 'actionName[' + lableNum + '][' + eleName + ']');
