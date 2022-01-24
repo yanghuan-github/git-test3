@@ -15,18 +15,7 @@ function submit(){
         url:    obj.url,
         dataType: 'json',
         success:function(code){
-            if (code == 1) {
-                msgFun(msg['success']);
-            } else {
-                msgFun(msg['error'])
-            }
-            setTimeout(()=>{
-                let index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                parent.layer.close(index); //再执行关闭 
-                if (code == 1) {
-                    parent.location.reload();
-                }
-            },3000)
+            commonSaveReturn(code);
         }
     })
 }

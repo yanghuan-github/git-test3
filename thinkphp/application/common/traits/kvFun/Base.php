@@ -89,4 +89,17 @@ trait Base
             $this->assign($funName.'Json',json_encode($tempArray));
         }
     }
+
+    /**
+     * url 特殊分割
+     * @param array $array
+     * @return void
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-24
+     */
+    public function urlView($array = [])
+    {
+        $this->assign(__FUNCTION__,$array);
+    }
 }

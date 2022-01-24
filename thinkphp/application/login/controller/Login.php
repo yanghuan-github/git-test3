@@ -67,13 +67,8 @@ class Login extends Controller
         $userName   = input('userName','','string');
         $password   = input('password','','string');
         $vercode    = input('vercode','','string');
-        $loginData = [
-            'userName'  =>  $userName,
-            'password'  =>  $password,
-            'vercode'   =>  $vercode
-        ];
         try {
-            if (notEmpty($loginData)) {
+            if (notEmpty([$userName,$password,$vercode])) {
                 // 检验是否是ip白名单
                 $ip = request()->ip();
                 if (in_array($ip,C('ip_white_list'))) {
@@ -92,7 +87,7 @@ class Login extends Controller
         } catch (\Exception $e) {
             $data = [
                 'msg'   =>  $e->getMessage(),
-                'data'  =>  $loginData,
+                'data'  =>  input('post.'),
             ];
             logs(__FUNCTION__,json_encode($data));
             return LoginConstant::LOGIN_LACK_PARAMS;

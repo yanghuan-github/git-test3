@@ -1,0 +1,25 @@
+{extend name="template/base" /}
+{block name="title"}
+{:lang('menuEdit')['title']}
+{/block}
+{block name="style"}
+<style>
+    .layui-form-select dl {
+        max-height: 200px;
+    }
+</style>
+{/block}
+{block name="body"}
+<div id="obj">
+    <form id="form" style="padding: 15px">
+        <input type="hidden" id="nodeId" value="{$nodeId}">
+        {include file="common_view/form"}
+    </form>
+</div>
+{/block}
+{block name="script"}
+<script>
+    const msg = {$msg | raw};
+</script>
+<script src="__JS__/index/menu/menuEdit.js"></script>
+{/block}

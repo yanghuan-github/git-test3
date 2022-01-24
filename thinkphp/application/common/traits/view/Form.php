@@ -18,7 +18,7 @@ trait Form
     protected $type;
     // 特殊方法类型
     protected $specifyFormFun = [
-        'statusView','passwordView',
+        'statusView','passwordView','urlView'
     ];
     // 表单数据
     protected $form = [];
@@ -28,7 +28,7 @@ trait Form
      * 表单公共模板
      * @param array $form 参数的数组先后顺序决定页面显示先后顺序
      * @param array $form['input'] input参数类型事例 ['input','id值','name值','title(标题)值','placeholder值','value值','特殊属性或者事件']
-     * @param array $form
+     * @param array $form['select'] select参数类型事例 ['select','id值','name值','title(标题)值','下拉框数组数据','默认值','特殊属性或者事件']
      * @return void
      * @author yanghuan
      * @author 1305964327@qq.com

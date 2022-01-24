@@ -19,27 +19,31 @@
         height: 100%;
     }
 
+    .layui-form-select dl {
+        max-height: 200px;
+    }
+
     .menuData input {
         width: 10.5%;
         display: inline-block;
     }
 
-    .layui-form-select dl {
-        max-height: 200px;
+    .form-select{
+        width: 10.5%;
+        display: inline-block;
     }
-
-    .layui-select-title input {
+    
+    .form-select select{
         width: 100%;
-    }
-
-    .layui-form-item .layui-input-inline {
-        float: unset;
+        height: 38px;
+        line-height: 1.3;
+        border-color: #e6e6e6;
     }
 </style>
 {/block}
 {block name="body"}
 <div id="obj">
-    <form class="layui-form" lay-filter="layuiadmin-form-admin" style="padding: 15px" id="form">
+    <form style="padding: 15px" id="form">
         <div class="layui-form-item">
             <label class="layui-form-label">父级菜单</label>
             <div class="layui-input-block layui-form">
@@ -71,16 +75,16 @@
             <input type="text" name="actionName[0][node_title]" data-name="node_title"
                 lay-verify="required" placeholder="" value="" autocomplete="off" class="layui-input">
             <span class="input-group-addon">显示</span>
-            <div class="layui-input-inline layui-form" style="width: 11.5%;">
-                <select name="actionName[0][show_type]" data-name="show_type" lay-search="">
+            <div class="form-select">
+                <select name="actionName[0][show_type]" data-name="show_type">
                     {foreach $showType as $ke => $va }
                     <option value="{$ke}">{$va}</option>
                     {/foreach}
                 </select>
             </div>
             <span class="input-group-addon">类型</span>
-            <div class="layui-input-inline layui-form" style="width: 10.5%;">
-                <select name="actionName[0][node_type]" data-name="node_type" lay-search="">
+            <div class="form-select">
+                <select name="actionName[0][node_type]" data-name="node_type">
                     {foreach $nodeType as $ke => $va }
                     <option value="{$ke}">{$va}</option>
                     {/foreach}

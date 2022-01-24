@@ -209,10 +209,10 @@ function KV($name,$refresh = false)
  * @author 1305964327@qq.com
  * @date 2022-01-19
  */
-function pageToLimit($page = 1,$limit = 20)
+function pageToLimit($page = 1,$limit = -1)
 {
     $page       = input('page',1,'int');
-    $limit      = input('limit',20,'int');
+    $limit      = input('limit',-1,'int');
     if ($limit == -1) {
         // 取全部条数
         return false;

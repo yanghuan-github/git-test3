@@ -15,7 +15,7 @@ class User extends BaseLogic
      * @param string $loginName
      * @param string $realName
      * @param string $order
-     * @return void
+     * @return array
      * @author yanghuan
      * @author 1305964327@qq.com
      * @date 2022-01-14
@@ -85,6 +85,7 @@ class User extends BaseLogic
             $update['status'] = $status;
         }
         $update['update_time'] = time();
+        model('AdminUser')->startTrans();
         try {
             // 拼装记录数据
             $data = [
@@ -95,18 +96,16 @@ class User extends BaseLogic
             model('AdminUser')->where('admin_id',$adminId)->update($update);
             // 写入操作记录
             $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
+            model('AdminUser')->commit();
             return Base::SUCCESS;
         } catch(\Exception $e) {
             $data = [
                 'msg'   =>  $e->getMessage(),
-                'data'  =>  [
-                    'adminId'       =>  $adminId,
-                    'realName'      =>  $realName,
-                    'status'        =>  $status,
-                ],
+                'data'  =>  input('post.'),
             ];
             logs(__FUNCTION__,json_encode($data));
             // 后续都是需要写入日志 和 操作记录的
+            model('AdminUser')->rollback();
             return Base::ERROR;
         }
     }
@@ -118,7 +117,7 @@ class User extends BaseLogic
      * @param string $password
      * @param stirng $confirmPwd
      * @param int $status
-     * @return void
+     * @return int
      * @author yanghuan
      * @author 1305964327@qq.com
      * @date 2022-01-20
@@ -145,6 +144,7 @@ class User extends BaseLogic
         $add['create_time']     = $time;
         $add['update_time']     = $time;
         $add['salt']            = md5(uniqid(microtime(true),true));
+        model('AdminUser')->startTrans();
         try {
             // 拼装记录数据
             $data = [
@@ -154,20 +154,16 @@ class User extends BaseLogic
             ];
             model('AdminUser')->insert($add);
             $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
-            return 1;
+            model('AdminUser')->commit();
+            return Base::SUCCESS;
         } catch(\Exception $e) {
             $data = [
                 'msg'   =>  $e->getMessage(),
-                'data'  =>  [
-                    'realName'      =>  $realName,
-                    'loginName'     =>  $loginName,
-                    'password'      =>  $password,
-                    'confirmPwd'    =>  $confirmPwd,
-                    'status'        =>  $status,
-                ],
+                'data'  =>  input('post.'),
             ];
             logs(__FUNCTION__,json_encode($data));
             // 后续都是需要写入日志 和 操作记录的
+            model('AdminUser')->rollback();
             return Base::ERROR;
         }
     }

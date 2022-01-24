@@ -29,4 +29,7 @@ return [
     'menuAdd'       =>  [
         'title'             =>  '菜单新增页面',
     ],
+    'menuEdit'       =>  [
+        'title'             =>  '菜单编辑页面',
+    ],
 ];

@@ -13,4 +13,5 @@ class Log extends Base
 {
     const LOG_UPDATE        =   1;  //  更新操作
     const LOG_ADD           =   2;  //  新增操作
+    const LOG_DELETE        =   3;  //  删除操作
 }
