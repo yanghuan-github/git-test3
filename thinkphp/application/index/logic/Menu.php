@@ -281,6 +281,7 @@ class Menu extends BaseLogic
             return MenuConstant::MENU_CANNOT_BE_MODIFIED;
         }
         model('AdminNode')->startTrans();
+        model('AdminRoleAccess')->startTrans();
         try {
             // 拼装记录数据
             $data = [
@@ -288,9 +289,11 @@ class Menu extends BaseLogic
                 'oldData'   =>  $this->getMenuInfo('*',$nodeId),
             ];
             model('AdminNode')->where('node_id',$nodeId)->delete();
+            model('AdminRoleAccess')->where('node_id',$nodeId)->delete();
             // 写入操作记录
             $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
             model('AdminUser')->commit();
+            model('AdminRoleAccess')->commit();
             return Base::SUCCESS;
         } catch(\Exception $e) {
             $data = [
@@ -300,6 +303,7 @@ class Menu extends BaseLogic
             logs(__FUNCTION__,json_encode($data));
             // 后续都是需要写入日志 和 操作记录的
             model('AdminUser')->rollback();
+            model('AdminRoleAccess')->rollback();
             return Base::ERROR;
         }
     }
