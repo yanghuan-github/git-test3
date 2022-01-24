@@ -31,6 +31,8 @@ trait Search
      *
      * @param array $search 参数的数组先后顺序决定页面显示先后顺序
      * @param array $search['input'] input参数类型事例 ['input','id值','name值','title(标题)值','placeholder值','value值','特殊属性或者事件']
+     * $param array $search['select'] select参数类型实例
+     * @param array $form['select'] select参数类型事例 ['select','id值','name值','title(标题)值','下拉框数组数据','默认值','特殊属性或者事件']
      * @return void
      * @author yanghuan
      * @author 1305964327@qq.com

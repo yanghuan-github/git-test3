@@ -91,7 +91,7 @@ class User extends BaseController
 
     /**
      * 用户新增保存
-     * @return void
+     * @return int
      * @author yanghuan
      * @author 1305964327@qq.com
      * @date 2022-01-20

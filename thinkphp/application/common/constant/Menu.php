@@ -12,6 +12,7 @@ namespace app\common\constant;
 class Menu extends Base
 {
 
-    const USER_AUTH_ERROR   =   1; //  当前用户没权限添加顶级菜单
-    const MENU_LACK_PARAMS  =   2; //  缺少必要参数
+    const USER_AUTH_ERROR           =   2; //  当前用户没权限添加顶级菜单
+    const MENU_LACK_PARAMS          =   3; //  缺少必要参数
+    const MENU_CANNOT_BE_MODIFIED   =   4; //  黑名单菜单无法修改
 }

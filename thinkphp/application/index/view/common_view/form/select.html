@@ -1,9 +1,9 @@
 <div class="layui-form-item">
-    <label class="layui-form-label">{$val[1]}</label>
+    <label class="layui-form-label">{$val[3]}</label>
     <div class="layui-input-block layui-form">
-        <select name="{$val[2]}" id="{$val[2]}" lay-search="" {present name="$val[5]"} {$val[5]} {/present}>
-            {foreach $val[3] as $ke => $va }
-                <option value="{$ke}" {present name="$val[4]"} {if condition="$ke eq $val[4]" }selected{/if} {/present}>{$va}</option>
+        <select name="{$val[2]}" id="{$val[1]}" lay-search="" {present name="$val[6]"} {$val[6]} {/present}>
+            {foreach $val[4] as $ke => $va }
+                <option value="{$ke}" {present name="$val[5]"} {if condition="$ke eq $val[5]" }selected{/if} {/present}>{$va}</option>
             {/foreach}
         </select>
     </div>

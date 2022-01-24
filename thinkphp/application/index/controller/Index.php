@@ -99,9 +99,7 @@ class Index extends BaseController
                 model('AdminUser')->rollback();
                 $data = [
                     'msg'   =>  $e->getMessage(),
-                    'data'  =>  [
-                        'adminId'       =>  $adminId,
-                    ],
+                    'data'  =>  input('post.'),
                 ];
                 logs(__FUNCTION__,json_encode($data));
                 return BaseConstant::ERROR;

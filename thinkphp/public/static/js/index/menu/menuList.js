@@ -53,3 +53,35 @@ function add(nodePid = 0) {
         }
     });
 }
+
+function edit(nodeId = 0) {
+    let editUrl = '/index/Menu/menuEdit?nodeId='+nodeId;
+    layer.open({
+        type: 2, 
+        title: msg.editTitle,
+        offset: 'auto',
+        area: ['1000px','480px'],
+        content: editUrl,
+        shadeClose: true,
+        btn: [msg.submit, msg.closure]
+        ,yes: function(index,layero){
+            let iframeDom = window[layero.find('iframe')[0]['name']]; // 获取当前子页面 iframe
+            iframeDom.submit();// 执行iframe页面的save方法
+        }
+        ,btn2: function(index){
+            layer.close(index);
+        }
+    });
+}
+
+function dele(nodeId) {
+    layer.confirm('是否要删除所选项?',{
+        btn: ['删除', '点错了~']
+    }, function(index, layero){
+        $.post('/index/Menu/menuDele',{nodeId:nodeId},function(code){
+            commonDeleReturn(code,index);
+        });
+    }, function(index){
+        layer.close(index);
+    });
+}

@@ -71,3 +71,43 @@ function statusFun(status)
         break;
     }
 }
+
+/**
+ * 公共保存返回
+ * @param {*} code 
+ */
+function commonSaveReturn(code)
+{
+    if (code == 1) {
+        msgFun(msg['success']);
+    } else {
+        msgFun(msg['error'])
+    }
+    setTimeout(()=>{
+        let index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+        parent.layer.close(index); //再执行关闭 
+        if (code == 1) {
+            parent.location.reload();
+        }
+    },3000)
+}
+
+/**
+ * 公共删除返回
+ * @param {*} code 
+ * @param {*} index 
+ */
+function commonDeleReturn(code,index)
+{
+    if (code == 1) {
+        msgFun(msg['success']);
+    } else {
+        msgFun(msg['error'])
+    }
+    setTimeout(()=>{
+        layer.close(index);
+        if (code == 1) {
+            location.reload();
+        }
+    },3000);
+}
