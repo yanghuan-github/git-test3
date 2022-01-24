@@ -4,7 +4,7 @@ namespace app\index\logic;
 
 
 use app\common\constant\Log;
-use app\common\constant\Base;
+use app\common\constant\User as UserConstant;
 
 class User extends BaseLogic
 {
@@ -49,7 +49,7 @@ class User extends BaseLogic
     {
         $where = [];
         if ($realName) {
-            $where['real_name'] = $realName;
+            $where[] = ['real_name','like','%'.$realName.'%'];
         }
         if ($status) {
             $where['status'] = $status;
@@ -77,6 +77,9 @@ class User extends BaseLogic
      */
     public function userEditSave($adminId,$realName,$status)
     {
+        if (!$adminId) {
+            return UserConstant::LACK_PARAMS;
+        }
         $update = [];
         if ($realName) {
             $update['real_name'] = $realName;
@@ -97,7 +100,7 @@ class User extends BaseLogic
             // 写入操作记录
             $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
             model('AdminUser')->commit();
-            return Base::SUCCESS;
+            return UserConstant::SUCCESS;
         } catch(\Exception $e) {
             $data = [
                 'msg'   =>  $e->getMessage(),
@@ -106,7 +109,7 @@ class User extends BaseLogic
             logs(__FUNCTION__,json_encode($data));
             // 后续都是需要写入日志 和 操作记录的
             model('AdminUser')->rollback();
-            return Base::ERROR;
+            return UserConstant::ERROR;
         }
     }
 
@@ -124,8 +127,11 @@ class User extends BaseLogic
      */
     public function userAddSave($realName,$loginName,$password,$confirmPwd,$status)
     {
+        if (!$loginName || !$password || !$confirmPwd) {
+            return UserConstant::LACK_PARAMS;
+        }
         if ($password != $confirmPwd) {
-            return 0;
+            return UserConstant::USER_PASSWORD_ERROR;
         }
         $add = [];
         if ($realName) {
@@ -155,7 +161,7 @@ class User extends BaseLogic
             model('AdminUser')->insert($add);
             $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
             model('AdminUser')->commit();
-            return Base::SUCCESS;
+            return UserConstant::SUCCESS;
         } catch(\Exception $e) {
             $data = [
                 'msg'   =>  $e->getMessage(),
@@ -164,7 +170,7 @@ class User extends BaseLogic
             logs(__FUNCTION__,json_encode($data));
             // 后续都是需要写入日志 和 操作记录的
             model('AdminUser')->rollback();
-            return Base::ERROR;
+            return UserConstant::ERROR;
         }
     }
 }

@@ -4,7 +4,6 @@ namespace app\index\logic;
 
 use app\common\constant\Log;
 use app\common\constant\Menu as MenuConstant;
-use app\common\constant\Base;
 
 class Menu extends BaseLogic
 {
@@ -113,7 +112,7 @@ class Menu extends BaseLogic
     public function menuAddSave($nodePid,$modular,$controller,$actionName,$role)
     {
         if (!$modular || !$controller) {
-            return MenuConstant::MENU_LACK_PARAMS;
+            return MenuConstant::LACK_PARAMS;
         }
         $pjId = C('pj_id');
         $level = $this->getMenuLevel($nodePid);
@@ -158,7 +157,7 @@ class Menu extends BaseLogic
                 $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
                 model('AdminNode')->commit();
                 model('AdminRoleAccess')->commit();
-                return Base::SUCCESS;
+                return MenuConstant::SUCCESS;
             } catch (\Exception $e) {
                 $data = [
                     'msg'   =>  $e->getMessage(),
@@ -168,10 +167,10 @@ class Menu extends BaseLogic
                 // 后续都是需要写入日志 和 操作记录的
                 model('AdminNode')->rollback();
                 model('AdminRoleAccess')->rollback();
-                return Base::ERROR;
+                return MenuConstant::ERROR;
             }
         }
-        return MenuConstant::MENU_LACK_PARAMS;
+        return MenuConstant::LACK_PARAMS;
     }
 
     /**
@@ -208,9 +207,9 @@ class Menu extends BaseLogic
     public function menuEditSave($nodeId,$nodeTitle,$nodePid,$showType,$nodeType,$status,$modular,$controller,$action,$sort,$remark)
     {
         if (!$nodeId || !$nodeTitle) {
-            return MenuConstant::MENU_LACK_PARAMS;
+            return MenuConstant::LACK_PARAMS;
         }
-        if (in_array($nodeId,KV('blackListMenu'))) {
+        if (in_array($nodeId,KV('whiteListMenu'))) {
             return MenuConstant::MENU_CANNOT_BE_MODIFIED;
         }
         $update = [];
@@ -233,7 +232,7 @@ class Menu extends BaseLogic
             if ($modular && $controller && $action) {
                 $update['data'] = '/'.$modular.'/'.$controller.'/'.$action.'.html';
             } else {
-                return MenuConstant::MENU_LACK_PARAMS;
+                return MenuConstant::LACK_PARAMS;
             }
         }
         if ($sort) {
@@ -254,7 +253,7 @@ class Menu extends BaseLogic
             // 写入操作记录
             $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
             model('AdminUser')->commit();
-            return Base::SUCCESS;
+            return MenuConstant::SUCCESS;
         } catch(\Exception $e) {
             $data = [
                 'msg'   =>  $e->getMessage(),
@@ -263,7 +262,7 @@ class Menu extends BaseLogic
             logs(__FUNCTION__,json_encode($data));
             // 后续都是需要写入日志 和 操作记录的
             model('AdminUser')->rollback();
-            return Base::ERROR;
+            return MenuConstant::ERROR;
         }
     }
 
@@ -277,7 +276,7 @@ class Menu extends BaseLogic
      */
     public function menuDele($nodeId)
     {
-        if (in_array($nodeId,KV('blackListMenu'))) {
+        if (in_array($nodeId,KV('whiteListMenu'))) {
             return MenuConstant::MENU_CANNOT_BE_MODIFIED;
         }
         model('AdminNode')->startTrans();
@@ -294,7 +293,7 @@ class Menu extends BaseLogic
             $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
             model('AdminUser')->commit();
             model('AdminRoleAccess')->commit();
-            return Base::SUCCESS;
+            return MenuConstant::SUCCESS;
         } catch(\Exception $e) {
             $data = [
                 'msg'   =>  $e->getMessage(),
@@ -304,7 +303,7 @@ class Menu extends BaseLogic
             // 后续都是需要写入日志 和 操作记录的
             model('AdminUser')->rollback();
             model('AdminRoleAccess')->rollback();
-            return Base::ERROR;
+            return MenuConstant::ERROR;
         }
     }
 }

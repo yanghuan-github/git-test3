@@ -1,7 +1,7 @@
 function submit(){
-    let id  = $('#id').val();
+    let roleId  = $('#roleId').val();
     let obj;
-    if (id == 0) {
+    if (roleId == 0) {
         obj = addData();
     } else {
         obj = editData();
@@ -26,11 +26,12 @@ function submit(){
  */
 function editData(){
     obj.data = {
-        adminId : $('#id').val(),
-        realName : $('#realName').val(),
+        roleId : $('#roleId').val(),
+        roleName : $('#roleName').val(),
+        rolePid : $('#rolePid').val(),
         status : $('#status').val(),
     }
-    obj.url = '/index/User/userEditSave';
+    obj.url = '/index/Role/roleEditSave';
     return obj;
 }
 
@@ -40,12 +41,10 @@ function editData(){
  */
 function addData(){
     obj.data = {
-        realName : $('#realName').val(),
-        loginName : $('#loginName').val(),
-        password : hex_md5($('#password').val()),
-        confirmPwd : hex_md5($('#confirmPwd').val()),
+        roleName : $('#roleName').val(),
+        rolePid : $('#rolePid').val(),
         status : $('#status').val(),
     }
-    obj.url = '/index/User/userAddSave';
+    obj.url = '/index/Role/roleAddSave';
     return obj;
 }

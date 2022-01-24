@@ -1,6 +1,7 @@
 <?php
 namespace app\index\controller;
 
+use app\common\constant\User as UserConstant;
 class User extends BaseController
 {
     /**
@@ -13,8 +14,8 @@ class User extends BaseController
     public function userList()
     {
         $this->search([
+            ['statusView',[0=>'全部',3=>'软删除'],true],
             ['input','realName','realName','真实姓名','支持模糊查询'],
-            ['statusView',[0=>'全部',3=>'软删除'],true]
         ]);
         return view('userList');
     }
@@ -80,12 +81,15 @@ class User extends BaseController
      */
     public function userEditSave()
     {
+        if (!$this->isRoot) {
+            return UserConstant::USER_AUTH_ERROR;
+        }
         $adminId    = input('adminId','','int');
         $realName   = input('realName','','string');
         $status     = input('status',2,'int');
 
         // 编辑
-        return json(model('User','logic')->userEditSave($adminId,$realName,$status));
+        return model('User','logic')->userEditSave($adminId,$realName,$status);
        
     }
 
@@ -98,6 +102,9 @@ class User extends BaseController
      */
     public function userAddSave()
     {
+        if (!$this->isRoot) {
+            return UserConstant::USER_AUTH_ERROR;
+        }
         $realName   = input('realName','','string');
         $loginName  = input('loginName','','string');
         $password   = input('password','','string');
@@ -105,6 +112,6 @@ class User extends BaseController
         $status     = input('status',2,'int');
 
         // 新增
-        return json(model('User','logic')->userAddSave($realName,$loginName,$password,$confirmPwd,$status));
+        return model('User','logic')->userAddSave($realName,$loginName,$password,$confirmPwd,$status);
     }
 }
