@@ -45,7 +45,27 @@ class Config extends BaseController
      */
     public function paramEdit()
     {
+        $id = input('id',0,'int');
 
+        $paramInfo = [
+            'name'      =>  '',
+            'value'     =>  '',
+            'msg'       =>  '',
+            'status'    =>  '',
+        ];
+        if ($id) {
+            $paramInfo = model('Config','logic')->getParamInfo('name,value,msg,status',$id);
+        }
+        $this->assign([
+            'id'    =>  $id,
+        ]);
+        $this->form([
+            ['input','name','name','属性名','KV参数名(唯一)',$paramInfo['name']],
+            ['textarea','value','value','键值',$paramInfo['value']],
+            ['textarea','msg','msg','参数含义(参数意义)',$paramInfo['msg']],
+            ['statusView',$paramInfo['status']],
+        ]);
+        return view('paramEdit');
     }
 
     /**
@@ -57,7 +77,17 @@ class Config extends BaseController
      */
     public function paramEditSave()
     {
+        if (!$this->isRoot) {
+            return ConfigConstant::USER_AUTH_ERROR;
+        }
+        $id         = input('id','','int');
+        $name       = input('name','','string');
+        $value      = input('value','','string');
+        $msg        = input('msg','','string');
+        $status     = input('status',2,'int');
 
+        // 编辑
+        return model('Config','logic')->paramEditSave($id,$name,$value,$msg,$status);
     }
 
     /**
@@ -69,7 +99,16 @@ class Config extends BaseController
      */
     public function paramAddSave()
     {
+        if (!$this->isRoot) {
+            return ConfigConstant::USER_AUTH_ERROR;
+        }
+        $name       = input('name','','string');
+        $value      = input('value','','string');
+        $msg        = input('msg','','string');
+        $status     = input('status',2,'int');
 
+        // 编辑
+        return model('Config','logic')->paramAddSave($name,$value,$msg,$status);
     }
 
     /**
@@ -81,6 +120,10 @@ class Config extends BaseController
      */
     public function paramDele()
     {
-
+        if (!$this->isRoot) {
+            return ConfigConstant::USER_AUTH_ERROR;
+        }
+        $id     = input('id','','int');
+        return model('Config','logic')->paramDele($id);
     }
 }

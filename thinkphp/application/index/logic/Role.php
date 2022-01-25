@@ -216,6 +216,9 @@ class Role extends BaseLogic
      */
     public function roleDele($roleId)
     {
+        if (!$roleId) {
+            return RoleConstant::LACK_PARAMS;
+        }
         if (in_array($roleId,KV('whiteListRole'))) {
             return RoleConstant::ROLE_CANNOT_BE_DELETE;
         }

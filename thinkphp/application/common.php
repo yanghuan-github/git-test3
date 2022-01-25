@@ -189,7 +189,7 @@ function KV($name,$refresh = false)
     if (empty($data) || $refresh) {
         // 系统项目时 直接model 不需要通过system的接口在获取数据
         if (C('pj_id') == 0) {
-            $data = model('common/Config','logic')->getParams();
+            $data = model('common/Config','logic')->getParams([],$refresh);
         } else {
             // system接口写好在补充
         }
