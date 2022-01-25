@@ -1,29 +1,31 @@
-{foreach $search as $key => $val }
-    {switch $val[0]}
-        {case search_statusView}
-            <!-- 状态类型 -->
-            {include file="common_view/search/status" }
-            <!-- 状态类型结束 -->
-        {/case}
-        {case search_pjView}
-            <!-- 项目类型 -->
-            {include file="common_view/search/pj" }
-            <!-- 项目类型结束 -->
-        {/case}
-        {case search_environView}
-            <!-- 环境类型 -->
-            {include file="common_view/search/environ" }
-            <!-- 环境类型结束 -->
-        {/case}
-        {case select}
-            <!-- 下拉框开始 -->
-            {include file="common_view/search/select" }
-            <!-- 下拉框结束 -->
-        {/case}
-        {case input}
-            <!-- 输入框开始 -->
-            {include file="common_view/search/input" }
-            <!-- 输入框结束 -->
-        {/case}
-    {/switch}
-{/foreach}
+{present name="$search"}
+    {foreach $search as $key => $val }
+        {switch $val[0]}
+            {case search_statusView}
+                <!-- 状态类型 -->
+                {include file="common_view/search/status" }
+                <!-- 状态类型结束 -->
+            {/case}
+            {case search_pjView}
+                <!-- 项目类型 -->
+                {include file="common_view/search/pj" }
+                <!-- 项目类型结束 -->
+            {/case}
+            {case search_environView}
+                <!-- 环境类型 -->
+                {include file="common_view/search/environ" }
+                <!-- 环境类型结束 -->
+            {/case}
+            {case select}
+                <!-- 下拉框开始 -->
+                {include file="common_view/search/select" }
+                <!-- 下拉框结束 -->
+            {/case}
+            {case input}
+                <!-- 输入框开始 -->
+                {include file="common_view/search/input" }
+                <!-- 输入框结束 -->
+            {/case}
+        {/switch}
+    {/foreach}
+{/present}

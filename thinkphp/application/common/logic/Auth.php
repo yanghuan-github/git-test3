@@ -37,8 +37,6 @@ class Auth
         if ($userInfo['status'] == 1 && $roleInfo['status'] == 1) {
             $status = true;
         }
-        // 查询用户角色组权限
-        $userMenu = model('Menu','logic')->adminNodeAccess($roleInfo['role_id']);
         $tokenInfo = [
             'iat'   => $time,    //签发时间
             'voe'   => $time + 86400, //换取有效时间
@@ -47,7 +45,6 @@ class Auth
             'data'  => [
                 'user_info' =>  $userInfo,
                 'role_info' =>  $roleInfo,
-                'user_menu' =>  $userMenu,
                 'status'    =>  $status // 是否被禁用
             ]
         ];
@@ -95,10 +92,10 @@ class Auth
         // 验证sign是否正确
         if ($raw) {
             $dataKey = "__auth_data_" .md5(json_encode((array)$raw->data->user_info));
-            $data = $this->cache('redis')->get($dataKey);
+            $data = $this->cache('file')->get($dataKey);
             if (!$data) {
                 $data = $this->checkSign($raw);
-                $this->cache('redis')->set($dataKey,$data,$surplusTime);
+                $this->cache('file')->set($dataKey,$data,$surplusTime);
             }
             if ($data) {
                 return $data;
@@ -124,7 +121,7 @@ class Auth
                     // 生成缓存 有效期内的缓存 避免下次还需进行验证
                     $userInfo = $this->toArray($raw->data->user_info);
                     $roleInfo = $this->toArray($raw->data->role_info);
-                    $userMenu = $this->toArray($raw->data->user_menu);
+                    $userMenu = model('common/Menu','logic')->adminNodeAccess($roleInfo['role_id']);
                     return [
                         'user_info' =>  $userInfo,
                         'role_info' =>  $roleInfo,

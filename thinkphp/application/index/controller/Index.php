@@ -49,7 +49,7 @@ class Index extends BaseController
         $jwtCheckKey = '__check_token_'.md5($this->userName);
         $dataKey = "__auth_data_" .md5(json_encode($this->userInfo));
         $this->cache('redis')->rm($jwtCheckKey);
-        $this->cache('redis')->rm($dataKey);
+        $this->cache('file')->rm($dataKey);
         session(null);
         $this->success('退出成功','login/Login/login');
     }
