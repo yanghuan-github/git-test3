@@ -20,6 +20,13 @@ class Role extends BaseController
         return view('roleList');
     }
 
+    /**
+     * 角色列表数据
+     * @return json
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-24
+     */
     public function roleListData()
     {
         $roleName   = input('roleName','','string');
