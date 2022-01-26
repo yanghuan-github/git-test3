@@ -20,19 +20,27 @@ class User extends BaseLogic
      * @author 1305964327@qq.com
      * @date 2022-01-14
      */
-    public function getAdminInfo($field = '*',$adminId = '',$loginName = '',$realName = '',$order = '')
+    public function getAdminInfo($field = '',$adminId = '',$loginName = '',$realName = '',$order = '')
     {
         $where = [];
         if ($adminId) {
-            $where['admin_id'] = $adminId;
+            $where['u.admin_id'] = $adminId;
         }
         if ($loginName) {
-            $where['login_name'] = $loginName;
+            $where['u.login_name'] = $loginName;
         }
         if ($realName) {
-            $where['real_name'] = $realName;
+            $where['u.real_name'] = $realName;
         }
-        return model('AdminUser')->getDetail($field,$where,$order);
+        if (!$field) {
+            $field  = 'u.login_name,u.login_pwd,u.real_name,u.status,r.role_id';
+        }
+        $model = model('AdminUser');
+        $data =  $model->field($field)->alias('u')
+                         ->leftJoin('BindAdminRole b','u.admin_id = b.admin_id')
+                         ->leftJoin('AdminRole r','b.role_id = r.role_id')
+                         ->where($where)->find();
+        return $data->toArray();
     }
 
     /**
@@ -45,18 +53,25 @@ class User extends BaseLogic
      * @author 1305964327@qq.com
      * @date 2022-01-19
      */
-    public function userListData($realName,$status,$pageLimit)
+    public function userListData($realName,$roleId,$status,$pageLimit)
     {
         $where = [];
         if ($realName) {
-            $where[] = ['real_name','like','%'.$realName.'%'];
+            $where[] = ['u.real_name','like','%'.$realName.'%'];
         }
         if ($status) {
-            $where['status'] = $status;
+            $where['u.status'] = $status;
         }
-        $field  = 'admin_id,login_name,real_name,status,create_time,update_time,laston_ip,laston_time';
+        if ($roleId) {
+            $where['r.role_id'] = $roleId;
+        }
+        $field  = 'u.admin_id,u.login_name,u.real_name,u.status,u.create_time,u.update_time,u.laston_ip,u.laston_time,r.role_id,r.role_name';
         $model = model('AdminUser');
-        $model   = $model->field($field)->where($where);
+        $model   = $model->field($field)
+                         ->alias('u')
+                         ->leftJoin('BindAdminRole b','u.admin_id = b.admin_id')
+                         ->leftJoin('AdminRole r','b.role_id = r.role_id')
+                         ->where($where);
         if ($pageLimit) {
             $model = $model->limit($pageLimit);
         }
@@ -75,10 +90,13 @@ class User extends BaseLogic
      * @author 1305964327@qq.com
      * @date 2022-01-19
      */
-    public function userEditSave($adminId,$realName,$status)
+    public function userEditSave($adminId,$roleId,$realName,$status)
     {
         if (!$adminId) {
             return UserConstant::LACK_PARAMS;
+        }
+        if (in_array($adminId,KV('whiteListUser'))) {
+            return UserConstant::USER_CANNOT_BE_MODIFIED;
         }
         $update = [];
         if ($realName) {
@@ -89,17 +107,28 @@ class User extends BaseLogic
         }
         $update['update_time'] = time();
         model('AdminUser')->startTrans();
+        model('BindAdminRole')->startTrans();
         try {
             // 拼装记录数据
             $data = [
                 'type'      =>  Log::LOG_UPDATE,
-                'oldData'   =>  $this->getAdminInfo('real_name,status',$adminId),
-                'data'      =>  $update,
+                'oldData'   =>  $this->getAdminInfo('u.real_name,u.status',$adminId),
+                'update'    =>  $update,
             ];
             model('AdminUser')->where('admin_id',$adminId)->update($update);
+            if ($roleId) {
+                // 插入用户角色组绑定表
+                $add = [
+                    'admin_id'  =>  $adminId,
+                    'role_id'   =>  $roleId,
+                ];
+                model('BindAdminRole')->insert($add,true);
+                $data['add'] = $add;
+            }
             // 写入操作记录
             $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
             model('AdminUser')->commit();
+            model('BindAdminRole')->commit();
             return UserConstant::SUCCESS;
         } catch(\Exception $e) {
             $data = [
@@ -109,6 +138,7 @@ class User extends BaseLogic
             logs(__FUNCTION__,json_encode($data));
             // 后续都是需要写入日志 和 操作记录的
             model('AdminUser')->rollback();
+            model('BindAdminRole')->rollback();
             return UserConstant::ERROR;
         }
     }
@@ -125,7 +155,7 @@ class User extends BaseLogic
      * @author 1305964327@qq.com
      * @date 2022-01-20
      */
-    public function userAddSave($realName,$loginName,$password,$confirmPwd,$status)
+    public function userAddSave($realName,$loginName,$password,$confirmPwd,$roleId,$status)
     {
         if (!$loginName || !$password || !$confirmPwd) {
             return UserConstant::LACK_PARAMS;
@@ -141,7 +171,8 @@ class User extends BaseLogic
             $add['login_name'] = $loginName;
         }
         if ($password) {
-            $add['login_pwd'] = $password;
+            $add['salt'] = md5(uniqid(microtime(true),true));
+            $add['login_pwd'] = md5(sha1(md5($password.$add['salt'])));
         }
         if ($status) {
             $add['status'] = $status;
@@ -149,8 +180,8 @@ class User extends BaseLogic
         $time = time();
         $add['create_time']     = $time;
         $add['update_time']     = $time;
-        $add['salt']            = md5(uniqid(microtime(true),true));
         model('AdminUser')->startTrans();
+        model('BindAdminRole')->startTrans();
         try {
             // 拼装记录数据
             $data = [
@@ -158,7 +189,58 @@ class User extends BaseLogic
                 'oldData'   =>  [],
                 'data'      =>  $add,
             ];
-            model('AdminUser')->insert($add);
+            $adminId = model('AdminUser')->insertGetId($add);
+            if ($roleId) {
+                // 插入用户角色组绑定表
+                $add = [
+                    'admin_id'  =>  $adminId,
+                    'role_id'   =>  $roleId,
+                ];
+                model('BindAdminRole')->insert($add);
+                $data['add'] = $add;
+            }
+            $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
+            model('AdminUser')->commit();
+            model('BindAdminRole')->commit();
+            return UserConstant::SUCCESS;
+        } catch(\Exception $e) {
+            $data = [
+                'msg'   =>  $e->getMessage(),
+                'data'  =>  input('post.'),
+            ];
+            logs(__FUNCTION__,json_encode($data));
+            // 后续都是需要写入日志 和 操作记录的
+            model('AdminUser')->rollback();
+            model('BindAdminRole')->rollback();
+            return UserConstant::ERROR;
+        }
+    }
+
+    /**
+     * 用户软删除
+     * @param int $adminId
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-25
+     */
+    public function userDele($adminId)
+    {
+        if (!$adminId) {
+            return UserConstant::LACK_PARAMS;
+        }
+        if (in_array($adminId,KV('whiteListUser'))) {
+            return UserConstant::USER_CANNOT_BE_MODIFIED;
+        }
+        model('AdminUser')->startTrans();
+        try {
+            // 拼装记录数据
+            $data = [
+                'type'      =>  Log::LOG_DELETE,
+                'oldData'   =>  $this->getAdminInfo('*',$adminId),
+            ];
+            model('AdminUser')->where('admin_id',$adminId)->update(['status'=>3,'update_time'=>time()]);
+            // 写入操作记录
             $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
             model('AdminUser')->commit();
             return UserConstant::SUCCESS;

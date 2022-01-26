@@ -12,9 +12,11 @@ layui.use(['form', 'table'], function () {
     // 构建查询条件
     function queryParams(params) {
         var queryParams = {
-            roleId: $("#roleId").val(),
-            realName: $("#realName").val(),
-            status: $("#status").val(),
+            pjId: $("#pjId").val(),
+            environId: $("#environId").val(),
+            isView: $("#isView").val(),
+            pjLogo: $("#pjLogo").val(),
+            pjName: $("#pjName").val(),
         };
         return queryParams;
     }
@@ -24,72 +26,45 @@ layui.use(['form', 'table'], function () {
             var table = layui.table;
             var columns = [[
                 {
-                    field: 'admin_id',
+                    field: 'id',
                     halign: "center",
                     align: "center",
                     title: 'ID',
                 },
                 {
-                    field: 'login_name',
+                    field: 'pj_id',
                     halign: "center",
                     align: "center",
-                    title: '用户名',
+                    title: '项目ID',
                 },
                 {
-                    field: 'role_name',
+                    field: 'environ_id',
                     halign: "center",
                     align: "center",
-                    title: '角色组名',
+                    title: '环境ID',
                     templet: function (v) {
-                        return roleFun(v.role_name);
+                        return environFun(v.environ_id);
                     }
                 },
                 {
-                    field: 'real_name',
+                    field: 'pj_logo',
                     halign: "center",
                     align: "center",
-                    title: '真实姓名',
+                    title: '项目标志',
                 },
                 {
-                    field: 'status',
+                    field: 'pj_name',
                     halign: "center",
                     align: "center",
-                    title: '状态',
+                    title: '项目名称',
+                },
+                {
+                    field: 'is_view',
+                    halign: "center",
+                    align: "center",
+                    title: '管理界面',
                     templet: function (v) {
-                        return statusFun(v.status);
-                    }
-                },
-                {
-                    field: 'create_time',
-                    halign: "center",
-                    align: "center",
-                    title: '创建时间',
-                    templet: function (v) {
-                        return timeFun(v.create_time);
-                    }
-                },
-                {
-                    field: 'update_time',
-                    halign: "center",
-                    align: "center",
-                    title: '更新时间',
-                    templet: function (v) {
-                        return timeFun(v.update_time);
-                    }
-                },
-                {
-                    field: 'laston_ip',
-                    halign: "center",
-                    align: "center",
-                    title: '最后登录ip',
-                },
-                {
-                    field: 'laston_time',
-                    halign: "center",
-                    align: "center",
-                    title: '最后登录时间',
-                    templet: function (v) {
-                        return timeFun(v.laston_time);
+                        return isViewFun(v.is_view);
                     }
                 },
                 {
@@ -99,8 +74,8 @@ layui.use(['form', 'table'], function () {
                     title: '操作',
                     templet: function (v) {
                         return `
-                                <a href='javascript:;' onclick='edit(`+v.admin_id+`)' class='layui-btn layui-btn-primary layui-btn-sm'>编辑</a>
-                                <a href='javascript:;' onclick='dele(`+v.admin_id+`)' class='layui-btn layui-btn-primary layui-btn-sm'>删除</a>
+                                <a href='javascript:;' onclick='edit(`+v.id+`)' class='layui-btn layui-btn-primary layui-btn-sm'>编辑</a>
+                                <a href='javascript:;' onclick='dele(`+v.id+`)' class='layui-btn layui-btn-primary layui-btn-sm'>删除</a>
                                 `;
                     }
                 }
@@ -130,25 +105,28 @@ layui.use(['form', 'table'], function () {
             })
         })
     }
-
 })
 
 /**
- * 角色组名特殊处理
- * @param {*} roleName 
- * @returns 
+ * 管理界面参数处理方法
+ * @param {*} isView 
  */
-function roleFun(roleName)
+function isViewFun(isView)
 {
-    if (roleName) {
-        return roleName;
+    if (isView == 1) {
+        return `<span style='color:red'>√</span>`;
     } else {
-        return `<span style='color:red;'>未绑定角色组</span>`;
+        return `<span style='color:green'>x</span>`;
     }
 }
 
+function environFun(environId)
+{
+    return environViewJson[environId];
+}
+
 function add() {
-    let addUrl = '/index/User/userEdit?id=0';
+    let addUrl = '/index/Config/pjEdit?id=0';
     layer.open({
         type: 2, 
         title: msg.addTitle,
@@ -167,7 +145,7 @@ function add() {
     });
 }
 function edit(id) {
-    let editUrl = '/index/User/userEdit?id='+id;
+    let editUrl = '/index/Config/pjEdit?id='+id;
     layer.open({
         type: 2, 
         title: msg.editTitle,
@@ -186,12 +164,11 @@ function edit(id) {
     });
 }
 
-function dele(id)
-{
+function dele(id) {
     layer.confirm('是否要删除所选项?',{
         btn: ['删除', '点错了~']
     }, function(index, layero){
-        $.post('/index/User/userDele',{adminId:id},function(code){
+        $.post('/index/Config/pjDele',{id:id},function(code){
             commonDeleReturn(code,index);
         });
     }, function(index){

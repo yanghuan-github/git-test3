@@ -1,0 +1,12 @@
+<div class="layui-inline" style="margin-top:0.5%;margin-bottom: 0.5%;">
+    <div class="layui-input-inline layui-form">
+        <label class="layui-form-label">角色组：</label>
+        <div class="layui-input-block">
+            <select name="roleId" id="roleId" lay-search="">
+                {foreach $roleView as $key => $val}
+                    <option value="{$key}" {present name="roleViewValue"} {if condition="$key eq $roleViewValue" }selected{/if} {/present}>{$val}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+</div>

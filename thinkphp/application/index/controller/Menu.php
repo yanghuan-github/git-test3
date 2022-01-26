@@ -40,7 +40,7 @@ class Menu extends BaseController
      * @author 1305964327@qq.com
      * @date 2022-01-20
      */
-    private function menuListData($pjId,$status,$page,$limit)
+    private function menuListData($pjId = 0,$status = 0,$page = 1,$limit = -1)
     {
         $pageLimit  = pageToLimit($page,$limit);
         return model('Menu','logic')->menuListData($pjId,$status,$pageLimit);
@@ -94,7 +94,7 @@ class Menu extends BaseController
         $controller     =   $data['controller']; 
         $actionName     =   $data['actionName']; 
         $role           =   $data['role'] ?? []; 
-        
+
         return model('Menu','logic')->menuAddSave($nodePid,$modular,$controller,$actionName,$role);
     }
 

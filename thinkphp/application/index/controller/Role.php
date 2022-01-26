@@ -14,9 +14,10 @@ class Role extends BaseController
     public function roleList()
     {
         $this->search([
-            ['statusView',[0=>'全部'],true],
+            ['statusView',[0=>'全部',3=>'软删除'],true],
             ['input','roleName','roleName','角色组名称','支持模糊查询'],
         ]);
+        $this->assign('rootId',1);
         return view('roleList');
     }
 
@@ -58,11 +59,11 @@ class Role extends BaseController
         ]);
         // 获取角色组id->name值
         $roleIdName = model('Role','logic')->getRoleIdName();
-
+        
         $this->form([
             ['input','roleName','roleName','角色组名称','权限组名称',$roleInfo['role_name']],
-            ['select','rolePid','rolePid','上级角色组',[0=>'顶级菜单']+$roleIdName,$roleInfo['role_pid']],
-            ['statusView',$roleInfo['status']],
+            ['select','rolePid','rolePid','上级角色组',$roleIdName,$roleInfo['role_pid']],
+            ['statusView','软删除',$roleInfo['status']],
         ]);
 
         return view('roleEdit');
@@ -110,7 +111,66 @@ class Role extends BaseController
     }
 
     /**
-     * 
+     * 角色权限编辑页面
+     * @return view
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-25
+     */
+    public function rolePer()
+    {
+        $roleId = input('roleId',1,'int');
+        // 获取菜单列表
+        $menuLogic = model('Menu','logic');
+        $menuList = $menuLogic->getNodeTree();
+        // 获取角色菜单权限
+        $roleMenu = $menuLogic->getRoleMenu($roleId);
+        $this->assign([
+            'roleId'    =>  $roleId,
+            'menuList'  =>  json_encode($menuList),
+            'roleMenu'  =>  json_encode($roleMenu),
+        ]);
+        return view('rolePer');
+    }
+
+    /**
+     * 角色权限编辑保存
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-26
+     */
+    public function rolePerSave()
+    {
+        if (!$this->isRoot) {
+            return RoleConstant::USER_AUTH_ERROR;
+        }
+        $data = input('post.');
+        // 权限编辑保存
+        return model('Role','logic')->rolePerSave($data);
+    }
+
+    /**
+     * 父角色权限继承保存
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-26
+     */
+    public function roleExtSave()
+    {
+        $roleId     = input('roleId',0,'int');
+        $rolePid    = input('rolePid',0,'int');
+
+        if (!$this->isRoot) {
+            return RoleConstant::USER_AUTH_ERROR;
+        }
+        // 权限编继承保存
+        return model('Role','logic')->roleExtSave($roleId,$rolePid);
+    }
+
+    /**
+     * 角色软删除
      * @return void
      * @author yanghuan
      * @author 1305964327@qq.com

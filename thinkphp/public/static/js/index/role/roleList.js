@@ -72,11 +72,19 @@ layui.use(['form', 'table'], function () {
                     halign: "center",
                     align: "center",
                     title: '操作',
+                    width: 300,
                     templet: function (v) {
-                        return `
-                                <a href='javascript:;' onclick='edit(`+v.role_id+`)' class='layui-btn layui-btn-primary layui-btn-sm'>编辑</a>
-                                <a href='javascript:;' onclick='dele(`+v.role_id+`)' class='layui-btn layui-btn-primary layui-btn-sm'>删除</a>
-                                `;
+                        let html =  `
+                                    <a href='javascript:;' onclick='edit(`+v.role_id+`)' class='layui-btn layui-btn-primary layui-btn-sm'>编辑</a>
+                                    <a href='javascript:;' onclick='per(`+v.role_id+`)' class='layui-btn layui-btn-primary layui-btn-sm'>权限</a>
+                                    `;
+                        if (v.role_id != rootId) {
+                            html += `
+                                    <a href='javascript:;' onclick='ext(`+v.role_id+`,`+v.role_pid+`)' class='layui-btn layui-btn-primary layui-btn-sm'>继承</a>
+                                    `;
+                        }
+                        html += `<a href='javascript:;' onclick='dele(`+v.role_id+`)' class='layui-btn layui-btn-primary layui-btn-sm'>删除</a>`;
+                        return html;
                     }
                 }
             ]]
@@ -89,7 +97,6 @@ layui.use(['form', 'table'], function () {
                 even: false, //开启隔行背景
                 cols: columns,
                 size: 'lg',
-                cellMinWidth: 100,
                 url: requestUrl,
                 method: 'post',
                 where: queryParams(),
@@ -127,6 +134,27 @@ function add() {
         }
     });
 }
+
+function per(roleId) {
+    let perUrl = '/index/Role/rolePer?roleId='+roleId;
+    layer.open({
+        type: 2, 
+        title: msg.perTitle,
+        offset: 'auto',
+        area: ['400px','400px'],
+        content: perUrl,
+        shadeClose: true,
+        btn: [msg.submit, msg.closure]
+        ,yes: function(index,layero){
+            let iframeDom = window[layero.find('iframe')[0]['name']]; // 获取当前子页面 iframe
+            iframeDom.submit();// 执行iframe页面的save方法
+        }
+        ,btn2: function(index){
+            layer.close(index);
+        }
+    });
+}
+
 function edit(roleId) {
     let editUrl = '/index/Role/roleEdit?roleId='+roleId;
     layer.open({
@@ -152,6 +180,18 @@ function dele(roleId) {
         btn: ['删除', '点错了~']
     }, function(index, layero){
         $.post('/index/Role/roleDele',{roleId:roleId},function(code){
+            commonDeleReturn(code,index);
+        });
+    }, function(index){
+        layer.close(index);
+    });
+}
+
+function ext(roleId,rolePid) {
+    layer.confirm('是否继承父角色组的所有权限?',{
+        btn: ['继承', '点错了~']
+    }, function(index, layero){
+        $.post('/index/Role/roleExtSave',{roleId:roleId,rolePid:rolePid},function(code){
             commonDeleReturn(code,index);
         });
     }, function(index){

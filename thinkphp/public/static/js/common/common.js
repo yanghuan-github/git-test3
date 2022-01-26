@@ -89,7 +89,7 @@ function commonSaveReturn(code)
         if (code == 1) {
             parent.location.reload();
         }
-    },3000)
+    },1000)
 }
 
 /**
@@ -109,5 +109,5 @@ function commonDeleReturn(code,index)
         if (code == 1) {
             location.reload();
         }
-    },3000);
+    },1000);
 }

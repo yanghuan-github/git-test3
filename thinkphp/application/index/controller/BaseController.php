@@ -55,10 +55,9 @@ class BaseController extends Controller
         }
         // 设置基本用户信息
         $this->adminId  = $userData['user_info']['admin_id'];
-        $this->roleId   = $userData['role_info']['role_id'];
-        $this->isRoot   = $this->isAdmin($this->adminId);
+        $this->roleId   = $userData['user_info']['role_id'];
+        $this->isRoot   = $this->isAdmin($this->userName,$this->roleId);
         $this->userInfo = $userData['user_info'];
-        $this->roleInfo = $userData['role_info'];
         $this->userMenu = $userData['user_menu'];
         $this->nodeUrl  = array_filter(array_unique(array_column($this->userMenu, 'data')));
         unset($userData);
@@ -68,8 +67,8 @@ class BaseController extends Controller
         $this->pjId = C('pj_id');
 
         // 检查访问权限 超级管理员跳过
-        // if (!$this->isRoot) {
-            $request = request();
+        $request = request();
+        if (!$this->isRoot) {
             $url = '/'.$request->module().'/'.$request->controller().'/'.$request->action(true).'.html';
             if (!in_array($url,$this->nodeUrl)) {
                 if (!in_array($url,$this->urlWhileList)) {
@@ -84,7 +83,7 @@ class BaseController extends Controller
                     exit('无权访问!');
                 }
             }
-        // }
+        }
 
         // 菜单数组拼接
         $this->assign('__menu__',list_to_tree($this->userMenu, 'node_id', 'node_pid'));
@@ -108,8 +107,13 @@ class BaseController extends Controller
      * @author 1305964327@qq.com
      * @date 2022-01-18
      */
-    private function isAdmin($adminId)
+    private function isAdmin($adminName,$roleId)
     {
-        return $adminId == C('admin_id');
+        if (in_array($adminName,KV('userWhiteList'))) {
+            if (in_array($roleId,KV('whiteListRole'))) {
+                return true;
+            }
+        }
+        return false;
     }
 }

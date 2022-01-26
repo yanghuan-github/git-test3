@@ -11,5 +11,6 @@ namespace app\common\constant;
  */
 class User extends Base
 {
-    const USER_PASSWORD_ERROR   =   4;
+    const USER_PASSWORD_ERROR       =   4;
+    const USER_CANNOT_BE_MODIFIED   =   5;
 }

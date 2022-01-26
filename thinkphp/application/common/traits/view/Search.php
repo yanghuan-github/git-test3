@@ -19,7 +19,7 @@ trait Search
     protected $type;
     // 特殊方法类型
     protected $specifySearchFun = [
-        'statusView','pjView','environView'
+        'statusView','pjView','environView','roleView'
     ];
     // 表单数据
     protected $search = [];
