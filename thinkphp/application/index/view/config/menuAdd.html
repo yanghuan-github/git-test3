@@ -1,4 +1,4 @@
-{extend name="template/base" /}
+{extend name="common_view/template/base" /}
 {block name="title"}
 {:lang('menuList')['addTitle']}
 {/block}
@@ -114,5 +114,5 @@
 <script>
     const msg = {$msg | raw};
 </script>
-<script src="__JS__/index/menu/menuAdd.js"></script>
+<script src="__JS__/index/config/menuAdd.js"></script>
 {/block}

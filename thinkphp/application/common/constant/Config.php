@@ -11,4 +11,5 @@ namespace app\common\constant;
  */
 class Config extends Base
 {
+    const MENU_CANNOT_BE_MODIFIED   =   4; //  黑名单菜单无法修改
 }

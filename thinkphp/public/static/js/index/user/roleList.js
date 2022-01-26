@@ -116,7 +116,7 @@ layui.use(['form', 'table'], function () {
 })
 
 function add() {
-    let addUrl = '/index/Role/roleEdit?roleId=0';
+    let addUrl = '/index/User/roleEdit?roleId=0';
     layer.open({
         type: 2, 
         title: msg.addTitle,
@@ -136,7 +136,7 @@ function add() {
 }
 
 function per(roleId) {
-    let perUrl = '/index/Role/rolePer?roleId='+roleId;
+    let perUrl = '/index/User/rolePer?roleId='+roleId;
     layer.open({
         type: 2, 
         title: msg.perTitle,
@@ -156,7 +156,7 @@ function per(roleId) {
 }
 
 function edit(roleId) {
-    let editUrl = '/index/Role/roleEdit?roleId='+roleId;
+    let editUrl = '/index/User/roleEdit?roleId='+roleId;
     layer.open({
         type: 2, 
         title: msg.editTitle,
@@ -179,7 +179,7 @@ function dele(roleId) {
     layer.confirm('是否要删除所选项?',{
         btn: ['删除', '点错了~']
     }, function(index, layero){
-        $.post('/index/Role/roleDele',{roleId:roleId},function(code){
+        $.post('/index/User/roleDele',{roleId:roleId},function(code){
             commonDeleReturn(code,index);
         });
     }, function(index){
@@ -191,7 +191,7 @@ function ext(roleId,rolePid) {
     layer.confirm('是否继承父角色组的所有权限?',{
         btn: ['继承', '点错了~']
     }, function(index, layero){
-        $.post('/index/Role/roleExtSave',{roleId:roleId,rolePid:rolePid},function(code){
+        $.post('/index/User/roleExtSave',{roleId:roleId,rolePid:rolePid},function(code){
             commonDeleReturn(code,index);
         });
     }, function(index){

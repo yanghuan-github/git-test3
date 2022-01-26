@@ -5,7 +5,7 @@ function submit(){
     $.ajax({
         type:   'post',
         data:   data,
-        url:    '/index/Menu/menuEditSave',
+        url:    '/index/Config/menuEditSave',
         dataType: 'json',
         success:function(code){
             commonSaveReturn(code);
