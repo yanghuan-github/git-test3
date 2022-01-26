@@ -67,8 +67,36 @@ trait Common
             $where = [
                 'environ_id' =>  $environId
             ];
-            $field = 'pj_id,pj_title';
+            $field = 'pj_id,pj_logo';
             $data = model('ConfigPj')->getColumn($where,$field);
+            if ($data) {
+                $this->cache('file')->set($cache,$data);
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * 获取角色数据
+     * 拼装为 id => name 格式
+     * @param boolean $refresh
+     * @return void
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-25
+     */
+    protected function roleIdName($refresh = false)
+    {
+        $cache = '__common_roleIdName';
+        $data = $this->cache('file')->get($cache);
+        if (empty($data) || $refresh) {
+            $data = [];
+            // 只不显示软删除的角色组即可
+            $where = [
+                ['status','in',[1,2]]
+            ];
+            $field = 'role_id,role_name';
+            $data = model('AdminRole')->getColumn($where,$field);
             if ($data) {
                 $this->cache('file')->set($cache,$data);
             }

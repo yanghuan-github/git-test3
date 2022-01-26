@@ -3,7 +3,7 @@
     <div class="layui-input-block">
         <select name="status" id="status" lay-search="">
             {foreach $statusView as $key => $val}
-                <option value="{$key}" {if condition="$key eq $value" }selected{/if} >{$val}</option>
+                <option value="{$key}"{present name="statusViewValue"} {if condition="$key eq $statusViewValue" }selected{/if} {/present} >{$val}</option>
             {/foreach}
         </select>
     </div>

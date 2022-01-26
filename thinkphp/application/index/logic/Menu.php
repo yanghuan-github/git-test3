@@ -52,12 +52,11 @@ class Menu extends BaseLogic
             $where['status'] = $status;
         }
         $field  = '*';
-        $model = model('AdminNode');
-        $model   = $model->field($field)->where($where);
         if ($pageLimit) {
-            $model = $model->limit($pageLimit);
+            $data = model('AdminNode')->getList($field,$where,null,$pageLimit);
+        } else {
+            $data = model('AdminNode')->getList($field,$where);
         }
-        $data = $model->select()->toArray();
         foreach ($data as $key => $val) {
             $data[$key]['subNumber'] = $this->getSubNumber($val['node_id']);
         }
@@ -95,6 +94,23 @@ class Menu extends BaseLogic
         }
         unset($data);
         return $temp;
+    }
+
+    /**
+     * 获取树形菜单列表
+     * @param int $roleId
+     * @return array
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-25
+     */
+    public function getNodeTree()
+    {
+        $data = model('AdminNode')->getColumn([],'node_id id,node_pid,node_title title');
+        foreach ($data as $key => $val) {
+            $data[$key]['spread'] = true;
+        }
+        return list_to_tree($data,'id','node_pid','children');
     }
 
     /**
@@ -157,6 +173,9 @@ class Menu extends BaseLogic
                 $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
                 model('AdminNode')->commit();
                 model('AdminRoleAccess')->commit();
+
+                // 清除缓存
+                vagueDeleteCache('__auth_data_');
                 return MenuConstant::SUCCESS;
             } catch (\Exception $e) {
                 $data = [
@@ -253,6 +272,9 @@ class Menu extends BaseLogic
             // 写入操作记录
             $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
             model('AdminUser')->commit();
+
+            // 清除缓存
+            vagueDeleteCache('__auth_data_');
             return MenuConstant::SUCCESS;
         } catch(\Exception $e) {
             $data = [
@@ -293,6 +315,9 @@ class Menu extends BaseLogic
             $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
             model('AdminUser')->commit();
             model('AdminRoleAccess')->commit();
+            
+            // 清除缓存
+            vagueDeleteCache('__auth_data_');
             return MenuConstant::SUCCESS;
         } catch(\Exception $e) {
             $data = [
@@ -305,5 +330,30 @@ class Menu extends BaseLogic
             model('AdminRoleAccess')->rollback();
             return MenuConstant::ERROR;
         }
+    }
+    
+    /**
+     * 获取角色组菜单
+     * @param int $roleId
+     * @return void
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-25
+     */
+    public function getRoleMenu($roleId)
+    {
+        $where = [];
+        if ($roleId) {
+            $where['role_id'] = $roleId;
+        }
+        $data = model('AdminRoleAccess')->getColumn($where,'node_id');
+        foreach ($data as $key => $val) {
+            // 存在子节点需要删除掉当前菜单id 否则 layui-tree那边会默认选中当前菜单下的所有菜单节点
+            // 只选中最底层的节点id即可
+            if ($this->getSubNumber($val) != 0) {
+                unset($data[$key]);
+            }
+        }
+        return array_values($data);
     }
 }

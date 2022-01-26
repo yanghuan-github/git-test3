@@ -1,22 +1,20 @@
 {extend name="template/base" /}
 {block name="title"}
-{if $roleId eq 0}
-  {:lang('roleList')['addTitle']}
-{else /} 
-  {:lang('roleList')['editTitle']}
-{/if}
+{:lang('roleList')['perTitle']}
 {/block}
 {block name="body"}
 <div id="obj">
     <div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 15px">
         <input type="hidden" id="roleId" value="{$roleId}">
-        {include file="common_view/form"}
+        <div id="perTree" class="demo-tree"></div>
     </div>
 </div>
 {/block}
 {block name="script"}
 <script>
+  const menuList    = {$menuList | raw};
+  const roleMenu    = {$roleMenu | raw};
   const msg         = {$msg | raw};
 </script>
-<script src="__JS__/index/role/roleEdit.js"></script>
+<script src="__JS__/index/role/rolePer.js"></script>
 {/block}

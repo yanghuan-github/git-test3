@@ -1,0 +1,12 @@
+<div class="layui-inline" style="margin-top:0.5%;margin-bottom: 0.5%;">
+    <div class="layui-input-inline">
+        <label class="layui-form-label">{$val[3]}:</label>
+        <div class="layui-input-block  layui-form">
+            <select name="{$val[1]}" id="{$val[2]}" lay-search="">
+                {foreach $val[4] as $key => $val}
+                    <option value="{$key}" {present name="$val[5]"} {if condition="$key eq $val[5]" }selected{/if} {/present}>{$val}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+</div>

@@ -71,9 +71,9 @@ class Login extends Controller
             if (notEmpty([$userName,$password,$vercode])) {
                 // 检验是否是ip白名单
                 $ip = request()->ip();
-                if (in_array($ip,C('ip_white_list'))) {
+                if (in_array($ip,KV('ipWhiteList'))) {
                     // 检查是否白名单用户
-                    if (in_array($userName,C('user_white_list'))) {
+                    if (in_array($userName,KV('userWhiteList'))) {
                         // if ($this->checkVercode($vercode)) {
                             return model('Login','logic')->login($userName,$password);
                         // }

@@ -18,7 +18,7 @@ trait Form
     protected $type;
     // 特殊方法类型
     protected $specifyFormFun = [
-        'statusView','passwordView','urlView'
+        'statusView','passwordView','urlView','roleView'
     ];
     // 表单数据
     protected $form = [];

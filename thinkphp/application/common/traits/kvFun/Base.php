@@ -5,7 +5,7 @@ namespace app\common\traits\kvFun;
 trait Base
 {
     // 默认值
-    protected $value = 0;
+    protected $value;
     protected $needJosn = false;
     /**
      * 状态类型 
@@ -35,6 +35,20 @@ trait Base
     {
         $pjIdName = $this->pjIdName($this->environId);
         $this->viewCommonFun($array,$pjIdName,__FUNCTION__);
+    }
+
+    /**
+     * roleIdName 角色id,name键值对
+     * @param array $array
+     * @return void
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-20
+     */
+    protected function roleView($array = [])
+    {
+        $roleIdName = $this->roleIdName();
+        $this->viewCommonFun($array,$roleIdName,__FUNCTION__);
     }
 
     /**
@@ -84,7 +98,7 @@ trait Base
         }
         ksort($tempArray);
         $this->assign($funName,$tempArray);
-        $this->assign('value',$this->value);
+        $this->assign($funName.'Value',$this->value);
         if ($this->needJosn) {
             $this->assign($funName.'Json',json_encode($tempArray));
         }

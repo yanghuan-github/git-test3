@@ -224,12 +224,13 @@ function pageToLimit($page = 1,$limit = -1)
 * 写日志
 * @param $fileName : 写入哪个日志
 * @param $data : 数据
+* @param $file : 目录名 默认为方法报错
 */
-function logs($fileName = '',$data = ''){
+function logs($fileName = '',$data = '',$file = 'fun'){
     if (!$fileName || !$data) {
         return;
     }
-    $path = RUNTIME_PATH . 'log/' . $fileName;
+    $path = RUNTIME_PATH . 'log/'.$file.'/'. $fileName;
     if (!is_dir($path)) {
         $mkdir_re = mkdir($path,0777,true);
         if(!$mkdir_re){
@@ -240,4 +241,36 @@ function logs($fileName = '',$data = ''){
 			
     $time = date("Y-m-d H:i:s",time());
     file_put_contents($filePath, $time." DATA : ".$data."\r\n\r\n" , FILE_APPEND);
+}
+
+/**
+ * 缓存模糊删除
+ * @param string $name
+ * @param string $type
+ * @return void
+ * @author yanghuan
+ * @author 1305964327@qq.com
+ * @date 2022-01-25
+ */
+function vagueDeleteCache($name,$type = 'file')
+{
+    $config = C($type,'cache');
+    $root   = $config['path'] . $config['prefix'];
+    $list   = glob($root . "/" . $name . "*");
+    if ($list) {
+        try {
+            foreach ($list as $v) {
+                unlink($v);
+            }
+        } catch (\Exception $e) {
+            $data = [
+                'msg'   =>  $e->getMessage(),
+                'data'  =>  [
+                    'name'     =>  $name,
+                    'type'     =>  $type,
+                ],
+            ];
+            logs(__FUNCTION__,json_encode($data));
+        }
+    }
 }

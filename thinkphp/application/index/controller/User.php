@@ -14,6 +14,7 @@ class User extends BaseController
     public function userList()
     {
         $this->search([
+            ['roleView',[0=>'全部']],
             ['statusView',[0=>'全部',3=>'软删除'],true],
             ['input','realName','realName','真实姓名','支持模糊查询'],
         ]);
@@ -30,9 +31,10 @@ class User extends BaseController
     public function userListData()
     {
         $realName   = input('realName','','string');
+        $roleId     = input('roleId',0,'int');
         $status     = input('status',0,'int');
         $pageLimit  = pageToLimit();
-        return json(model('User','logic')->userListData($realName,$status,$pageLimit));
+        return json(model('User','logic')->userListData($realName,$roleId,$status,$pageLimit));
     }
 
     /**
@@ -51,13 +53,18 @@ class User extends BaseController
             'login_pwd'     =>  '',
             'real_name'     =>  '',
             'status'        =>  '',
+            'role_id'       =>  '',
         ];
         $nameInput = [
             'input','loginName','loginName','登录账号','登录时所用的账号'
         ];
+        $roleSelect = [
+            'roleView',
+        ];
         if ($id) {
-            $userInfo = model('User','logic')->getAdminInfo('login_name,login_pwd,real_name,status',$id);
+            $userInfo = model('User','logic')->getAdminInfo('u.login_name,u.login_pwd,u.real_name,u.status,r.role_id',$id);
             array_push($nameInput,$userInfo['login_name'],'disabled');
+            array_push($roleSelect,$userInfo['role_id']);
         }
         $this->assign([
             'id'        =>  $id,
@@ -67,6 +74,7 @@ class User extends BaseController
             ['input','realName','realName','真实姓名','真实姓名',$userInfo['real_name']],
             $nameInput,
             ['passwordView',$id,$userInfo['login_pwd']],
+            $roleSelect,
             ['statusView','软删除',$userInfo['status']]
         ]);
         return view('userEdit');
@@ -84,12 +92,13 @@ class User extends BaseController
         if (!$this->isRoot) {
             return UserConstant::USER_AUTH_ERROR;
         }
-        $adminId    = input('adminId','','int');
+        $adminId    = input('adminId',0,'int');
+        $roleId    = input('roleId',0,'int');
         $realName   = input('realName','','string');
         $status     = input('status',2,'int');
 
         // 编辑
-        return model('User','logic')->userEditSave($adminId,$realName,$status);
+        return model('User','logic')->userEditSave($adminId,$roleId,$realName,$status);
        
     }
 
@@ -109,9 +118,19 @@ class User extends BaseController
         $loginName  = input('loginName','','string');
         $password   = input('password','','string');
         $confirmPwd = input('confirmPwd','','string');
+        $roleId    = input('roleId',0,'int');
         $status     = input('status',2,'int');
 
         // 新增
-        return model('User','logic')->userAddSave($realName,$loginName,$password,$confirmPwd,$status);
+        return model('User','logic')->userAddSave($realName,$loginName,$password,$confirmPwd,$roleId,$status);
+    }
+
+    public function userDele()
+    {
+        if (!$this->isRoot) {
+            return UserConstant::USER_AUTH_ERROR;
+        }
+        $adminId     = input('adminId','','int');
+        return model('User','logic')->userDele($adminId);
     }
 }

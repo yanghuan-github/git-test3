@@ -1,6 +1,10 @@
 {extend name="template/base" /}
 {block name="title"}
-{:lang('userEdit')['title']}
+{if $id eq 0}
+  {:lang('userList')['addTitle']}
+{else /} 
+  {:lang('userList')['editTitle']}
+{/if}
 {/block}
 {block name="body"}
 <div id="obj">

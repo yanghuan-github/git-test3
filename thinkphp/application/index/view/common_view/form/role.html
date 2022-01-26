@@ -1,0 +1,14 @@
+<div class="layui-form-item">
+    <label class="layui-form-label">角色组：</label>
+    <div class="layui-input-block">
+        <select name="roleId" id="roleId" lay-search="">
+            {if condition="$id neq 0"}
+                <option value="" selected>未绑定角色组</option>
+            {/if}
+            {foreach $roleView as $key => $val}
+                <option value="{$key}"  {present name="roleViewValue"} {if condition="$key eq $roleViewValue" }selected{/if} {/present} >{$val}</option>
+            {/foreach}
+        </select>
+    </div>
+</div>
+<hr>

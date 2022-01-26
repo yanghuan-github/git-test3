@@ -1,15 +1,11 @@
 {extend name="template/base" /}
 {block name="title"}
-{if $roleId eq 0}
-  {:lang('roleList')['addTitle']}
-{else /} 
-  {:lang('roleList')['editTitle']}
-{/if}
+{:lang('pjEdit')['title']}
 {/block}
 {block name="body"}
 <div id="obj">
     <div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 15px">
-        <input type="hidden" id="roleId" value="{$roleId}">
+        <input type="hidden" id="id" value="{$id}">
         {include file="common_view/form"}
     </div>
 </div>
@@ -18,5 +14,5 @@
 <script>
   const msg         = {$msg | raw};
 </script>
-<script src="__JS__/index/role/roleEdit.js"></script>
+<script src="__JS__/index/config/pjEdit.js"></script>
 {/block}

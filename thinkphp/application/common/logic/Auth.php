@@ -29,12 +29,12 @@ class Auth
      * @author 1305964327@qq.com
      * @date 2022-01-17
      */
-    public function createToken(array $userInfo,array $roleInfo)
+    public function createToken(array $userInfo)
     {
         $time = time();
         $sign = $this->createSign($userInfo['admin_id']);
         $status = false;
-        if ($userInfo['status'] == 1 && $roleInfo['status'] == 1) {
+        if ($userInfo['u_status'] == 1 && $userInfo['r_status'] == 1) {
             $status = true;
         }
         $tokenInfo = [
@@ -44,7 +44,6 @@ class Auth
             'sign'  => $sign,//签名
             'data'  => [
                 'user_info' =>  $userInfo,
-                'role_info' =>  $roleInfo,
                 'status'    =>  $status // 是否被禁用
             ]
         ];
@@ -120,11 +119,9 @@ class Auth
                 if ($raw->data->status == 1) {
                     // 生成缓存 有效期内的缓存 避免下次还需进行验证
                     $userInfo = $this->toArray($raw->data->user_info);
-                    $roleInfo = $this->toArray($raw->data->role_info);
-                    $userMenu = model('common/Menu','logic')->adminNodeAccess($roleInfo['role_id']);
+                    $userMenu = model('common/Menu','logic')->adminNodeAccess($userInfo['role_id']);
                     return [
                         'user_info' =>  $userInfo,
-                        'role_info' =>  $roleInfo,
                         'user_menu' =>  $userMenu
                     ];
                 }

@@ -8,24 +8,6 @@ class Role extends BaseLogic
 {
 
     /**
-     * 获取当前用户角色组id
-     *
-     * @param int $adminId
-     * @return int
-     * @author yanghuan
-     * @author 1305964327@qq.com
-     * @date 2022-01-14
-     */
-    public function getBindRoleId($adminId)
-    {
-        $where = [];
-        if ($adminId) {
-            $where['admin_id'] = $adminId;
-        }
-        return model('BindAdminRole')->getValue($where,'role_id');
-    }
-
-    /**
      * 获取当前角色组信息
      * 
      * @param string $field
@@ -60,7 +42,7 @@ class Role extends BaseLogic
      */
     public function getRoleIdName()
     {
-        return model('AdminRole')->getColumn([],'role_id,role_name');
+        return model('AdminRole')->order('role_id asc')->column('role_id,role_name');
     }
 
     /**
@@ -84,12 +66,12 @@ class Role extends BaseLogic
         }
         $field  = '*';
         $model = model('AdminRole');
-        $model   = $model->field($field)->where($where);
         if ($pageLimit) {
-            $model = $model->limit($pageLimit);
+            $data = $model->getList($field,$where,'role_pid asc',$pageLimit);
+        } else {
+            $data = $model->getList($field,$where,'role_pid asc');
         }
-        $data = $model->select();
-        $count  = $model->count();
+        $count  = $model->field('role_id')->where($where)->count();
         return  ['code' => 0, 'msg' => '','count' => $count,'data' => $data];
     }
 
@@ -110,7 +92,7 @@ class Role extends BaseLogic
             return RoleConstant::LACK_PARAMS;
         }
         if (in_array($roleId,KV('whiteListRole'))) {
-            return RoleConstant::ROLE_CANNOT_BE_DELETE;
+            return RoleConstant::ROLE_CANNOT_BE_MODIFIED;
         }
         $update = [];
         if ($roleName) {
@@ -135,6 +117,7 @@ class Role extends BaseLogic
             // 写入操作记录
             $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
             model('AdminRole')->commit();
+            $this->roleIdName(true);
             return RoleConstant::SUCCESS;
         } catch(\Exception $e) {
             $data = [
@@ -193,6 +176,7 @@ class Role extends BaseLogic
             model('AdminRole')->insert($add);
             $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
             model('AdminRole')->commit();
+            $this->roleIdName(true);
             return RoleConstant::SUCCESS;
         } catch(\Exception $e) {
             $data = [
@@ -220,7 +204,7 @@ class Role extends BaseLogic
             return RoleConstant::LACK_PARAMS;
         }
         if (in_array($roleId,KV('whiteListRole'))) {
-            return RoleConstant::ROLE_CANNOT_BE_DELETE;
+            return RoleConstant::ROLE_CANNOT_BE_MODIFIED;
         }
         model('AdminRole')->startTrans();
         try {
@@ -229,10 +213,11 @@ class Role extends BaseLogic
                 'type'      =>  Log::LOG_DELETE,
                 'oldData'   =>  $this->getRoleInfo('*',$roleId),
             ];
-            model('AdminRole')->where('role_id',$roleId)->delete();
+            model('AdminRole')->where('role_id',$roleId)->update(['status'=>3,'update_time'=>time()]);
             // 写入操作记录
             $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
             model('AdminRole')->commit();
+            $this->roleIdName(true);
             return RoleConstant::SUCCESS;
         } catch(\Exception $e) {
             $data = [
@@ -242,6 +227,114 @@ class Role extends BaseLogic
             logs(__FUNCTION__,json_encode($data));
             // 后续都是需要写入日志 和 操作记录的
             model('AdminRole')->rollback();
+            return RoleConstant::ERROR;
+        }
+    }
+
+    /**
+     * 角色组权限编辑保存
+     * @param array $data
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-26
+     */
+    public function rolePerSave($data)
+    {
+        $insert = [];
+        $roleId = $data['roleId'];
+        if (in_array($roleId,KV('whiteListRole'))) {
+            return RoleConstant::ROLE_CANNOT_BE_MODIFIED;
+        }
+        if (!isset($data['data'])) {
+            $data['data'] = [];
+        }
+        $data = tree_to_list([$data['data']],'children');
+        // 获取菜单节点id
+        $nodeIdList = array_column($data,'id');
+        unset($data);
+        model('AdminRoleAccess')->startTrans();
+        try {
+            // 拼装记录数据
+            $data = [
+                'type'      =>  Log::LOG_UPDATE,
+                'oldData'   =>  model('Menu','logic')->getRoleMenu($roleId),
+                'data'      =>  $nodeIdList,
+            ];
+            // 先删除旧的权限
+            model('AdminRoleAccess')->where('role_id',$roleId)->delete();
+            // 添加新权限
+            foreach ($nodeIdList as $val) {
+                $insert[] = [
+                    'role_id'   =>  $roleId,
+                    'node_id'   =>  $val,
+                ];
+            }
+            unset($nodeIdList);
+            model('AdminRoleAccess')->removeOption()->insertAll($insert);
+            // 写入操作记录
+            $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
+            model('AdminRoleAccess')->commit();
+            return RoleConstant::SUCCESS;
+        } catch(\Exception $e) {
+            $data = [
+                'msg'   =>  $e->getMessage(),
+                'data'  =>  input('post.'),
+            ];
+            logs(__FUNCTION__,json_encode($data));
+            // 后续都是需要写入日志 和 操作记录的
+            model('AdminRoleAccess')->rollback();
+            return RoleConstant::ERROR;
+        }
+    }
+
+    /**
+     * 权限继承保存
+     * @param int $roleId
+     * @param int $rolePid
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-26
+     */
+    public function roleExtSave($roleId,$rolePid)
+    {
+        if (in_array($roleId,KV('whiteListRole'))) {
+            return RoleConstant::ROLE_CANNOT_BE_MODIFIED;
+        }
+        // 获取父角色组权限
+        $pMenu = model('AdminRoleAccess')->getColumn(['role_id'=>$rolePid],'node_id');
+        model('AdminRoleAccess')->startTrans();
+        try {
+            // 拼装记录数据
+            $data = [
+                'type'      =>  Log::LOG_UPDATE,
+                'oldData'   =>  model('AdminRoleAccess')->getColumn(['role_id'=>$roleId],'node_id'),
+                'data'      =>  $pMenu,
+            ];
+            // 先删除旧的权限
+            model('AdminRoleAccess')->where('role_id',$roleId)->delete();
+            // 添加新权限
+            foreach ($pMenu as $val) {
+                $insert[] = [
+                    'role_id'   =>  $roleId,
+                    'node_id'   =>  $val,
+                ];
+            }
+            unset($pMenu);
+            model('AdminRoleAccess')->removeOption()->insertAll($insert);
+            // 写入操作记录
+            $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
+            model('AdminRoleAccess')->commit();
+            return RoleConstant::SUCCESS;
+        } catch(\Exception $e) {
+            $data = [
+                'msg'   =>  $e->getMessage(),
+                'data'  =>  input('post.'),
+            ];
+            logs(__FUNCTION__,json_encode($data));
+            // 后续都是需要写入日志 和 操作记录的
+            model('AdminRoleAccess')->rollback();
             return RoleConstant::ERROR;
         }
     }

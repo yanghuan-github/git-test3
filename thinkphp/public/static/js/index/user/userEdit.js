@@ -27,6 +27,7 @@ function submit(){
 function editData(){
     obj.data = {
         adminId : $('#id').val(),
+        roleId : $('#roleId').val(),
         realName : $('#realName').val(),
         status : $('#status').val(),
     }
@@ -44,7 +45,17 @@ function addData(){
         loginName : $('#loginName').val(),
         password : hex_md5($('#password').val()),
         confirmPwd : hex_md5($('#confirmPwd').val()),
+        roleId : $('#roleId').val(),
         status : $('#status').val(),
+    }
+    let pwdRule = /^[\S]{6,12}$/;
+    if (!(pwdRule.test(obj.data.password))) {
+        msgFun(msg['error_format']);
+        return false;
+    }
+    if (!(pwdRule.test(obj.data.confirmPwd))) {
+        msgFun(msg['error_format']);
+        return false;
     }
     obj.url = '/index/User/userAddSave';
     return obj;
