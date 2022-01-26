@@ -9,6 +9,9 @@ use app\common\logic\Auth;
 // 引入工具类
 use app\common\traits\View;
 
+// 引入基础常量
+use app\common\constant\Base as BaseConstant;
+
 class BaseController extends Controller
 {
 
@@ -33,7 +36,8 @@ class BaseController extends Controller
     // 方法白名单
     protected $urlWhileList = [
         '/index/Index/loginOut.html',
-        '/index/Index/resetPassword.html'
+        '/index/Index/resetPassword.html',
+        '/index/User/changePwd.html'
     ];
 
     public function initialize()
@@ -66,7 +70,7 @@ class BaseController extends Controller
 
         // 检查访问权限 超级管理员跳过
         $request = request();
-        if (!$this->isRoot) {
+        if ($this->adminId != C('admin_id')) {
             $url = '/'.$request->module().'/'.$request->controller().'/'.$request->action(true).'.html';
             if (!in_array($url,$this->nodeUrl)) {
                 if (!in_array($url,$this->urlWhileList)) {
@@ -107,11 +111,32 @@ class BaseController extends Controller
      */
     private function isAdmin($adminName,$roleId)
     {
-        if (in_array($adminName,KV('userWhiteList'))) {
-            if (in_array($roleId,KV('whiteListRole'))) {
-                return true;
+        $cache = '__is_admin_'.$adminName.'_'.$roleId;
+        $return = $this->cache('redis')->get($cache);
+        if (!$return) {
+            $return = 'error';
+            if (in_array($adminName,KV('userWhiteList'))) {
+                if (in_array($roleId,KV('whiteListRole'))) {
+                    $return = 'success';
+                }
             }
+            $this->cache('redis')->set($cache,$return,3600 * 3);
         }
-        return false;
+        return $return;
+    }
+    
+
+    /**
+     * 检查方法是否受限
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-26
+     */
+    protected function funCheckAuth()
+    {
+        if (!$this->isRoot) {
+            return BaseConstant::USER_AUTH_ERROR;
+        }
     }
 }

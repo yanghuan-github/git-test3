@@ -89,9 +89,7 @@ class User extends BaseController
      */
     public function userEditSave()
     {
-        if (!$this->isRoot) {
-            return UserConstant::USER_AUTH_ERROR;
-        }
+        $this->funCheckAuth();
         $adminId    = input('adminId',0,'int');
         $roleId    = input('roleId',0,'int');
         $realName   = input('realName','','string');
@@ -111,9 +109,7 @@ class User extends BaseController
      */
     public function userAddSave()
     {
-        if (!$this->isRoot) {
-            return UserConstant::USER_AUTH_ERROR;
-        }
+        $this->funCheckAuth();
         $realName   = input('realName','','string');
         $loginName  = input('loginName','','string');
         $password   = input('password','','string');
@@ -127,9 +123,7 @@ class User extends BaseController
 
     public function userDele()
     {
-        if (!$this->isRoot) {
-            return UserConstant::USER_AUTH_ERROR;
-        }
+        $this->funCheckAuth();
         $adminId     = input('adminId','','int');
         return model('User','logic')->userDele($adminId);
     }
@@ -208,9 +202,7 @@ class User extends BaseController
      */
     public function roleEditSave()
     {
-        if (!$this->isRoot) {
-            return UserConstant::USER_AUTH_ERROR;
-        }
+        $this->funCheckAuth();
         $roleId     = input('roleId','','int');
         $roleName   = input('roleName','','string');
         $rolePid    = input('rolePid','','int');
@@ -229,9 +221,7 @@ class User extends BaseController
      */
     public function roleAddSave()
     {
-        if (!$this->isRoot) {
-            return UserConstant::USER_AUTH_ERROR;
-        }
+        $this->funCheckAuth();
         $roleName   = input('roleName','','string');
         $rolePid    = input('rolePid',0,'int');
         $status     = input('status',2,'int');
@@ -272,9 +262,7 @@ class User extends BaseController
      */
     public function rolePerSave()
     {
-        if (!$this->isRoot) {
-            return UserConstant::USER_AUTH_ERROR;
-        }
+        $this->funCheckAuth();
         $data = input('post.');
         // 权限编辑保存
         return model('User','logic')->rolePerSave($data);
@@ -292,9 +280,7 @@ class User extends BaseController
         $roleId     = input('roleId',0,'int');
         $rolePid    = input('rolePid',0,'int');
 
-        if (!$this->isRoot) {
-            return UserConstant::USER_AUTH_ERROR;
-        }
+        $this->funCheckAuth();
         // 权限编继承保存
         return model('User','logic')->roleExtSave($roleId,$rolePid);
     }
@@ -308,10 +294,20 @@ class User extends BaseController
      */
     public function roleDele()
     {
-        if (!$this->isRoot) {
-            return UserConstant::USER_AUTH_ERROR;
-        }
+        $this->funCheckAuth();
         $roleId     = input('roleId','','int');
         return model('User','logic')->roleDele($roleId);
+    }
+
+    /**
+     * 修改密码
+     * @return void
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-26
+     */
+    public function changePwd()
+    {
+        return view('changePwd');
     }
 }

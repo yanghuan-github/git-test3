@@ -15,7 +15,7 @@ class User extends Base
     const USER_CANNOT_BE_MODIFIED   =   5;  //  白名单用户无法操作/删除
 
 
-    const ROLE_NOT_ADD_TOP_MENU     =   4;  //  不可添加顶级菜单
-    const ROLE_NAME_EXISTS          =   5;  //  角色组名已存在
-    CONST ROLE_CANNOT_BE_MODIFIED   =   6;  //  白名单角色组不可删除
+    const ROLE_NOT_ADD_TOP_MENU     =   6;  //  不可添加顶级菜单
+    const ROLE_NAME_EXISTS          =   7;  //  角色组名已存在
+    CONST ROLE_CANNOT_BE_MODIFIED   =   8;  //  白名单角色组不可删除
 }

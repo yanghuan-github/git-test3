@@ -77,9 +77,7 @@ class Config extends BaseController
      */
     public function paramEditSave()
     {
-        if (!$this->isRoot) {
-            return ConfigConstant::USER_AUTH_ERROR;
-        }
+        $this->funCheckAuth();
         $id         = input('id','','int');
         $name       = input('name','','string');
         $value      = input('value','','string');
@@ -99,9 +97,7 @@ class Config extends BaseController
      */
     public function paramAddSave()
     {
-        if (!$this->isRoot) {
-            return ConfigConstant::USER_AUTH_ERROR;
-        }
+        $this->funCheckAuth();
         $name       = input('name','','string');
         $value      = input('value','','string');
         $msg        = input('msg','','string');
@@ -120,9 +116,7 @@ class Config extends BaseController
      */
     public function paramDele()
     {
-        if (!$this->isRoot) {
-            return ConfigConstant::USER_AUTH_ERROR;
-        }
+        $this->funCheckAuth();
         $id     = input('id','','int');
         return model('Config','logic')->paramDele($id);
     }
@@ -215,9 +209,7 @@ class Config extends BaseController
      */
     public function pjAddSave()
     {
-        if (!$this->isRoot) {
-            return ConfigConstant::USER_AUTH_ERROR;
-        }
+        $this->funCheckAuth();
         $pjId       = input('pjId',0,'int');
         $environId  = input('environId',0,'int');
         $pjLogo     = input('pjLogo','','string');
@@ -237,9 +229,7 @@ class Config extends BaseController
      */
     public function pjEditSave()
     {
-        if (!$this->isRoot) {
-            return ConfigConstant::USER_AUTH_ERROR;
-        }
+        $this->funCheckAuth();
         $id         = input('id',0,'int');
         $pjId       = input('pjId',0,'int');
         $environId  = input('environId',0,'int');
@@ -261,9 +251,7 @@ class Config extends BaseController
     public function pjDele()
     {
 
-        if (!$this->isRoot) {
-            return ConfigConstant::USER_AUTH_ERROR;
-        }
+        $this->funCheckAuth();
         $id     = input('id','','int');
         return model('Config','logic')->pjDele($id);
     }
@@ -439,9 +427,7 @@ class Config extends BaseController
         $sort       = input('sort',0,'int');
         $remark     = input('remark','','string');
 
-        if (!$this->isRoot) {
-            return ConfigConstant::USER_AUTH_ERROR;
-        }
+        $this->funCheckAuth();
         // 编辑
         return model('Config','logic')->menuEditSave($nodeId,$nodeTitle,$nodePid,$showType,$nodeType,$status,$modular,$controller,$action,$sort,$remark);
     }
@@ -456,9 +442,7 @@ class Config extends BaseController
     public function menuDele()
     {
         $nodeId     = input('nodeId',0,'int');
-        if (!$this->isRoot) {
-            return ConfigConstant::USER_AUTH_ERROR;
-        }
+        $this->funCheckAuth();
 
         return model('Config','logic')->menuDele($nodeId);
     }
