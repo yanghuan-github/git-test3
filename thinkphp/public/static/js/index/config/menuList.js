@@ -35,7 +35,7 @@ $('#search').on('click', function () {
 })
 
 function add(nodePid = 0) {
-    let addUrl = '/index/Menu/menuAdd?nodePid='+nodePid;
+    let addUrl = '/index/Config/menuAdd?nodePid='+nodePid;
     layer.open({
         type: 2, 
         title: msg.addTitle,
@@ -55,7 +55,7 @@ function add(nodePid = 0) {
 }
 
 function edit(nodeId = 0) {
-    let editUrl = '/index/Menu/menuEdit?nodeId='+nodeId;
+    let editUrl = '/index/Config/menuEdit?nodeId='+nodeId;
     layer.open({
         type: 2, 
         title: msg.editTitle,
@@ -78,7 +78,7 @@ function dele(nodeId) {
     layer.confirm('是否要删除所选项?',{
         btn: ['删除', '点错了~']
     }, function(index, layero){
-        $.post('/index/Menu/menuDele',{nodeId:nodeId},function(code){
+        $.post('/index/Config/menuDele',{nodeId:nodeId},function(code){
             commonDeleReturn(code,index);
         });
     }, function(index){

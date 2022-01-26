@@ -1,4 +1,4 @@
-{extend name="template/base" /}
+{extend name="common_view/template/base" /}
 {block name="title"}
 {:lang('roleList')['title']}
 {/block}
@@ -44,10 +44,10 @@
 {/block}
 {block name="script"}
 <script>
-  const requestUrl      = "/index/Role/roleListData";
+  const requestUrl      = "/index/User/roleListData";
   const statusViewJson  = {$statusViewJson | raw};
   const rootId          = {$rootId | raw};
   const msg             = {$msg | raw};
 </script>
-<script src="__JS__/index/role/roleList.js"></script>
+<script src="__JS__/index/user/roleList.js"></script>
 {/block}

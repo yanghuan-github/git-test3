@@ -31,7 +31,7 @@ function editData(){
         rolePid : $('#rolePid').val(),
         status : $('#status').val(),
     }
-    obj.url = '/index/Role/roleEditSave';
+    obj.url = '/index/User/roleEditSave';
     return obj;
 }
 
@@ -45,6 +45,6 @@ function addData(){
         rolePid : $('#rolePid').val(),
         status : $('#status').val(),
     }
-    obj.url = '/index/Role/roleAddSave';
+    obj.url = '/index/User/roleAddSave';
     return obj;
 }

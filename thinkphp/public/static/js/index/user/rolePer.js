@@ -19,7 +19,7 @@ function submit(){
     $.ajax({
         type:   'post',
         data:   data,
-        url:    '/index/Role/rolePerSave',
+        url:    '/index/User/rolePerSave',
         dataType: 'json',
         success:function(code){
             commonSaveReturn(code);

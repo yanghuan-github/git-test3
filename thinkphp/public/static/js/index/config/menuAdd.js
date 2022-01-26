@@ -36,7 +36,7 @@ function submit(){
     $.ajax({
         type:   'post',
         data:   data,
-        url:    '/index/Menu/menuAddSave',
+        url:    '/index/Config/menuAddSave',
         dataType: 'json',
         success:function(code){
             commonSaveReturn(code);

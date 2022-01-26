@@ -7,9 +7,7 @@ use think\Controller;
 use app\common\logic\Auth;
 
 // 引入工具类
-use app\common\traits\Cache;
 use app\common\traits\View;
-use app\common\traits\Common;
 
 class BaseController extends Controller
 {
@@ -30,7 +28,7 @@ class BaseController extends Controller
 
 
     // 常用工具类
-    use Cache,View,Common;
+    use View;
 
     // 方法白名单
     protected $urlWhileList = [

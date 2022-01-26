@@ -1,4 +1,4 @@
-{extend name="template/base" /}
+{extend name="common_view/template/base" /}
 {block name="title"}
 {:lang('menuList')['title']}
 {/block}
@@ -117,8 +117,8 @@
 {/block}
 {block name="script"}
 <script>
-  const requestUrl      = "/index/Menu/menuListData";
+  const requestUrl      = "/index/Config/menuListData";
   const msg             = {$msg | raw};
 </script>
-<script src="__JS__/index/menu/menuList.js"></script>
+<script src="__JS__/index/config/menuList.js"></script>
 {/block}
