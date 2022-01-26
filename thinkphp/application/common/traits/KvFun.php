@@ -10,4 +10,9 @@ use app\common\traits\Common;
 trait KvFun
 {
     use Common,Base;
+
+    // 特殊方法类型
+    protected $specifyFun = [
+        'statusView','passwordView','urlView','roleView','pjView','environView'
+    ];
 }

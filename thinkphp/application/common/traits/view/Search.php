@@ -17,10 +17,6 @@ trait Search
 
     // 当前模板类型
     protected $type;
-    // 特殊方法类型
-    protected $specifySearchFun = [
-        'statusView','pjView','environView','roleView'
-    ];
     // 表单数据
     protected $search = [];
 
@@ -31,7 +27,6 @@ trait Search
      *
      * @param array $search 参数的数组先后顺序决定页面显示先后顺序
      * @param array $search['input'] input参数类型事例 ['input','id值','name值','title(标题)值','placeholder值','value值','特殊属性或者事件']
-     * $param array $search['select'] select参数类型实例
      * @param array $form['select'] select参数类型事例 ['select','id值','name值','title(标题)值','下拉框数组数据','默认值','特殊属性或者事件']
      * @return void
      * @author yanghuan
@@ -43,7 +38,7 @@ trait Search
         foreach ($search as $val) {
             $this->type = $val['0'];
 
-            if (in_array($this->type,$this->specifySearchFun)) {
+            if (in_array($this->type,$this->specifyFun)) {
                 // 删除类型值，将剩余参数传入方法中，用于扩展
                 unset($val[0]);
                 call_user_func([$this,$this->type],$val);
