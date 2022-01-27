@@ -460,4 +460,87 @@ class Config extends BaseController
 
         return model('Config','logic')->menuDele($nodeId);
     }
+
+    /**
+     * db库列表
+     * @return view
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-27
+     */
+    public function dbList()
+    {
+        $type = KV('dbLibraryType');
+        $this->search([
+            ['select','type','type','db库类型',[0=>'全部'] + $type],
+            ['input','dbName','dbName','数据库名','数据库名(支持模糊查询)']
+        ]);
+        $this->assign([
+            'typeJson'  =>  json_encode($type),
+        ]);
+        return view('dbList');
+    }
+
+    /**
+     * db库列表数据
+     * @return json
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-27
+     */
+    public function dbListData()
+    {
+        $type       = input('type',0,'int');
+        $dbName     = input('dbName','','string');
+        $pageLimit  = pageToLimit();
+        return json(model('Config','logic')->dbListData($type,$dbName,$pageLimit));
+    }
+
+    /**
+     * db库新增，编辑页面
+     * @return view
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-27
+     */
+    public function dbEdit()
+    {
+
+    }
+
+    /**
+     * db库新增保存
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-27
+     */
+    public function dbAddSave()
+    {
+
+    }
+
+    /**
+     * db库编辑保存
+     * @return void
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-27
+     */
+    public function dbEditSave()
+    {
+
+    }
+
+    /**
+     * db库删除
+     * @return void
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-27
+     */
+    public function dbDele()
+    {
+
+    }
 }

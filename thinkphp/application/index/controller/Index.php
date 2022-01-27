@@ -27,11 +27,7 @@ class Index extends BaseController
      */
     public function console()
     {
-        // 获取存在快捷跳转的菜单
-        $menu = model('AdminNode')->getList('node_title,data,remark',['is_shortcut'=>1]);
-        // 分段处理 每页显示8个
-        $menuList = array_chunk($menu,8);
-        
+        $menuList = model('common/Menu','logic')->shortcutNode();
         $this->assign([
             'menuList'  =>  $menuList,
         ]);
