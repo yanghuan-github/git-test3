@@ -1,0 +1,52 @@
+{extend name="common_view/template/base" /}
+{block name="title"}
+{:lang('db_list')['title']}
+{/block}
+{block name="body"}
+<div id="obj">
+  <div class="layui-col-xs6 layui-col-sm5 layui-col-md12">
+    <div class="layui-card">
+      <div class="layui-card-header">
+        <div class="obj-padding">
+          <div>
+            <span class="obj-title">
+              <i class="layui-icon">&#xe615;</i>
+              {:lang('common')['query_conditions']}
+            </span>
+            <div class="obj-btu">
+              <i class="layui-icon layui-icon-search layuiadmin-button-btn" id="search"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="layui-card-header">
+        <div class="obj-padding">
+          {include file="common_view/search"}
+        </div>
+      </div>
+      <div class="layui-card-header">
+        <div>
+          <span class="obj-title">
+            <i class="layui-icon">&#xe638;</i>
+            {:lang('db_list')['title']}
+          </span>
+          <div class="obj-btu">
+            <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="add()">新增</button>
+          </div>
+        </div>
+      </div>
+      <div class="layui-card-body">
+        <table class="layui-hide" data-mobile-responsive="true" id="table"></table>
+      </div>
+    </div>
+  </div>
+</div>
+{/block}
+{block name="script"}
+<script>
+  const requestUrl      = "/index/Config/dbListData";
+  const typeJson        = {$typeJson | raw};
+  const msg             = {$msg | raw};
+</script>
+<script src="__JS__/index/config/dbList.js"></script>
+{/block}

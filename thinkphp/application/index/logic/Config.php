@@ -818,4 +818,34 @@ class Config extends BaseLogic
         }
         return array_values($data);
     }
+
+    /**
+     * 获取db库列表数据
+     * @param int $type
+     * @param stirng $dbName
+     * @param stirng $pageLimit
+     * @return array
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-27
+     */
+    public function dbListData($type,$dbName,$pageLimit)
+    {
+        $where = [];
+        if ($type) {
+            $where['type'] = $type;
+        }
+        if ($dbName) {
+            $where[] = ['db_name','like','%'.$dbName.'%'];
+        }
+        $field  = '*';
+        $model = model('ConfigDbLibrary');
+        if ($pageLimit) {
+            $data = $model->getList($field,$where,null,$pageLimit);
+        } else {
+            $data = $model->getList($field,$where);
+        }
+        $count  = $model->field('db_id')->where($where)->count();
+        return  ['code' => 0, 'msg' => '','count' => $count,'data' => $data];
+    }
 }
