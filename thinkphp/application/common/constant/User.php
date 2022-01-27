@@ -13,6 +13,7 @@ class User extends Base
 {
     const USER_PASSWORD_ERROR       =   4;  //  密码与确认密码字段不符
     const USER_CANNOT_BE_MODIFIED   =   5;  //  白名单用户无法操作/删除
+    const USER_OLD_PASSWORD_ERROR   =   9;  //  旧密码与用户传入密码不符
 
 
     const ROLE_NOT_ADD_TOP_MENU     =   6;  //  不可添加顶级菜单

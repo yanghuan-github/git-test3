@@ -1,6 +1,6 @@
 {extend name="common_view/template/base" /}
 {block name="title"}
-{:lang('menuList')['title']}
+{:lang('menu_list')['title']}
 {/block}
 {block name="style"}
 <style>
@@ -35,7 +35,7 @@
         <div>
           <span class="obj-title">
             <i class="layui-icon">&#xe638;</i>
-            {:lang('menuList')['title']}
+            {:lang('menu_list')['title']}
           </span>
           <div class="obj-btu">
             <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="add()">新增</button>
@@ -55,15 +55,16 @@
               <th>节点类型</th>
               <th>权限Url方法</th>
               <th>状态</th>
+              <th>快捷显示</th>
               <th>排序</th>
               <th>节点层级</th>
               <th>layui图标样式</th>
-              <th>操作</th>
+              <th width="200">操作</th>
             </tr> 
           </thead>
           <tbody>
             {foreach $menuListData as $key => $val}
-              <tr id="node-{$val.node_id}" class="child-of-node-{$val.node_pid}" {if condition="$val.level gt 2"}style="display:none;"{/if}>
+              <tr id="node-{$val.node_id}" class="child-of-node-{$val.node_pid}">
                 <td>{$val.node_id}</td>
                 <td>{$val.node_pid}</td>
                 <td>
@@ -86,7 +87,7 @@
                   {/switch}
                 </td>
                 <td>
-                  <span class="layui-badge">{$val.subNumber}</span>
+                  <span class="layui-badge">{$val.sub_number}</span>
                 </td>
                 <td>
                   {$showType[$val.show_type]}
@@ -97,6 +98,9 @@
                 <td>{$val.data}</td>
                 <td>
                   {$statusView[$val.status]}
+                </td>
+                <td>
+                  {$shortcutType[$val.is_shortcut]}
                 </td>
                 <td>{$val.sort}</td>
                 <td>{$val.level}</td>

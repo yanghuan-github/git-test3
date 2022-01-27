@@ -43,8 +43,8 @@ function addData(){
     obj.data = {
         realName : $('#realName').val(),
         loginName : $('#loginName').val(),
-        password : hex_md5($('#password').val()),
-        confirmPwd : hex_md5($('#confirmPwd').val()),
+        password : $('#password').val(),
+        confirmPwd : $('#confirmPwd').val(),
         roleId : $('#roleId').val(),
         status : $('#status').val(),
     }
@@ -57,6 +57,8 @@ function addData(){
         msgFun(msg['error_format']);
         return false;
     }
+    obj.data.password = hex_md5(obj.data.password);
+    obj.data.confirmPwd = hex_md5(obj.data.confirmPwd);
     obj.url = '/index/User/userAddSave';
     return obj;
 }

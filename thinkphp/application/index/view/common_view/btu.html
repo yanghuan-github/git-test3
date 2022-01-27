@@ -1,0 +1,20 @@
+
+<div class="layui-form-item">
+    <div class="layui-input-block">
+        {present name="$btu"}
+            {foreach $btu as $key => $val }
+                {switch $val}
+                    {case btu}
+                        <span onclick="submit()" class="layui-btn" lay-filter="component-form-element">立即提交</span>
+                    {/case}
+                    {case reset}
+                        <button id="reset" type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    {/case}
+                    {case cancel}
+                        <button id="cancel" type="cancel" class="layui-btn layui-btn-primary">取消</button>
+                    {/case}
+                {/switch}
+            {/foreach}
+        {/present}
+    </div>
+</div>

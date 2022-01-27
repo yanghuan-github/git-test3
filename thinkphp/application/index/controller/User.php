@@ -308,6 +308,27 @@ class User extends BaseController
      */
     public function changePwd()
     {
+        $this->assign('adminId',$this->adminId);
+        $this->form([
+            ['passwordView',$this->adminId,''],
+        ]);
+        $this->btu(['btu']);
         return view('changePwd');
+    }
+
+    /**
+     * 用户修改密码保存
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-27
+     */
+    public function changePwdSave()
+    {
+        $adminId        = input('adminId',0,'int');
+        $oldPwd         = input('oldPwd','','string');
+        $password       = input('password','','string');
+        $confirmPwd     = input('confirmPwd','','string');
+        return model('User','logic')->changePwdSave($adminId,$oldPwd,$password,$confirmPwd);
     }
 }

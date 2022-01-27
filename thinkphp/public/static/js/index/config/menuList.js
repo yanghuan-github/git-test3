@@ -30,15 +30,18 @@ function childHandle(id, status) {
 
 $('#search').on('click', function () {
     let pjId = $("#pjId").val();
+    let showType = $("#showType").val();
+    let nodeType = $("#nodeType").val();
     let status = $("#status").val();
-    window.location.href = '?pjId='+pjId+'&status='+status;
+    let shortcutType = $("#shortcutType").val();
+    window.location.href = '?pjId='+pjId+'&showType='+showType+'&nodeType='+nodeType+'&status='+status+'&shortcutType='+shortcutType;
 })
 
 function add(nodePid = 0) {
     let addUrl = '/index/Config/menuAdd?nodePid='+nodePid;
     layer.open({
         type: 2, 
-        title: msg.addTitle,
+        title: msg.add_title,
         offset: 'auto',
         area: ['1000px','480px'],
         content: addUrl,
@@ -58,7 +61,7 @@ function edit(nodeId = 0) {
     let editUrl = '/index/Config/menuEdit?nodeId='+nodeId;
     layer.open({
         type: 2, 
-        title: msg.editTitle,
+        title: msg.edit_title,
         offset: 'auto',
         area: ['1000px','480px'],
         content: editUrl,

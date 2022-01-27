@@ -21,7 +21,6 @@ class BaseController extends Controller
     protected $isRoot;      //  是否超级管理员
     protected $userName;    //  用户名
     protected $userInfo;    //  用户基本信息
-    protected $roleInfo;    //  角色基本信息
     protected $userMenu;    //  用户菜单
     protected $nodeUrl;     //  用户菜单权限url
 
@@ -95,7 +94,7 @@ class BaseController extends Controller
         // 初始化页面基本信息
         $commonMsg  = lang('common');
         $msg        = is_array(lang($request->action())) ? lang($request->action()) : [];
-        $errorName  = strtolower($request->controller()).'Error';
+        $errorName  = strtolower($request->controller()).'_error';
         $error      = is_array(lang($errorName)) ? lang($errorName) : [];
         $msg        = array_merge($commonMsg,$msg,$error);
         $this->assign('msg',json_encode($msg));
@@ -114,10 +113,10 @@ class BaseController extends Controller
         $cache = '__is_admin_'.$adminName.'_'.$roleId;
         $return = $this->cache('redis')->get($cache);
         if (!$return) {
-            $return = 'error';
+            $return = 'no';
             if (in_array($adminName,KV('userWhiteList'))) {
                 if (in_array($roleId,KV('whiteListRole'))) {
-                    $return = 'success';
+                    $return = 'yes';
                 }
             }
             $this->cache('redis')->set($cache,$return,3600 * 3);
