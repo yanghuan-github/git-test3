@@ -588,4 +588,56 @@ class User extends BaseLogic
             return UserConstant::ERROR;
         }
     }
+
+    /**
+     * 用户修改密码保存
+     * @param int $adminId
+     * @param string $oldPwd
+     * @param string $password
+     * @param string $confirmPwd
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-27
+     */
+    public function changePwdSave($adminId,$oldPwd,$password,$confirmPwd)
+    {
+        if (!$adminId) {
+            return UserConstant::LACK_PARAMS;
+        }
+        $oldData = $this->getAdminInfo('u.login_pwd,u.salt',$adminId);
+        $oldPwd = md5(sha1(md5($oldPwd.$oldData['salt'])));
+        if ($oldPwd != $oldData['login_pwd']) {
+            return UserConstant::USER_OLD_PASSWORD_ERROR;
+        }
+        if ($password != $confirmPwd) {
+            return UserConstant::USER_PASSWORD_ERROR;
+        }
+        $update['salt']         = md5(uniqid(microtime(true),true));
+        $update['login_pwd']    = md5(sha1(md5($password.$update['salt'])));
+        $update['update_time']  = time();
+        model('AdminUser')->startTrans();
+        try {
+            // 拼装记录数据
+            $data = [
+                'type'      =>  Log::LOG_UPDATE,
+                'oldData'   =>  $oldData,
+                'update'    =>  $update,
+            ];
+            model('AdminUser')->where('admin_id',$adminId)->update($update);
+            // 写入操作记录
+            $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
+            model('AdminUser')->commit();
+            return UserConstant::SUCCESS;
+        } catch(\Exception $e) {
+            $data = [
+                'msg'   =>  $e->getMessage(),
+                'data'  =>  input('post.'),
+            ];
+            logs(__FUNCTION__,json_encode($data));
+            // 后续都是需要写入日志 和 操作记录的
+            model('AdminUser')->rollback();
+            return UserConstant::ERROR;
+        }
+    }
 }

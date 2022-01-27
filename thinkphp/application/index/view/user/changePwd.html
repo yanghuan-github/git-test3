@@ -1,1 +1,26 @@
-fdas
+{extend name="common_view/template/base" /}
+{block name="title"}
+{:lang('user_list')['change_pwd']}
+{/block}
+{block name="body"}
+<div id="obj">
+    <div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 15px">
+        <input type="hidden" id="adminId" value="{$adminId}">
+        <div class="layui-form-item">
+            <label class="layui-form-label">旧密码</label>
+            <div class="layui-input-block">
+              <input type="password" id="oldPwd" name="oldPwd" lay-verify="required" placeholder="当前登录密码" value="" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <hr>
+        {include file="common_view/form"}
+        {include file="common_view/btu"}
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script>
+  const msg         = {$msg | raw};
+</script>
+<script src="__JS__/index/user/changePwd.js"></script>
+{/block}

@@ -484,14 +484,25 @@ class Config extends BaseLogic
      * @author 1305964327@qq.com
      * @date 2022-01-20
      */
-    public function menuListData($pjId,$status,$pageLimit)
+    public function menuListData($pjId,$showType,$nodeType,$status,$isShortcut,$pageLimit)
     {
+        // 存在查询条件时 就不转为tree树形菜单 否则出现空数组查询错误问题
+        $isTree = true;
         $where = [];
         if ($pjId) {
             $where['pj_id'] = $pjId;
         }
+        if ($showType) {
+            $where['show_type'] = $showType;
+        }
+        if ($nodeType) {
+            $where['node_type'] = $nodeType;
+        }
         if ($status) {
             $where['status'] = $status;
+        }
+        if ($isShortcut) {
+            $where['is_shortcut'] = $isShortcut;
         }
         $field  = '*';
         if ($pageLimit) {
@@ -499,11 +510,17 @@ class Config extends BaseLogic
         } else {
             $data = model('AdminNode')->getList($field,$where);
         }
-        foreach ($data as $key => $val) {
-            $data[$key]['subNumber'] = $this->getSubNumber($val['node_id']);
+        if ($where) {
+            $isTree = false;
         }
-        $data = list_to_tree($data,'node_id','node_pid');
-        return tree_to_list($data);
+        foreach ($data as $key => $val) {
+            $data[$key]['sub_number'] = $this->getSubNumber($val['node_id']);
+        }
+        if ($isTree) {
+            $data = list_to_tree($data,'node_id','node_pid');
+            return tree_to_list($data);
+        }
+        return $data;
     }
 
     /**
@@ -665,7 +682,7 @@ class Config extends BaseLogic
      * @author 1305964327@qq.com
      * @date 2022-01-24
      */
-    public function menuEditSave($nodeId,$nodeTitle,$nodePid,$showType,$nodeType,$status,$modular,$controller,$action,$sort,$remark)
+    public function menuEditSave($nodeId,$nodeTitle,$nodePid,$showType,$nodeType,$status,$modular,$controller,$action,$sort,$remark,$isShortcut)
     {
         if (!$nodeId || !$nodeTitle) {
             return ConfigConstant::LACK_PARAMS;
@@ -701,6 +718,9 @@ class Config extends BaseLogic
         }
         if ($remark) {
             $update['remark'] = $remark;
+        }
+        if ($isShortcut) {
+            $update['is_shortcut'] = $isShortcut;
         }
         model('AdminNode')->startTrans();
         try {

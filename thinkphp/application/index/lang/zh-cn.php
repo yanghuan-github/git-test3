@@ -12,11 +12,16 @@ return [
         'close_other_tabs'      =>  '关闭其它标签页',
         'close_all_tabs'        =>  '关闭全部标签页',
     ],
+    'console'   =>  [
+        'version'               =>  '1.0',
+        'title'                 =>  '控制台',
+        'a_shortcut'            =>  '快捷方式',
+    ],
 
     ///////////////////////////////     Index/user     ///////////////////////////////////////////
     
     ///////用户
-    'userError'     =>  [
+    'user_error'     =>  [
         'error_format'          =>  '密码必须6到12位，且不能出现空格',
 
         'error_4'               =>  '登录密码字段与确认登录密码字段不符',
@@ -24,41 +29,43 @@ return [
         'error_6'               =>  '不可添加顶级菜单',
         'error_7'               =>  '角色组名已存在',
         'error_8'               =>  '白名单角色组无法修改/删除',
+        'error_9'               =>  '旧密码错误,请检查',
     ],
-    'userList'      =>  [
+    'user_list'      =>  [
         'title'                 =>  '用户列表',
-        'addTitle'              =>  '用户新增页面',
-        'editTitle'             =>  '用户编辑页面',
+        'add_title'             =>  '用户新增页面',
+        'edit_title'            =>  '用户编辑页面',
+        'change_pwd'            =>  '用户修改密码',
     ],
     ///////角色
-    'roleList'      =>  [
+    'role_list'      =>  [
         'title'                 =>  '角色列表',
-        'addTitle'              =>  '角色新增页面',
-        'editTitle'             =>  '角色编辑页面',
+        'add_title'             =>  '角色新增页面',
+        'edit_title'            =>  '角色编辑页面',
         'perTitle'              =>  '角色权限编辑页面',
     ],
     
     ///////////////////////////////     Index/Config     ///////////////////////////////////////////
     
     ///////菜单
-    'configError'     =>  [
+    'config_error'     =>  [
         'error_4'               =>  '白名单菜单无法修改/删除',
     ],
-    'menuList'      =>  [
+    'menu_list'      =>  [
         'title'                 =>  '菜单列表',
-        'addTitle'              =>  '菜单新增页面',
-        'editTitle'             =>  '菜单编辑页面',
+        'add_title'             =>  '菜单新增页面',
+        'edit_title'            =>  '菜单编辑页面',
     ],
     ///////kv配置
-    'paramList'      =>  [
+    'param_list'      =>  [
         'title'                 =>  'KV参数配置列表',
-        'addTitle'              =>  'KV参数配置新增页面',
-        'editTitle'             =>  'KV参数配置编辑页面',
+        'add_title'             =>  'KV参数配置新增页面',
+        'edit_title'            =>  'KV参数配置编辑页面',
     ],
     ///////项目
-    'pjList'        =>  [
+    'pj_list'        =>  [
         'title'                 =>  '项目配置列表',
-        'addTitle'              =>  '项目配置新增页面',
-        'editTitle'             =>  '项目配置编辑页面',
+        'add_title'             =>  '项目配置新增页面',
+        'edit_title'            =>  '项目配置编辑页面',
     ],
 ];

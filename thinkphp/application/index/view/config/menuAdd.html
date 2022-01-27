@@ -1,6 +1,6 @@
 {extend name="common_view/template/base" /}
 {block name="title"}
-{:lang('menuList')['addTitle']}
+{:lang('menu_list')['add_title']}
 {/block}
 {block name="style"}
 <style>
@@ -24,12 +24,14 @@
     }
 
     .menuData input {
-        width: 10.5%;
+        width: 8.5%;
+        height: 38px;
         display: inline-block;
     }
 
     .form-select{
-        width: 10.5%;
+        width: 8.5%;
+        height: 38px;
         display: inline-block;
     }
     
@@ -86,6 +88,14 @@
             <div class="form-select">
                 <select name="actionName[0][node_type]" data-name="node_type">
                     {foreach $nodeType as $ke => $va }
+                    <option value="{$ke}">{$va}</option>
+                    {/foreach}
+                </select>
+            </div>
+            <span class="input-group-addon">快捷显示</span>
+            <div class="form-select">
+                <select name="actionName[0][is_shortcut]" data-name="is_shortcut">
+                    {foreach $shortcutType as $ke => $va }
                     <option value="{$ke}">{$va}</option>
                     {/foreach}
                 </select>

@@ -129,7 +129,7 @@ function add() {
     let addUrl = '/index/Config/pjEdit?id=0';
     layer.open({
         type: 2, 
-        title: msg.addTitle,
+        title: msg.add_title,
         offset: 'auto',
         area: ['800px','390px'],
         content: addUrl,
@@ -148,7 +148,7 @@ function edit(id) {
     let editUrl = '/index/Config/pjEdit?id='+id;
     layer.open({
         type: 2, 
-        title: msg.editTitle,
+        title: msg.edit_title,
         offset: 'auto',
         area: ['800px','390px'],
         content: editUrl,

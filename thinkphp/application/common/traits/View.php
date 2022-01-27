@@ -11,8 +11,8 @@ namespace app\common\traits;
  */
 use app\common\traits\view\Form;
 use app\common\traits\view\Search;
-
+use app\common\traits\view\Btu;
 trait View
 {
-    use Form,Search;
+    use Form,Search,Btu;
 }
