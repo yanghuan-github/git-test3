@@ -252,7 +252,7 @@ class Config extends BaseController
     {
 
         $this->funCheckAuth();
-        $id     = input('id','','int');
+        $id     = input('id',0,'int');
         return model('Config','logic')->pjDele($id);
     }
 
@@ -505,7 +505,32 @@ class Config extends BaseController
      */
     public function dbEdit()
     {
+        $dbId = input('dbId',0,'int');
+        $dbIdView = ['input','dbId','dbId','数据库ID','数据库ID'];
+        $dbStatus = 1;  //  默认为添加
+        
+        $dbInfo = [
+            'db_name'   =>  '',
+            'type'      =>  '',
+            'msg'       =>  '',
+        ];
 
+        if ($dbId) {
+            $dbInfo = model('Config','logic')->getDbInfo('db_name,type,msg',$dbId);
+            array_push($dbIdView,$dbId);
+            $dbStatus = 2;
+        }
+        $this->assign([
+            'dbId'      =>  $dbId,
+            'dbStatus'  =>  $dbStatus,
+        ]);
+        $this->form([
+            ['select','type','type','db库类型', KV('dbLibraryType')],
+            $dbIdView,
+            ['input','dbName','dbName','数据库名称','数据库名称',$dbInfo['db_name']],
+            ['textarea','msg','msg','说明',$dbInfo['msg']],
+        ]);
+        return view('dbEdit');
     }
 
     /**
@@ -517,30 +542,46 @@ class Config extends BaseController
      */
     public function dbAddSave()
     {
+        $this->funCheckAuth();
+        $dbId       = input('dbId',0,'int');
+        $type       = input('type',0,'int');
+        $dbName     = input('dbName','','string');
+        $msg        = input('msg','','string');
 
+        // 新增
+        return model('Config','logic')->dbAddSave($dbId,$type,$dbName,$msg);
     }
 
     /**
      * db库编辑保存
-     * @return void
+     * @return int
      * @author yanghuan
      * @author 1305964327@qq.com
      * @date 2022-01-27
      */
     public function dbEditSave()
     {
+        $this->funCheckAuth();
+        $dbId       = input('dbId',0,'int');
+        $type       = input('type',0,'int');
+        $dbName     = input('dbName','','string');
+        $msg        = input('msg','','string');
 
+        // 编辑
+        return model('Config','logic')->dbEditSave($dbId,$type,$dbName,$msg);
     }
 
     /**
      * db库删除
-     * @return void
+     * @return int
      * @author yanghuan
      * @author 1305964327@qq.com
      * @date 2022-01-27
      */
     public function dbDele()
     {
-
+        $this->funCheckAuth();
+        $dbId     = input('dbId',0,'int');
+        return model('Config','logic')->dbDele($dbId);
     }
 }

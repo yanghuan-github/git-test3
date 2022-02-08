@@ -848,4 +848,175 @@ class Config extends BaseLogic
         $count  = $model->field('db_id')->where($where)->count();
         return  ['code' => 0, 'msg' => '','count' => $count,'data' => $data];
     }
+
+     /**
+     * 获取DB库管理信息详情 - 单条
+     * @param string $field
+     * @param int $dbId
+     * @param string $dbName
+     * @param int $type
+     * @param string $order
+     * @return array
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-01-24
+     */
+    public function getDbInfo($field = '*',$dbId = '',$dbName = '',$type = '',$order = '')
+    {
+        $where = [];
+        if ($dbId) {
+            $where['db_id'] = $dbId;
+        }
+        if ($dbName) {
+            $where['db_name'] = $dbName;
+        }
+        if ($type) {
+            $where['type'] = $type;
+        }
+        return model('ConfigDbLibrary')->getDetail($field,$where,$order);
+    }
+
+    /**
+     * db库新增保存
+     * @param int $dbId
+     * @param int $type
+     * @param string $dbName
+     * @param string $msg
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-08
+     */
+    public function dbAddSave($dbId,$type,$dbName,$msg)
+    {
+        if (!$dbId || !$type || !$dbName) {
+            return ConfigConstant::LACK_PARAMS;
+        }
+        $add = [];
+        if ($dbId) {
+            $add['db_id'] = $dbId;
+        }
+        if ($type) {
+            $add['type'] = $type;
+        }
+        if ($dbName) {
+            $add['db_name'] = $dbName;
+        }
+        if ($msg) {
+            $add['msg'] = $msg;
+        }
+        model('ConfigDbLibrary')->startTrans();
+        try {
+            // 拼装记录数据
+            $data = [
+                'type'      =>  Log::LOG_ADD,
+                'oldData'   =>  [],
+                'data'      =>  $add,
+            ];
+            model('ConfigDbLibrary')->insert($add);
+            $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
+            model('ConfigDbLibrary')->commit();
+
+            return ConfigConstant::SUCCESS;
+        } catch(\Exception $e) {
+            $data = [
+                'msg'   =>  $e->getMessage(),
+                'data'  =>  input('post.'),
+            ];
+            logs(__FUNCTION__,json_encode($data));
+            // 后续都是需要写入日志 和 操作记录的
+            model('ConfigDbLibrary')->rollback();
+            return ConfigConstant::ERROR;
+        }
+    }
+
+    /**
+     * db库编辑保存
+     * @param int $dbId
+     * @param int $type
+     * @param string $dbName
+     * @param string $msg
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-08
+     */
+    public function dbEditSave($dbId,$type,$dbName,$msg)
+    {
+        if (!$dbId || !$type || !$dbName) {
+            return ConfigConstant::LACK_PARAMS;
+        }
+        $update = [];
+        if ($type) {
+            $update['type'] = $type;
+        }
+        if ($dbName) {
+            $update['db_name'] = $dbName;
+        }
+        if ($msg) {
+            $update['msg'] = $msg;
+        }
+        model('ConfigDbLibrary')->startTrans();
+        try {
+            // 拼装记录数据
+            $data = [
+                'type'      =>  Log::LOG_UPDATE,
+                'oldData'   =>  $this->getDbInfo('*',$dbId),
+                'data'      =>  $update,
+            ];
+            model('ConfigDbLibrary')->where('db_id',$dbId)->update($update);
+            // 写入操作记录
+            $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
+            model('ConfigDbLibrary')->commit();
+
+            return ConfigConstant::SUCCESS;
+        } catch(\Exception $e) {
+            $data = [
+                'msg'   =>  $e->getMessage(),
+                'data'  =>  input('post.'),
+            ];
+            logs(__FUNCTION__,json_encode($data));
+            // 后续都是需要写入日志 和 操作记录的
+            model('ConfigDbLibrary')->rollback();
+            return ConfigConstant::ERROR;
+        }
+    }
+
+    /**
+     * db库删除
+     * @param int $dbId
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-08
+     */
+    public function dbDele($dbId)
+    {
+        if (!$dbId) {
+            return ConfigConstant::LACK_PARAMS;
+        }
+        model('ConfigDbLibrary')->startTrans();
+        try {
+            // 拼装记录数据
+            $data = [
+                'type'      =>  Log::LOG_DELETE,
+                'oldData'   =>  $this->getDbInfo('*',$dbId),
+            ];
+            model('ConfigDbLibrary')->where('db_id',$dbId)->delete();
+            // 写入操作记录
+            $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
+            model('ConfigDbLibrary')->commit();
+              
+            return ConfigConstant::SUCCESS;
+        } catch(\Exception $e) {
+            $data = [
+                'msg'   =>  $e->getMessage(),
+                'data'  =>  input('post.'),
+            ];
+            logs(__FUNCTION__,json_encode($data));
+            // 后续都是需要写入日志 和 操作记录的
+            model('ConfigDbLibrary')->rollback();
+            return ConfigConstant::ERROR;
+        }
+    }
 }
