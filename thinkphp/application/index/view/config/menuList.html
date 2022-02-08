@@ -64,7 +64,7 @@
           </thead>
           <tbody>
             {foreach $menuListData as $key => $val}
-              <tr id="node-{$val.node_id}" class="child-of-node-{$val.node_pid}">
+              <tr id="node-{$val.node_id}" class="child-of-node-{$val.node_pid} expanded">
                 <td>{$val.node_id}</td>
                 <td>{$val.node_pid}</td>
                 <td>
