@@ -53,11 +53,11 @@ return [
         // 驱动方式
         'type' => 'redis',
         // 链接地址
-        'host' => '自己服务器redis地址或云redis地址',
+        'host' => '120.24.63.166',
         // 端口号
         'port' => 6379,
         // 密码
-        'password' => 'redis密码',
+        'password' => 'WEdpzUEkUuMq7r5O',
         // 缓存有效期 0表示永久缓存
         'expire' => 0,
         // 缓存前缀
