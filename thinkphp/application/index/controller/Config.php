@@ -584,4 +584,28 @@ class Config extends BaseController
         $dbId     = input('dbId',0,'int');
         return model('Config','logic')->dbDele($dbId);
     }
+
+    /**
+     * 项目数据库列表
+     * @return view
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-08
+     */
+    public function pjDatabaseList()
+    {
+        echo 2131;
+    }
+
+    /**
+     * 项目数据库列表数据
+     * @return json
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-08
+     */
+    public function pjDatabaseListData()
+    {
+
+    }
 }
