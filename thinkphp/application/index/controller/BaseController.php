@@ -80,7 +80,7 @@ class BaseController extends Controller
                             'nodeUrl'   =>  $this->nodeUrl,
                         ]
                     ];
-                    logs(__FUNCTION__,json_encode($data));
+                    logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
                     exit('无权访问!');
                 }
             }

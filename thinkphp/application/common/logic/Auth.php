@@ -82,7 +82,7 @@ class Auth
                     'userName'      =>  $userName,
                 ],
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
             return [];
         }
         // 计算出有效期剩余时间 存入缓存 避免重复验证

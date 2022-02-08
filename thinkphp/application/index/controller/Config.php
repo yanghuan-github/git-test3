@@ -594,7 +594,25 @@ class Config extends BaseController
      */
     public function pjDatabaseList()
     {
-        echo 2131;
+        $type           = $this->dbTypeIdName();
+        $environType    = KV('environType');
+        $dbType         = KV('dbType');
+        $dbAuthType     = KV('dbAuthType');
+        $this->search([
+            ['select','type','type','项目',[0=>'全部']+$type],
+            ['select','environId','environId','环境',[0=>'全部']+$environType,C('environ_id')],
+            ['select','dbType','dbType','数据库类型',[0=>'全部']+$dbType],
+            ['select','authId','authId','权限',[0=>'全部']+$dbAuthType],
+            ['input','dbHost','dbHost','主机','主机(支持模糊查询)'],
+            ['input','dbName','dbName','数据库名','数据库名(支持模糊查询)'],
+        ]);
+        $this->assign([
+            'typeJson'          =>  json_encode($type),
+            'environTypeJson'   =>  json_encode($environType),
+            'dbTypeJson'        =>  json_encode($dbType),
+            'dbAuthTypeJson'    =>  json_encode($dbAuthType),
+        ]);
+        return view('pjDatabaseList');
     }
 
     /**
@@ -605,6 +623,119 @@ class Config extends BaseController
      * @date 2022-02-08
      */
     public function pjDatabaseListData()
+    {
+        $type       = input('type',0,'int');
+        $environId  = input('environId',0,'int');
+        $authId     = input('authId',0,'int');
+        $dbType     = input('dbType',0,'int');
+        $dbHost     = input('dbHost','','string');
+        $dbName     = input('dbName','','string');
+        $pageLimit  = pageToLimit();
+        return json(model('Config','logic')->pjDatabaseListData($type,$environId,$authId,$dbType,$dbHost,$dbName,$pageLimit));
+    }
+
+    /**
+     * 项目数据库新增，编辑页面
+     * @return view
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-08
+     */
+    public function pjDatabaseEdit()
+    {
+        $id         = input('id',0,'int');
+        $funType    = input('funType',1,'int');
+        $pjDatabaseInfo = [
+            'type'          =>  '',
+            'environ_id'    =>  '',
+            'db_type'       =>  '',
+            'auth_id'       =>  '',
+            'db_host'       =>  '',
+            'db_port'       =>  '',
+            'db_name'       =>  '',
+            'db_user'       =>  '',
+            'db_pwd'        =>  '',
+        ];
+        if ($id) {
+            $pjDatabaseInfo = model('Config','logic')->getpjDatabaseInfo('type,environ_id,db_type,auth_id,db_host,db_port,db_name,db_user,db_pwd',$id);
+        }
+        $this->assign([
+            'id'        =>  $id,
+            'funType'   =>  $funType,
+        ]);
+
+        $this->form([
+            ['select','type','type','项目',$this->dbTypeIdName(),$pjDatabaseInfo['type']],
+            ['select','environId','environId','环境',KV('environType'),$pjDatabaseInfo['environ_id']],
+            ['select','dbType','dbType','数据库类型',KV('dbType'),$pjDatabaseInfo['db_type']],
+            ['select','authId','authId','数据库类型',KV('dbAuthType'),$pjDatabaseInfo['auth_id']],
+            ['input','dbHost','dbHost','HOST(IP)','HOST(IP)',$pjDatabaseInfo['db_host']],
+            ['input','dbPort','dbPort','PORT','PORT(端口)',$pjDatabaseInfo['db_port']],
+            ['input','dbName','dbName','数据库名','数据库名',$pjDatabaseInfo['db_name']],
+            ['input','dbUser','dbUser','账户','账户',$pjDatabaseInfo['db_user']],
+            ['input','dbPwd','dbPwd','密码','密码',$pjDatabaseInfo['db_pwd']],
+        ]);
+        return view('pjDatabaseEdit');
+    }
+
+    /**
+     * 项目数据库新增保存
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-08
+     */
+    public function pjDatabaseAddSave()
+    {
+        $this->funCheckAuth();
+        $type       = input('type',0,'int');
+        $environId  = input('environId','','string');
+        $dbType     = input('dbType','','string');
+        $authId     = input('authId',0,'int');
+        $dbHost     = input('dbHost','','string');
+        $dbPort     = input('dbPort','','string');
+        $dbName     = input('dbName','','string');
+        $dbUser     = input('dbUser','','string');
+        $dbPwd      = input('dbPwd','','string');
+
+        // 新增
+        return model('Config','logic')->pjDatabaseAddSave($type,$environId,$dbType,$authId,$dbHost,$dbPort,$dbName,$dbUser,$dbPwd);
+    }
+
+    /**
+     * 项目数据库编辑保存
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-08
+     */
+    public function pjDatabaseEditSave()
+    {
+        $this->funCheckAuth();
+        $id         = input('id',0,'int');
+        $funType    = input('funType',1,'int');
+        $type       = input('type',0,'int');
+        $environId  = input('environId','','string');
+        $dbType     = input('dbType','','string');
+        $authId     = input('authId',0,'int');
+        $dbHost     = input('dbHost','','string');
+        $dbPort     = input('dbPort','','string');
+        $dbName     = input('dbName','','string');
+        $dbUser     = input('dbUser','','string');
+        $dbPwd      = input('dbPwd','','string');
+
+        // 新增
+        return model('Config','logic')->pjDatabaseEditSave($id,$funType,$type,$environId,$dbType,$authId,$dbHost,$dbPort,$dbName,$dbUser,$dbPwd);
+    }
+
+    /**
+     * 项目数据库删除
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-08
+     */
+    public function pjDatabaseDele()
     {
 
     }

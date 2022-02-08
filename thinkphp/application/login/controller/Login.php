@@ -89,7 +89,7 @@ class Login extends Controller
                 'msg'   =>  $e->getMessage(),
                 'data'  =>  input('post.'),
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
             return LoginConstant::LOGIN_LACK_PARAMS;
         }
     }
