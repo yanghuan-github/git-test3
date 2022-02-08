@@ -1,0 +1,22 @@
+{extend name="common_view/template/base" /}
+{block name="title"}
+{if $dbStatus eq 1}
+  {:lang('db_list')['add_title']}
+{else /} 
+  {:lang('db_list')['edit_title']}
+{/if}
+{/block}
+{block name="body"}
+<div id="obj">
+    <div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 15px">
+        <input type="hidden" id="dbStatus" value="{$dbStatus}">
+        {include file="common_view/form"}
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script>
+  const msg         = {$msg | raw};
+</script>
+<script src="__JS__/index/config/dbEdit.js"></script>
+{/block}

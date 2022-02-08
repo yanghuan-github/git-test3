@@ -76,10 +76,10 @@ layui.use(['form', 'table'], function () {
                     templet: function (v) {
                         let html =  `
                                     <a href='javascript:;' onclick='edit(`+v.role_id+`)' class='layui-btn layui-btn-primary layui-btn-sm'>编辑</a>
-                                    <a href='javascript:;' onclick='per(`+v.role_id+`)' class='layui-btn layui-btn-primary layui-btn-sm'>权限</a>
                                     `;
                         if (v.role_id != rootId) {
                             html += `
+                                    <a href='javascript:;' onclick='per(`+v.role_id+`)' class='layui-btn layui-btn-primary layui-btn-sm'>权限</a>
                                     <a href='javascript:;' onclick='ext(`+v.role_id+`,`+v.role_pid+`)' class='layui-btn layui-btn-primary layui-btn-sm'>继承</a>
                                     `;
                         }
