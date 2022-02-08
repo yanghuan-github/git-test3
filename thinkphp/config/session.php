@@ -24,11 +24,11 @@ return [
     // 是否自动开启 SESSION
     'auto_start'     => true,
     // redis主机
-    'host'           => '120.24.63.166',
+    'host'           => 'redis库主机',
     // redis端口
     'port'           => 6379,
     // 密码
-    'password'       => 'WEdpzUEkUuMq7r5O',
+    'password'       => 'redis库密码',
     // 查询库
     'select'         => 0,
     // 是否长连接
