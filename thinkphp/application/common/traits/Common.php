@@ -44,7 +44,7 @@ trait Common
                     'data'          =>  $data,
                 ],
             ];
-            logs(__FUNCTION__,json_encode($log));
+            logs(__FUNCTION__,json_encode($log,JSON_UNESCAPED_UNICODE));
         }
     }
 
@@ -53,7 +53,7 @@ trait Common
      * 拼装为 id => name 格式
      * @param int $environId
      * @param boolean $refresh
-     * @return void
+     * @return array
      * @author yanghuan
      * @author 1305964327@qq.com
      * @date 2022-01-20
@@ -80,7 +80,7 @@ trait Common
      * 获取角色数据
      * 拼装为 id => name 格式
      * @param boolean $refresh
-     * @return void
+     * @return array
      * @author yanghuan
      * @author 1305964327@qq.com
      * @date 2022-01-25
@@ -97,6 +97,30 @@ trait Common
             ];
             $field = 'role_id,role_name';
             $data = model('AdminRole')->getColumn($where,$field);
+            if ($data) {
+                $this->cache('file')->set($cache,$data);
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * 获取db库管理类型
+     * 拼装为 id => name 格式
+     * @param boolean $refresh
+     * @return array
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-08
+     */
+    protected function dbTypeIdName($refresh = false)
+    {
+        $cache = '__common_dbTypeIdName';
+        $data = $this->cache('file')->get($cache);
+        if (empty($data) || $refresh) {
+            $data = [];
+            $field = 'db_id,db_name';
+            $data = model('ConfigDbLibrary')->getColumn([],$field);
             if ($data) {
                 $this->cache('file')->set($cache,$data);
             }

@@ -60,10 +60,10 @@ class User extends BaseLogic
             $where[] = ['u.real_name','like','%'.$realName.'%'];
         }
         if ($status) {
-            $where['u.status'] = $status;
+            $where[] = ['u.status','=',$status];
         }
         if ($roleId) {
-            $where['r.role_id'] = $roleId;
+            $where[] = ['r.role_id','=',$roleId];
         }
         $field  = 'u.admin_id,u.login_name,u.real_name,u.status,u.create_time,u.update_time,u.laston_ip,u.laston_time,r.role_id,r.role_name';
         $model = model('AdminUser');
@@ -135,7 +135,7 @@ class User extends BaseLogic
                 'msg'   =>  $e->getMessage(),
                 'data'  =>  input('post.'),
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
             // 后续都是需要写入日志 和 操作记录的
             model('AdminUser')->rollback();
             model('BindAdminRole')->rollback();
@@ -157,7 +157,7 @@ class User extends BaseLogic
      */
     public function userAddSave($realName,$loginName,$password,$confirmPwd,$roleId,$status)
     {
-        if (!$loginName || !$password || !$confirmPwd) {
+        if (!notEmpty([$loginName,$password,$confirmPwd])) {
             return UserConstant::LACK_PARAMS;
         }
         if ($password != $confirmPwd) {
@@ -208,7 +208,7 @@ class User extends BaseLogic
                 'msg'   =>  $e->getMessage(),
                 'data'  =>  input('post.'),
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
             // 后续都是需要写入日志 和 操作记录的
             model('AdminUser')->rollback();
             model('BindAdminRole')->rollback();
@@ -249,7 +249,7 @@ class User extends BaseLogic
                 'msg'   =>  $e->getMessage(),
                 'data'  =>  input('post.'),
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
             // 后续都是需要写入日志 和 操作记录的
             model('AdminUser')->rollback();
             return UserConstant::ERROR;
@@ -338,7 +338,7 @@ class User extends BaseLogic
      */
     public function roleEditSave($roleId,$roleName,$rolePid,$status)
     {
-        if (!$roleId || !$roleName) {
+        if (!notEmpty([$roleId,$roleName])) {
             return UserConstant::LACK_PARAMS;
         }
         if (in_array($roleId,KV('whiteListRole'))) {
@@ -374,7 +374,7 @@ class User extends BaseLogic
                 'msg'   =>  $e->getMessage(),
                 'data'  =>  input('post.'),
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
             // 后续都是需要写入日志 和 操作记录的
             model('AdminRole')->rollback();
             return UserConstant::ERROR;
@@ -433,7 +433,7 @@ class User extends BaseLogic
                 'msg'   =>  $e->getMessage(),
                 'data'  =>  input('post.'),
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
             // 后续都是需要写入日志 和 操作记录的
             model('AdminRole')->rollback();
             return UserConstant::ERROR;
@@ -474,7 +474,7 @@ class User extends BaseLogic
                 'msg'   =>  $e->getMessage(),
                 'data'  =>  input('post.'),
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
             // 后续都是需要写入日志 和 操作记录的
             model('AdminRole')->rollback();
             return UserConstant::ERROR;
@@ -531,7 +531,7 @@ class User extends BaseLogic
                 'msg'   =>  $e->getMessage(),
                 'data'  =>  input('post.'),
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
             // 后续都是需要写入日志 和 操作记录的
             model('AdminRoleAccess')->rollback();
             return UserConstant::ERROR;
@@ -582,7 +582,7 @@ class User extends BaseLogic
                 'msg'   =>  $e->getMessage(),
                 'data'  =>  input('post.'),
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
             // 后续都是需要写入日志 和 操作记录的
             model('AdminRoleAccess')->rollback();
             return UserConstant::ERROR;
@@ -634,7 +634,7 @@ class User extends BaseLogic
                 'msg'   =>  $e->getMessage(),
                 'data'  =>  input('post.'),
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
             // 后续都是需要写入日志 和 操作记录的
             model('AdminUser')->rollback();
             return UserConstant::ERROR;

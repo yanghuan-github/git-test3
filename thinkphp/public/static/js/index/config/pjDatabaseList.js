@@ -12,11 +12,12 @@ layui.use(['form', 'table'], function () {
     // 构建查询条件
     function queryParams(params) {
         var queryParams = {
-            pjId: $("#pjId").val(),
+            type: $("#type").val(),
             environId: $("#environId").val(),
-            isView: $("#isView").val(),
-            pjLogo: $("#pjLogo").val(),
-            pjName: $("#pjName").val(),
+            authId: $("#authId").val(),
+            dbType: $("#dbType").val(),
+            dbHost: $("#dbHost").val(),
+            dbName: $("#dbName").val(),
         };
         return queryParams;
     }
@@ -32,10 +33,19 @@ layui.use(['form', 'table'], function () {
                     title: 'ID',
                 },
                 {
-                    field: 'pj_id',
+                    field: 'type',
                     halign: "center",
                     align: "center",
-                    title: '项目ID',
+                    title: 'DB类型ID',
+                },
+                {
+                    field: 'typeName',
+                    halign: "center",
+                    align: "center",
+                    title: '项目名称',
+                    templet: function (v) {
+                        return typeNameFun(v.type);
+                    }
                 },
                 {
                     field: 'environ_id',
@@ -47,25 +57,46 @@ layui.use(['form', 'table'], function () {
                     }
                 },
                 {
-                    field: 'pj_logo',
+                    field: 'db_type',
                     halign: "center",
                     align: "center",
-                    title: '项目标志',
-                },
-                {
-                    field: 'pj_name',
-                    halign: "center",
-                    align: "center",
-                    title: '项目名称',
-                },
-                {
-                    field: 'is_view',
-                    halign: "center",
-                    align: "center",
-                    title: '管理界面',
+                    title: '数据库类型',
                     templet: function (v) {
-                        return isViewFun(v.is_view);
+                        return dbTypeFun(v.db_type);
                     }
+                },
+                {
+                    field: 'auth_id',
+                    halign: "center",
+                    align: "center",
+                    title: '权限',
+                    templet: function (v) {
+                        return authFun(v.auth_id);
+                    }
+                },
+                {
+                    field: 'db_host',
+                    halign: "center",
+                    align: "center",
+                    title: '主机',
+                },
+                {
+                    field: 'db_port',
+                    halign: "center",
+                    align: "center",
+                    title: '端口',
+                },
+                {
+                    field: 'db_name',
+                    halign: "center",
+                    align: "center",
+                    title: '数据库名',
+                },
+                {
+                    field: 'db_user',
+                    halign: "center",
+                    align: "center",
+                    title: '用户名',
                 },
                 {
                     field: 'templet',
@@ -74,6 +105,7 @@ layui.use(['form', 'table'], function () {
                     title: '操作',
                     templet: function (v) {
                         return `
+                                <a href='javascript:;' onclick='edit(`+v.id+`,2)' class='layui-btn layui-btn-primary layui-btn-sm'>复用</a>
                                 <a href='javascript:;' onclick='edit(`+v.id+`)' class='layui-btn layui-btn-primary layui-btn-sm'>编辑</a>
                                 <a href='javascript:;' onclick='dele(`+v.id+`)' class='layui-btn layui-btn-primary layui-btn-sm'>删除</a>
                                 `;
@@ -105,28 +137,28 @@ layui.use(['form', 'table'], function () {
             })
         })
     }
+
 })
 
-/**
- * 管理界面参数处理方法
- * @param {*} isView 
- */
-function isViewFun(isView)
-{
-    if (isView == 1) {
-        return `<span style='color:red'>√</span>`;
-    } else {
-        return `<span style='color:green'>x</span>`;
-    }
+function typeNameFun(type) {
+    return typeJson[type];
 }
 
-function environFun(environId)
-{
-    return environViewJson[environId];
+function environFun(environId) {
+    return environTypeJson[environId];
 }
+
+function dbTypeFun(dbTypeId) {
+    return dbTypeJson[dbTypeId];
+}
+
+function authFun(authId) {
+    return dbAuthTypeJson[authId];
+}
+
 
 function add() {
-    let addUrl = '/index/Config/pjEdit?id=0';
+    let addUrl = '/index/Config/pjDatabaseEdit?id=0';
     layer.open({
         type: 2, 
         title: msg.add_title,
@@ -144,8 +176,8 @@ function add() {
         }
     });
 }
-function edit(id) {
-    let editUrl = '/index/Config/pjEdit?id='+id;
+function edit(id,funType = 1) {
+    let editUrl = '/index/Config/pjDatabaseEdit?id='+id+'&funType='+funType;
     layer.open({
         type: 2, 
         title: msg.edit_title,
@@ -168,7 +200,7 @@ function dele(id) {
     layer.confirm('是否要删除所选项?',{
         btn: ['删除', '点错了~']
     }, function(index, layero){
-        $.post('/index/Config/pjDele',{id:id},function(code){
+        $.post('/index/Config/pjDatabaseDele',{id:id},function(code){
             commonDeleReturn(code,index);
         });
     }, function(index){

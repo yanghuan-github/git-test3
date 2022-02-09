@@ -270,7 +270,7 @@ function vagueDeleteCache($name,$type = 'file')
                     'type'     =>  $type,
                 ],
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
         }
     }
 }

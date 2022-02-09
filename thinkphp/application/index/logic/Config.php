@@ -46,7 +46,7 @@ class Config extends BaseLogic
             $where[] = ['name','like','%'.$name.'%'];
         }
         if ($status) {
-            $where['status'] = $status;
+            $where[] = ['status','=',$status];
         }
         $field  = '*';
         $model = model('ConfigParams');
@@ -71,7 +71,7 @@ class Config extends BaseLogic
      */
     public function paramAddSave($name,$value,$msg,$status)
     {
-        if (!$name || !$value) {
+        if (!notEmpty([$name,$value])) {
             return ConfigConstant::LACK_PARAMS;
         }
         $add = [];
@@ -110,7 +110,7 @@ class Config extends BaseLogic
                 'msg'   =>  $e->getMessage(),
                 'data'  =>  input('post.'),
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
             // 后续都是需要写入日志 和 操作记录的
             model('ConfigParams')->rollback();
             return ConfigConstant::ERROR;
@@ -131,7 +131,7 @@ class Config extends BaseLogic
      */
     public function paramEditSave($id,$name,$value,$msg,$status)
     {
-        if (!$name || !$value) {
+        if (!notEmpty([$name,$value])) {
             return ConfigConstant::LACK_PARAMS;
         }
         $update = [];
@@ -169,7 +169,7 @@ class Config extends BaseLogic
                 'msg'   =>  $e->getMessage(),
                 'data'  =>  input('post.'),
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
             // 后续都是需要写入日志 和 操作记录的
             model('ConfigParams')->rollback();
             return ConfigConstant::ERROR;
@@ -209,7 +209,7 @@ class Config extends BaseLogic
                 'msg'   =>  $e->getMessage(),
                 'data'  =>  input('post.'),
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
             // 后续都是需要写入日志 和 操作记录的
             model('ConfigParams')->rollback();
             return ConfigConstant::ERROR;
@@ -263,13 +263,13 @@ class Config extends BaseLogic
     {
         $where = [];
         if ($pjId) {
-            $where['pj_id'] = $pjId;
+            $where[] = ['pj_id','=',$pjId];
         }
         if ($environId) {
-            $where['environ_id'] = $environId;
+            $where[] = ['environ_id','=',$environId];
         }
         if ($isView) {
-            $where['is_view'] = $isView;
+            $where[] = ['is_view','=',$isView];
         }
         if ($pjName) {
             $where[] = ['pj_name','like','%'.$pjName.'%'];
@@ -302,7 +302,7 @@ class Config extends BaseLogic
      */
     public function pjAddSave($pjId,$environId,$pjLogo,$pjName,$isView)
     {
-        if (!$pjId || !$pjLogo || !$pjName) {
+        if (!notEmpty([$pjId,$pjLogo,$pjName])) {
             return ConfigConstant::LACK_PARAMS;
         }
         $add = [];
@@ -341,7 +341,7 @@ class Config extends BaseLogic
                 'msg'   =>  $e->getMessage(),
                 'data'  =>  input('post.'),
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
             // 后续都是需要写入日志 和 操作记录的
             model('ConfigPj')->rollback();
             return ConfigConstant::ERROR;
@@ -363,7 +363,7 @@ class Config extends BaseLogic
      */
     public function pjEditSave($id,$pjId,$environId,$pjLogo,$pjName,$isView)
     {
-        if (!$id || !$pjId || !$environId || !$pjLogo || !$pjName) {
+        if (!notEmpty([$id,$pjId,$environId,$pjLogo,$pjName])) {
             return ConfigConstant::LACK_PARAMS;
         }
         $update = [];
@@ -403,7 +403,7 @@ class Config extends BaseLogic
                 'msg'   =>  $e->getMessage(),
                 'data'  =>  input('post.'),
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
             // 后续都是需要写入日志 和 操作记录的
             model('ConfigPj')->rollback();
             return ConfigConstant::ERROR;
@@ -443,7 +443,7 @@ class Config extends BaseLogic
                 'msg'   =>  $e->getMessage(),
                 'data'  =>  input('post.'),
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
             // 后续都是需要写入日志 和 操作记录的
             model('ConfigPj')->rollback();
             return ConfigConstant::ERROR;
@@ -586,7 +586,7 @@ class Config extends BaseLogic
      */
     public function menuAddSave($nodePid,$modular,$controller,$actionName,$role)
     {
-        if (!$modular || !$controller) {
+        if (!notEmpty([$modular,$controller])) {
             return ConfigConstant::LACK_PARAMS;
         }
         $pjId = C('pj_id');
@@ -633,15 +633,14 @@ class Config extends BaseLogic
                 model('AdminNode')->commit();
                 model('AdminRoleAccess')->commit();
 
-                // 清除缓存
-                vagueDeleteCache('__auth_data_');
+                $this->claerMenuCache();
                 return ConfigConstant::SUCCESS;
             } catch (\Exception $e) {
                 $data = [
                     'msg'   =>  $e->getMessage(),
                     'data'  =>  input('post.'),
                 ];
-                logs(__FUNCTION__,json_encode($data));
+                logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
                 // 后续都是需要写入日志 和 操作记录的
                 model('AdminNode')->rollback();
                 model('AdminRoleAccess')->rollback();
@@ -684,7 +683,7 @@ class Config extends BaseLogic
      */
     public function menuEditSave($nodeId,$nodeTitle,$nodePid,$showType,$nodeType,$status,$modular,$controller,$action,$sort,$remark,$isShortcut)
     {
-        if (!$nodeId || !$nodeTitle) {
+        if (!notEmpty([$nodeId,$nodeTitle])) {
             return ConfigConstant::LACK_PARAMS;
         }
         if (in_array($nodeId,KV('whiteListMenu'))) {
@@ -735,15 +734,14 @@ class Config extends BaseLogic
             $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
             model('AdminUser')->commit();
 
-            // 清除缓存
-            vagueDeleteCache('__auth_data_');
+            $this->claerMenuCache();
             return ConfigConstant::SUCCESS;
         } catch(\Exception $e) {
             $data = [
                 'msg'   =>  $e->getMessage(),
                 'data'  =>  input('post.'),
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
             // 后续都是需要写入日志 和 操作记录的
             model('AdminUser')->rollback();
             return ConfigConstant::ERROR;
@@ -778,15 +776,14 @@ class Config extends BaseLogic
             model('AdminUser')->commit();
             model('AdminRoleAccess')->commit();
             
-            // 清除缓存
-            vagueDeleteCache('__auth_data_');
+            $this->claerMenuCache();
             return ConfigConstant::SUCCESS;
         } catch(\Exception $e) {
             $data = [
                 'msg'   =>  $e->getMessage(),
                 'data'  =>  input('post.'),
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
             // 后续都是需要写入日志 和 操作记录的
             model('AdminUser')->rollback();
             model('AdminRoleAccess')->rollback();
@@ -794,6 +791,21 @@ class Config extends BaseLogic
         }
     }
     
+    /**
+     * 清除菜单相关缓存
+     * @return void
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-08
+     */
+    private function claerMenuCache()
+    {
+        // 清除缓存
+        vagueDeleteCache('__auth_data_');
+        vagueDeleteCache('__admin_node_access_pj_id_');
+        vagueDeleteCache('__shortcut_node_pj_id');
+    }
+
     /**
      * 获取角色组菜单
      * @param int $roleId
@@ -833,7 +845,7 @@ class Config extends BaseLogic
     {
         $where = [];
         if ($type) {
-            $where['type'] = $type;
+            $where[] = ['type','=',$type];
         }
         if ($dbName) {
             $where[] = ['db_name','like','%'.$dbName.'%'];
@@ -889,7 +901,7 @@ class Config extends BaseLogic
      */
     public function dbAddSave($dbId,$type,$dbName,$msg)
     {
-        if (!$dbId || !$type || !$dbName) {
+        if (!notEmpty([$dbId,$type,$dbName])) {
             return ConfigConstant::LACK_PARAMS;
         }
         $add = [];
@@ -917,13 +929,14 @@ class Config extends BaseLogic
             $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
             model('ConfigDbLibrary')->commit();
 
+            $this->dbTypeIdName(true);
             return ConfigConstant::SUCCESS;
         } catch(\Exception $e) {
             $data = [
                 'msg'   =>  $e->getMessage(),
                 'data'  =>  input('post.'),
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
             // 后续都是需要写入日志 和 操作记录的
             model('ConfigDbLibrary')->rollback();
             return ConfigConstant::ERROR;
@@ -943,7 +956,7 @@ class Config extends BaseLogic
      */
     public function dbEditSave($dbId,$type,$dbName,$msg)
     {
-        if (!$dbId || !$type || !$dbName) {
+        if (!notEmpty([$dbId,$type,$dbName])) {
             return ConfigConstant::LACK_PARAMS;
         }
         $update = [];
@@ -969,13 +982,14 @@ class Config extends BaseLogic
             $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
             model('ConfigDbLibrary')->commit();
 
+            $this->dbTypeIdName(true);
             return ConfigConstant::SUCCESS;
         } catch(\Exception $e) {
             $data = [
                 'msg'   =>  $e->getMessage(),
                 'data'  =>  input('post.'),
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
             // 后续都是需要写入日志 和 操作记录的
             model('ConfigDbLibrary')->rollback();
             return ConfigConstant::ERROR;
@@ -1007,15 +1021,270 @@ class Config extends BaseLogic
             $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
             model('ConfigDbLibrary')->commit();
               
+            $this->dbTypeIdName(true);
             return ConfigConstant::SUCCESS;
         } catch(\Exception $e) {
             $data = [
                 'msg'   =>  $e->getMessage(),
                 'data'  =>  input('post.'),
             ];
-            logs(__FUNCTION__,json_encode($data));
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
             // 后续都是需要写入日志 和 操作记录的
             model('ConfigDbLibrary')->rollback();
+            return ConfigConstant::ERROR;
+        }
+    }
+
+    /**
+     * 项目数据库列表数据
+     * @param int $type
+     * @param int $environId
+     * @param int $authId
+     * @param int $dbType
+     * @param string $dbHost
+     * @param string $dbName
+     * @param string $pageLimit
+     * @return array
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-08
+     */
+    public function pjDatabaseListData($type,$environId,$authId,$dbType,$dbHost,$dbName,$pageLimit)
+    {
+        $where = [];
+        if ($type) {
+            $where[] = ['type','=',$type];
+        }
+        if ($environId) {
+            $where[] = ['environ_id','=',$environId];
+        }
+        if ($authId) {
+            $where[] = ['auth_id','=',$authId];
+        }
+        if ($dbType) {
+            $where[] = ['db_type','=',$dbType];
+        }
+        if ($dbHost) {
+            $where[] = ['db_host','like','%'.$dbHost.'%'];
+        }
+        if ($dbName) {
+            $where[] = ['db_name','like','%'.$dbName.'%'];
+        }
+        $field  = 'id,type,environ_id,db_type,auth_id,db_host,db_port,db_name,db_user';
+        $model = model('ConfigPjDatabase');
+        $data = $model->getList($field,$where,null,$pageLimit);
+        $count  = $model->field('id')->where($where)->count();
+        return  ['code' => 0, 'msg' => '','count' => $count,'data' => $data];
+    }
+
+    /**
+     * 获取数据库配置信息 - 单条
+     * @param string $field
+     * @param int $id
+     * @param int $type
+     * @param int $environId
+     * @param int $dbType
+     * @param int $authId
+     * @param string $order
+     * @return void
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-08
+     */
+    public function getpjDatabaseInfo($field = '*',$id = '',$type = '',$environId = '',$dbType = '',$authId = '',$order = '')
+    {
+        $where = [];
+        if ($id) {
+            $where['id'] = $id;
+        }
+        if ($type) {
+            $where['type'] = $type;
+        }
+        if ($environId) {
+            $where['environ_id'] = $environId;
+        }
+        if ($dbType) {
+            $where['db_type'] = $dbType;
+        }
+        if ($authId) {
+            $where['auth_id'] = $authId;
+        }
+        return model('ConfigPjDatabase')->getDetail($field,$where,$order);
+    }
+
+    /**
+     * 项目数据库新增保存
+     * @param int $type
+     * @param int $environId
+     * @param int $dbType
+     * @param int $authId
+     * @param string $dbHost
+     * @param int $dbPort
+     * @param string $dbName
+     * @param string $dbUser
+     * @param string $dbPwd
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-08
+     */
+    public function pjDatabaseAddSave($type,$environId,$dbType,$authId,$dbHost,$dbPort,$dbName,$dbUser,$dbPwd)
+    {
+        if (!notEmpty([$type,$environId,$dbType,$authId,$dbHost,$dbPort,$dbName,$dbUser,$dbPwd])) {
+            return ConfigConstant::LACK_PARAMS;
+        }
+        $add = [];
+        if ($type) {
+            $add['type'] = $type;
+        }
+        if ($environId) {
+            $add['environ_id'] = $environId;
+        }
+        if ($dbType) {
+            $add['db_type'] = $dbType;
+        }
+        if ($authId) {
+            $add['auth_id'] = $authId;
+        }
+        if ($dbHost) {
+            $add['db_host'] = $dbHost;
+        }
+        if ($dbPort) {
+            $add['db_port'] = $dbPort;
+        }
+        if ($dbName) {
+            $add['db_name'] = $dbName;
+        }
+        if ($dbUser) {
+            $add['db_user'] = $dbUser;
+        }
+        if ($dbPwd) {
+            $add['db_pwd'] = $dbPwd;
+        }
+        model('ConfigPjDatabase')->startTrans();
+        try {
+            // 拼装记录数据
+            $data = [
+                'type'      =>  Log::LOG_ADD,
+                'oldData'   =>  [],
+                'data'      =>  $add,
+            ];
+            model('ConfigPjDatabase')->insert($add);
+            $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
+            model('ConfigPjDatabase')->commit();
+
+            return ConfigConstant::SUCCESS;
+        } catch(\Exception $e) {
+            $data = [
+                'msg'   =>  $e->getMessage(),
+                'data'  =>  input('post.'),
+            ];
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
+            // 后续都是需要写入日志 和 操作记录的
+            model('ConfigPjDatabase')->rollback();
+            return ConfigConstant::ERROR;
+        }
+    }
+
+    /**
+     * 项目数据库复用保存
+     * @param int $type
+     * @param int $environId
+     * @param int $dbType
+     * @param int $authId
+     * @param string $dbHost
+     * @param string $dbPort
+     * @param string $dbName
+     * @param string $dbUser
+     * @param string $dbPwd
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-08
+     */
+    public function pjDatabaseCopySave($type,$environId,$dbType,$authId,$dbHost,$dbPort,$dbName,$dbUser,$dbPwd)
+    {
+        
+    }
+
+    /**
+     * 项目数据库编辑保存
+     * @param int $id
+     * @param int $funType 1 => 新增 2 => 复用
+     * @param int $type
+     * @param int $environId
+     * @param int $dbType
+     * @param int $authId
+     * @param string $dbHost
+     * @param int $dbPort
+     * @param string $dbName
+     * @param string $dbUser
+     * @param string $dbPwd
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-08
+     */
+    public function pjDatabaseEditSave($id,$funType,$type,$environId,$dbType,$authId,$dbHost,$dbPort,$dbName,$dbUser,$dbPwd)
+    {
+        if (!notEmpty([$id,$type,$environId,$dbType,$authId,$dbHost,$dbPort,$dbName,$dbUser,$dbPwd])) {
+            return ConfigConstant::LACK_PARAMS;
+        }
+        // 复用还是编辑 操作
+        if ($funType == 2) {
+            $this->pjDatabaseCopySave($type,$environId,$dbType,$authId,$dbHost,$dbPort,$dbName,$dbUser,$dbPwd);
+        }
+        $update = [];
+        if ($type) {
+            $update['type'] = $type;
+        }
+        if ($environId) {
+            $update['environ_id'] = $environId;
+        }
+        if ($dbType) {
+            $update['db_type'] = $dbType;
+        }
+        if ($authId) {
+            $update['auth_id'] = $authId;
+        }
+        if ($dbHost) {
+            $update['db_host'] = $dbHost;
+        }
+        if ($dbPort) {
+            $update['db_port'] = $dbPort;
+        }
+        if ($dbName) {
+            $update['db_name'] = $dbName;
+        }
+        if ($dbUser) {
+            $update['db_user'] = $dbUser;
+        }
+        if ($dbPwd) {
+            $update['db_pwd'] = $dbPwd;
+        }
+        model('ConfigPjDatabase')->startTrans();
+        try {
+            // 拼装记录数据
+            $data = [
+                'type'      =>  Log::LOG_UPDATE,
+                'oldData'   =>  $this->getpjDatabaseInfo('*',$id),
+                'data'      =>  $update,
+            ];
+            model('ConfigPjDatabase')->where('id',$id)->update($update);
+            // 写入操作记录
+            $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
+            model('ConfigPjDatabase')->commit();
+
+            $this->dbTypeIdName(true);
+            return ConfigConstant::SUCCESS;
+        } catch(\Exception $e) {
+            $data = [
+                'msg'   =>  $e->getMessage(),
+                'data'  =>  input('post.'),
+            ];
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
+            // 后续都是需要写入日志 和 操作记录的
+            model('ConfigPjDatabase')->rollback();
             return ConfigConstant::ERROR;
         }
     }

@@ -68,10 +68,17 @@ return [
         'add_title'             =>  '项目配置新增页面',
         'edit_title'            =>  '项目配置编辑页面',
     ],
-    ///////db库
+    ///////db库管理
     'db_list'        =>  [
-        'title'                 =>  'db库列表',
-        'add_title'             =>  'db库新增页面',
-        'edit_title'            =>  'db库编辑页面',
+        'title'                 =>  'db库管理列表',
+        'add_title'             =>  'db库管理新增页面',
+        'edit_title'            =>  'db库管理编辑页面',
+    ],
+    ///////db库配置
+    'pj_database_list'  =>  [
+        'title'                 =>  'db库配置列表',
+        'add_title'             =>  'db库配置新增页面',
+        'edit_title'            =>  'db库配置编辑页面',
+        'copy_title'            =>  'db库配置复用页面',
     ],
 ];
