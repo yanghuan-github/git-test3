@@ -737,6 +737,91 @@ class Config extends BaseController
      */
     public function pjDatabaseDele()
     {
+        $this->funCheckAuth();
+        $id     = input('id',0,'int');
+        return model('Config','logic')->pjDatabaseDele($id);
+    }
+
+    /**
+     * 项目服务器列表
+     * @return view
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-09
+     */
+    public function pjServerList()
+    {
+        $environType    = KV('environType');
+        $this->search([
+            ['select','environId','environId','环境',$environType,C('environ_id'),'lay-filter=environId'],
+            ['select','pjId','pjId','项目',[]],
+        ]);
+        $this->assign([
+            'environTypeJson'   =>  json_encode($environType),
+        ]);
+        return view('pjServerList');
+    }
+
+    /**
+     * 项目服务器列表数据
+     * @return json
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-09
+     */
+    public function pjServerListData()
+    {
+        $environId  = input('environId',0,'int');
+        $pjId       = input('pjId',0,'int');
+        $pageLimit  = pageToLimit();
+        return json(model('Config','logic')->pjServerListData($environId,$pjId,$pageLimit));
+    }
+
+    /**
+     * 项目服务器新增，编辑页面
+     * @return view
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-09
+     */
+    public function pjServerEdit()
+    {
+        return view('pjServerEdit');
+    }
+
+    /**
+     * 项目服务器新增保存
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-09
+     */
+    public function pjServerAddSave()
+    {
+
+    }
+
+    /**
+     * 项目服务器编辑保存
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-09
+     */
+    public function pjServereEditSave()
+    {
+
+    }
+
+    /**
+     * 项目服务器删除
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-09
+     */
+    public function pjServerDele()
+    {
 
     }
 }

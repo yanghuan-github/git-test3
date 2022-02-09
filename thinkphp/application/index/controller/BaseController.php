@@ -36,7 +36,8 @@ class BaseController extends Controller
     protected $urlWhileList = [
         '/index/Index/loginOut.html',
         '/index/Index/resetPassword.html',
-        '/index/User/changePwd.html'
+        '/index/User/changePwd.html',
+        '/index/PublicTool/pubPjIdName.html'
     ];
 
     public function initialize()

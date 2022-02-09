@@ -1072,7 +1072,7 @@ class Config extends BaseLogic
         }
         $field  = 'id,type,environ_id,db_type,auth_id,db_host,db_port,db_name,db_user';
         $model = model('ConfigPjDatabase');
-        $data = $model->getList($field,$where,null,$pageLimit);
+        $data = $model->getList($field,$where,'type asc,auth_id asc',$pageLimit);
         $count  = $model->field('id')->where($where)->count();
         return  ['code' => 0, 'msg' => '','count' => $count,'data' => $data];
     }
@@ -1091,7 +1091,7 @@ class Config extends BaseLogic
      * @author 1305964327@qq.com
      * @date 2022-02-08
      */
-    public function getpjDatabaseInfo($field = '*',$id = '',$type = '',$environId = '',$dbType = '',$authId = '',$order = '')
+    public function getpjDatabaseInfo($field = '*',$id = '',$type = '',$environId = '',$dbType = '',$authId = '',$dbHost = '',$order = '')
     {
         $where = [];
         if ($id) {
@@ -1108,6 +1108,9 @@ class Config extends BaseLogic
         }
         if ($authId) {
             $where['auth_id'] = $authId;
+        }
+        if ($dbHost) {
+            $where['db_host'] = $dbHost;
         }
         return model('ConfigPjDatabase')->getDetail($field,$where,$order);
     }
@@ -1204,7 +1207,62 @@ class Config extends BaseLogic
      */
     public function pjDatabaseCopySave($type,$environId,$dbType,$authId,$dbHost,$dbPort,$dbName,$dbUser,$dbPwd)
     {
-        
+        $isset = $this->getpjDatabaseInfo('*',null,$type,$environId,$dbType,$authId,$dbHost);
+        if ($isset) {
+            return ConfigConstant::DB_ALREADY_EXIST;
+        }
+        $add = [];
+        if ($type) {
+            $add['type'] = $type;
+        }
+        if ($environId) {
+            $add['environ_id'] = $environId;
+        }
+        if ($dbType) {
+            $add['db_type'] = $dbType;
+        }
+        if ($authId) {
+            $add['auth_id'] = $authId;
+        }
+        if ($dbHost) {
+            $add['db_host'] = $dbHost;
+        }
+        if ($dbPort) {
+            $add['db_port'] = $dbPort;
+        }
+        if ($dbName) {
+            $add['db_name'] = $dbName;
+        }
+        if ($dbUser) {
+            $add['db_user'] = $dbUser;
+        }
+        if ($dbPwd) {
+            $add['db_pwd'] = $dbPwd;
+        }
+        model('ConfigPjDatabase')->startTrans();
+        try {
+            // 拼装记录数据
+            $data = [
+                'type'      =>  Log::LOG_ADD,
+                'oldData'   =>  [],
+                'data'      =>  $add,
+            ];
+            model('ConfigPjDatabase')->insert($add);
+            // 写入操作记录
+            $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
+            model('ConfigPjDatabase')->commit();
+
+            return ConfigConstant::SUCCESS;
+        } catch(\Exception $e) {
+            $data = [
+                'msg'   =>  $e->getMessage(),
+                'data'  =>  input('post.'),
+            ];
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
+            // 后续都是需要写入日志 和 操作记录的
+            model('ConfigPjDatabase')->rollback();
+            return ConfigConstant::ERROR;
+        }
     }
 
     /**
@@ -1232,7 +1290,7 @@ class Config extends BaseLogic
         }
         // 复用还是编辑 操作
         if ($funType == 2) {
-            $this->pjDatabaseCopySave($type,$environId,$dbType,$authId,$dbHost,$dbPort,$dbName,$dbUser,$dbPwd);
+            return $this->pjDatabaseCopySave($type,$environId,$dbType,$authId,$dbHost,$dbPort,$dbName,$dbUser,$dbPwd);
         }
         $update = [];
         if ($type) {
@@ -1275,7 +1333,6 @@ class Config extends BaseLogic
             $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
             model('ConfigPjDatabase')->commit();
 
-            $this->dbTypeIdName(true);
             return ConfigConstant::SUCCESS;
         } catch(\Exception $e) {
             $data = [
@@ -1287,5 +1344,63 @@ class Config extends BaseLogic
             model('ConfigPjDatabase')->rollback();
             return ConfigConstant::ERROR;
         }
+    }
+
+    public function pjDatabaseDele($id)
+    {
+        if (!$id) {
+            return ConfigConstant::LACK_PARAMS;
+        }
+        model('ConfigPjDatabase')->startTrans();
+        try {
+            // 拼装记录数据
+            $data = [
+                'type'      =>  Log::LOG_DELETE,
+                'oldData'   =>  $this->getpjDatabaseInfo('*',$id),
+            ];
+            model('ConfigPjDatabase')->where('id',$id)->delete();
+            // 写入操作记录
+            $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
+            model('ConfigPjDatabase')->commit();
+              
+            // 刷新缓存
+            vagueDeleteCache('__common_pjIdName_');
+            return ConfigConstant::SUCCESS;
+        } catch(\Exception $e) {
+            $data = [
+                'msg'   =>  $e->getMessage(),
+                'data'  =>  input('post.'),
+            ];
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
+            // 后续都是需要写入日志 和 操作记录的
+            model('ConfigPjDatabase')->rollback();
+            return ConfigConstant::ERROR;
+        }
+    }
+
+    /**
+     * 获取服务器列表数据
+     * @param int $environId
+     * @param int $pjId
+     * @param string $pageLimit
+     * @return array
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-09
+     */
+    public function pjServerListData($environId,$pjId,$pageLimit)
+    {
+        $where = [];
+        if ($environId) {
+            $where[] = ['environ_id','=',$environId];
+        }
+        if ($pjId) {
+            $where[] = ['pj_id','=',$pjId];
+        }
+        $field  = '*';
+        $model  = model('ConfigPjServer');
+        $data   = $model->getList($field,$where,null,$pageLimit);
+        $count  = $model->field('id')->where($where)->count();
+        return  ['code' => 0, 'msg' => '','count' => $count,'data' => $data];
     }
 }

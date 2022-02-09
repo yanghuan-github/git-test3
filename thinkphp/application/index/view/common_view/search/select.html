@@ -2,7 +2,7 @@
     <div class="layui-input-inline">
         <label class="layui-form-label">{$val[3]}:</label>
         <div class="layui-input-block  layui-form">
-            <select name="{$val[1]}" id="{$val[2]}" lay-search="">
+            <select name="{$val[1]}" id="{$val[2]}" lay-search="" {present name="$val[6]"} {$val[6]} {/present}>
                 {foreach $val[4] as $ke => $va}
                     <option value="{$ke}" {present name="$val[5]"} {if condition="$ke eq $val[5]" }selected{/if} {/present}>{$va}</option>
                 {/foreach}

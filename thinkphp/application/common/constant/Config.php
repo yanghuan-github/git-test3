@@ -12,4 +12,8 @@ namespace app\common\constant;
 class Config extends Base
 {
     const MENU_CANNOT_BE_MODIFIED   =   4; //  白名单菜单无法修改
+
+
+
+    const DB_ALREADY_EXIST          =   5; //   db库配置已存在
 }
