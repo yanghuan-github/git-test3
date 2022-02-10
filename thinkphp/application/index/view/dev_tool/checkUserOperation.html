@@ -1,0 +1,26 @@
+{extend name="common_view/template/base" /}
+{block name="title"}
+{:lang('user_operation_list')['title']}
+{/block}
+{block name="style"}
+    <style>
+        pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
+        .string { color: green; }
+        .number { color: darkorange; }
+        .boolean { color: blue; }
+        .null { color: magenta; }
+        .key { color: red; }
+    </style>
+{/block}
+{block name="body"}
+<div id="obj">
+    <pre id="result">
+    </pre>
+</div>
+{/block}
+{block name="script"}
+<script>
+    const data = {$data | raw};
+</script>
+<script src="__JS__/index/dev_tool/checkUserOperation.js"></script>
+{/block}

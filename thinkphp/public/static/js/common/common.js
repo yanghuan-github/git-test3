@@ -1,36 +1,32 @@
 // 设置输入框边框红色和焦点
-function fcous(id)
-{
+function fcous(id) {
     randomCode();// 刷新验证码
-    let idObj = $('#'+id);
+    let idObj = $('#' + id);
     idObj.focus();// 获取焦点
     idObj.addClass('layui-form-danger layui-form-danger:focus');
 }
 
-function msgFun(msg)
-{
+function msgFun(msg) {
     layer.msg(msg);
 }
 
-function errorCaveat(msg,obj)
-{
-    layer.tips(msg,'#'+obj);
+function errorCaveat(msg, obj) {
+    layer.tips(msg, '#' + obj);
     fcous(obj);
 }
 
-function jumpSuccess(msg,url,time)
-{
+function jumpSuccess(msg, url, time) {
     layer.msg(msg);
-    setTimeout(()=>{
+    setTimeout(() => {
         window.location.href = url;
-    },time)
+    }, time)
 }
 
-$('.obj-btu i').on("mouseover",function(){
-    $('.obj-btu i').css('color','#1c84c6');
+$('.obj-btu i').on("mouseover", function () {
+    $('.obj-btu i').css('color', '#1c84c6');
 });
-$('.obj-btu i').on("mouseout",function(){
-    $('.obj-btu i').css('color','');
+$('.obj-btu i').on("mouseout", function () {
+    $('.obj-btu i').css('color', '');
 });
 
 
@@ -38,11 +34,10 @@ $('.obj-btu i').on("mouseout",function(){
  * 时间公共处理函数
  * @param {*} time 
  */
-function timeFun(time)
-{
+function timeFun(time) {
     if (time) {
-        let now = new Date(time*1000);
-        return now.getFullYear()+"-" + (now.getMonth()+1) + "-" + (now.getDate()) + " " + (now.getHours()) + ":" + (now.getMinutes()) + ":" + (now.getSeconds());
+        let now = new Date(time * 1000);
+        return now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + (now.getDate()) + " " + (now.getHours()) + ":" + (now.getMinutes()) + ":" + (now.getSeconds());
     } else {
         return '-';
     }
@@ -54,21 +49,20 @@ function timeFun(time)
  * @param {*} status 状态
  * @returns 
  */
-function statusFun(status)
-{
+function statusFun(status) {
     switch (status) {
         case 1:
             return statusViewJson[status];
-        break;
+            break;
         case 2:
-            return `<span style='color:red;'>`+statusViewJson[status]+`</span>`;
-        break;
+            return `<span style='color:red;'>` + statusViewJson[status] + `</span>`;
+            break;
         case 3:
-            return `<span style='color:green;'>`+statusViewJson[status]+`</span>`;
-        break;
+            return `<span style='color:green;'>` + statusViewJson[status] + `</span>`;
+            break;
         default:
             return '-';
-        break;
+            break;
     }
 }
 
@@ -76,20 +70,19 @@ function statusFun(status)
  * 公共保存返回
  * @param {*} code 
  */
-function commonSaveReturn(code)
-{
+function commonSaveReturn(code) {
     if (code == 1) {
-        msgFun(msg['success_'+code]);
+        msgFun(msg['success_' + code]);
     } else {
-        msgFun(msg['error_'+code])
+        msgFun(msg['error_' + code])
     }
-    setTimeout(()=>{
+    setTimeout(() => {
         let index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
         parent.layer.close(index); //再执行关闭 
         if (code == 1) {
             parent.location.reload();
         }
-    },1000)
+    }, 1000)
 }
 
 /**
@@ -97,17 +90,43 @@ function commonSaveReturn(code)
  * @param {*} code 
  * @param {*} index 
  */
-function commonDeleReturn(code,index)
-{
+function commonDeleReturn(code, index) {
     if (code == 1) {
-        msgFun(msg['success_'+code]);
+        msgFun(msg['success_' + code]);
     } else {
-        msgFun(msg['error_'+code])
+        msgFun(msg['error_' + code])
     }
-    setTimeout(()=>{
+    setTimeout(() => {
         layer.close(index);
         if (code == 1) {
             location.reload();
         }
-    },1000);
+    }, 1000);
+}
+
+/**
+ * json格式化输出工具
+ * @param {*} json 
+ * @returns 
+ */
+function syntaxHighlight(json) {
+    if (typeof json != 'string') {
+        json = JSON.stringify(json, undefined, 2);
+    }
+    json = json.replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>');
+    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) {
+        var cls = 'number';
+        if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+                cls = 'key';
+            } else {
+                cls = 'string';
+            }
+        } else if (/true|false/.test(match)) {
+            cls = 'boolean';
+        } else if (/null/.test(match)) {
+            cls = 'null';
+        }
+        return '<span class="' + cls + '">' + match + '</span>';
+    });
 }

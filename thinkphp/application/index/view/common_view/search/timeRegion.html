@@ -1,0 +1,27 @@
+<div class="layui-inline">
+    <label class="layui-form-label">操作时间范围：</label>
+    <div class="layui-inline" id="timeRegion">
+        <div class="layui-input-inline">
+            <input type="text" autocomplete="off" id="start" class="layui-input" placeholder="开始日期">
+        </div>
+        <div class="layui-form-mid">-</div>
+        <div class="layui-input-inline">
+            <input type="text" autocomplete="off" id="end" class="layui-input" placeholder="结束日期">
+        </div>
+    </div>
+</div>
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#start',
+            format: 'yyyy-M-d',
+        });
+        $("#start").val('{$start}');
+        laydate.render({
+            elem: '#end',
+            format: 'yyyy-M-d',
+        });
+        $("#end").val('{$end}');
+    })
+</script>

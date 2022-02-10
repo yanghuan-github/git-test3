@@ -68,9 +68,10 @@ trait Base
     /**
      * 公共处理方法
      * 该方法传入参数顺序无关 不支持特殊事件
-     * 可传入int类型值 作为默认值
-     * 可传入bool值 true 用于标识是否需要转json
-     * 可通过直接传入数组 规定键值对的形式扩展
+     * 可传入int类型值 作为默认值 例：1
+     * 可传入bool值 true 用于标识是否需要转json 例：true
+     * 可传入string类型值, 用于标识特殊事件 例：lay-filter=environId
+     * 可通过直接传入数组 规定键值对的形式扩展 例：[0=>'全部']
      * 也可通过直接传入参数，使数组自动生成键
      * @param array $array
      * @param array $tempArray
@@ -88,10 +89,12 @@ trait Base
                 $tempArray += $val;
             } elseif (is_bool($val) && $val === true) {
                 $this->needJosn = true;
-            }elseif (is_int($val)) {
+            } elseif (is_int($val)) {
                 if ($val) {
                     $this->value = $val;
                 }
+            } elseif (is_string($val)) {
+                $this->assign($funName.'Fun',$val);
             } else {
                 $tempArray[] = $val;
             }
@@ -112,8 +115,36 @@ trait Base
      * @author 1305964327@qq.com
      * @date 2022-01-24
      */
-    public function urlView($array = [])
+    protected function urlView($array = [])
     {
         $this->assign(__FUNCTION__,$array);
+    }
+
+    /**
+     * 时间范围区间
+     * @param array $array
+     * @return void
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-10
+     */
+    protected function timeRegionView($array = [])
+    {
+        $start  = date("Y-m-d", strtotime("-7 day"));
+        $end    = date("Y-m-d");
+        if (is_array($array)) {
+            foreach ($array as $key => $val ) {
+                if (is_array($val)) {
+                    if (isset($val['start']) && isset($val['end'])) {
+                        $start  = $val['start'];
+                        $end    = $val['end'];
+                    }
+                }
+            }
+        }
+        $this->assign([
+            'start'     =>  $start,
+            'end'       =>  $end,
+        ]);
     }
 }

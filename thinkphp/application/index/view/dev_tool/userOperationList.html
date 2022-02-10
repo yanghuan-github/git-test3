@@ -1,6 +1,6 @@
 {extend name="common_view/template/base" /}
 {block name="title"}
-{:lang('pj_database_list')['title']}
+{:lang('user_operation_list')['title']}
 {/block}
 {block name="body"}
 <div id="obj">
@@ -28,7 +28,7 @@
         <div>
           <span class="obj-title">
             <i class="layui-icon">&#xe638;</i>
-            {:lang('pj_database_list')['title']}
+            {:lang('user_operation_list')['title']}
           </span>
           <div class="obj-btu">
             <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="add()">新增</button>
@@ -44,12 +44,8 @@
 {/block}
 {block name="script"}
 <script>
-  const requestUrl      = "/index/Config/pjDatabaseListData";
+  const requestUrl      = "/index/DevTool/userOperationListData";
   const msg             = {$msg | raw};
-  const typeJson        = {$typeJson | raw};
-  const environTypeJson = {$environViewJson | raw};
-  const dbTypeJson      = {$dbTypeJson | raw};
-  const dbAuthTypeJson  = {$dbAuthTypeJson | raw};
 </script>
-<script src="__JS__/index/config/pjDatabaseList.js"></script>
+<script src="__JS__/index/dev_tool/userOperationList.js"></script>
 {/block}

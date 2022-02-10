@@ -13,6 +13,6 @@ trait KvFun
 
     // 特殊方法类型
     protected $specifyFun = [
-        'statusView','passwordView','urlView','roleView','pjView','environView'
+        'statusView','passwordView','urlView','roleView','pjView','environView','timeRegionView'
     ];
 }

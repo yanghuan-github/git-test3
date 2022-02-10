@@ -196,7 +196,7 @@ class Config extends BaseController
 
         $this->form([
             ['input','pjId','pjId','项目ID','项目ID',$pjInfo['pj_id']],
-            ['select','environId','environId','环境',KV('environType'),$pjInfo['environ_id']],
+            ['environView',$pjInfo['environ_id']],
             ['input','pjLogo','pjLogo','项目LOGO','项目LOGO',$pjInfo['pj_logo']],
             ['input','pjName','pjName','项目名','项目名',$pjInfo['pj_logo']],
             ['select','isView','isView','是否管理界面',[
@@ -333,7 +333,7 @@ class Config extends BaseController
         $nodePid = input('nodePid',0,'int');
 
         // 获取菜单KV值
-        $nodeIdName = model('Config','logic')->getNodeIdName();
+        $nodeIdName = model('Config','logic')->getNodeIdName(0);
 
         // 获取角色组
         $roleIdName = model('User','logic')->getRoleIdName();
@@ -386,7 +386,7 @@ class Config extends BaseController
         $nodeId = input('nodeId',0,'int');
 
         // 获取菜单KV值
-        $nodeIdName = model('Config','logic')->getNodeIdName();
+        $nodeIdName = model('Config','logic')->getNodeIdName($nodeId);
 
         $menuInfo = [
             'node_title'    =>  '',
@@ -618,12 +618,11 @@ class Config extends BaseController
     public function pjDatabaseList()
     {
         $type           = $this->dbTypeIdName();
-        $environType    = KV('environType');
         $dbType         = KV('dbType');
         $dbAuthType     = KV('dbAuthType');
         $this->search([
-            ['select','type','type','项目',[0=>'全部']+$type],
-            ['select','environId','environId','环境',[0=>'全部']+$environType,C('environ_id')],
+            ['select','type','type','db库类型',[0=>'全部']+$type],
+            ['environView',[0=>'全部'],C('environ_id'),true],
             ['select','dbType','dbType','数据库类型',[0=>'全部']+$dbType],
             ['select','authId','authId','权限',[0=>'全部']+$dbAuthType],
             ['input','dbHost','dbHost','主机','主机(支持模糊查询)'],
@@ -631,7 +630,6 @@ class Config extends BaseController
         ]);
         $this->assign([
             'typeJson'          =>  json_encode($type),
-            'environTypeJson'   =>  json_encode($environType),
             'dbTypeJson'        =>  json_encode($dbType),
             'dbAuthTypeJson'    =>  json_encode($dbAuthType),
         ]);
@@ -689,7 +687,7 @@ class Config extends BaseController
 
         $this->form([
             ['select','type','type','项目',$this->dbTypeIdName(),$pjDatabaseInfo['type']],
-            ['select','environId','environId','环境',KV('environType'),$pjDatabaseInfo['environ_id']],
+            ['environView',$pjDatabaseInfo['environ_id']],
             ['select','dbType','dbType','数据库类型',KV('dbType'),$pjDatabaseInfo['db_type']],
             ['select','authId','authId','数据库类型',KV('dbAuthType'),$pjDatabaseInfo['auth_id']],
             ['input','dbHost','dbHost','HOST(IP)','HOST(IP)',$pjDatabaseInfo['db_host']],
@@ -780,13 +778,9 @@ class Config extends BaseController
      */
     public function pjServerList()
     {
-        $environType    = KV('environType');
         $this->search([
-            ['select','environId','environId','环境',$environType,C('environ_id'),'lay-filter=environId'],
+            ['environView',C('environ_id'),true,'lay-filter=environId'],
             ['select','pjId','pjId','项目',[]],
-        ]);
-        $this->assign([
-            'environTypeJson'   =>  json_encode($environType),
         ]);
         return view('pjServerList');
     }
@@ -831,7 +825,7 @@ class Config extends BaseController
             'pjSelect'  =>  $pjServerInfo['pj_id'], 
         ]);
         $this->form([
-            ['select','environId','environId','环境',KV('environType'),$pjServerInfo['environ_id'],'lay-filter=environId'],
+            ['environView',$pjServerInfo['environ_id'],'lay-filter=environId'],
             ['select','pjId','pjId','项目',[]],
             ['input','pjUrl','pjUrl','项目url','项目url',$pjServerInfo['pj_url']],
             ['input','pjIp','pjIp','负载IP','负载IP(多个用逗号隔开即可)',$pjServerInfo['pj_ip']],
