@@ -50,10 +50,9 @@ class Index extends BaseController
     public function loginOut()
     {
         // 清除用户菜单缓存
-        $jwtCheckKey = '__check_token_'.md5($this->userName);
-        $dataKey = "__auth_data_" .md5(json_encode($this->userInfo));
-        $this->cache('redis')->rm($jwtCheckKey);
-        $this->cache('file')->rm($dataKey);
+        cacheDele('__check_token_'.md5($this->userName),'redis');
+        cacheDele('__auth_data_');
+        cacheDele('__is_admin_'.$this->userName.'_'.$this->roleId,'redis');
         session(null);
         $this->success('退出成功','login/Login/login');
     }

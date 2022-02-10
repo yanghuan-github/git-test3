@@ -50,6 +50,7 @@ return [
     ///////菜单
     'config_error'     =>  [
         'error_4'               =>  '白名单菜单无法修改/删除',
+        'error_5'               =>  'db库配置已存在,无法复用',
     ],
     'menu_list'      =>  [
         'title'                 =>  '菜单列表',
@@ -80,5 +81,11 @@ return [
         'add_title'             =>  'db库配置新增页面',
         'edit_title'            =>  'db库配置编辑页面',
         'copy_title'            =>  'db库配置复用页面',
+    ],
+     ///////server配置
+     'pj_server_list'  =>  [
+        'title'                 =>  '项目服务器列表',
+        'add_title'             =>  '项目服务器新增页面',
+        'edit_title'            =>  '项目服务器编辑页面',
     ],
 ];
