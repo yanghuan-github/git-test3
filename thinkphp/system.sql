@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 09/02/2022 15:27:50
+ Date: 10/02/2022 17:35:38
 */
 
 SET NAMES utf8mb4;
@@ -40,7 +40,7 @@ CREATE TABLE `t_admin_node`  (
   INDEX `data_type`(`node_type`) USING BTREE,
   INDEX `status`(`status`) USING BTREE,
   INDEX `is_shortcut`(`is_shortcut`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 79 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '后台系统节点表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 84 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '后台系统节点表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of t_admin_node
@@ -110,6 +110,10 @@ INSERT INTO `t_admin_node` VALUES (75, 0, '项目服务器新增，编辑页面'
 INSERT INTO `t_admin_node` VALUES (76, 0, '项目服务器新增保存', 3, 73, 1, '/index/Config/pjServerAddSave.html', 1, 2, 4, '', 2);
 INSERT INTO `t_admin_node` VALUES (77, 0, '项目服务器编辑保存', 3, 73, 1, '/index/Config/pjServerEditSave.html', 1, 3, 4, '', 2);
 INSERT INTO `t_admin_node` VALUES (78, 0, '项目服务器删除', 3, 73, 1, '/index/Config/pjServerDele.html', 1, 4, 4, '', 2);
+INSERT INTO `t_admin_node` VALUES (80, 0, '开发者工具', 2, 1, 1, '', 1, 13, 2, '', 2);
+INSERT INTO `t_admin_node` VALUES (81, 0, '用户操作日志列表', 1, 80, 1, '/index/DevTool/userOperationList.html', 1, 0, 3, '', 1);
+INSERT INTO `t_admin_node` VALUES (82, 0, '用户操作日志列表数据', 3, 81, 1, '/index/DevTool/userOperationListData.html', 1, 1, 4, '', 2);
+INSERT INTO `t_admin_node` VALUES (83, 0, '查看用户操作日志数据详情', 3, 81, 1, '/index/DevTool/checkUserOperation.html', 1, 0, 4, '', 2);
 
 -- ----------------------------
 -- Table structure for t_admin_operation_log
@@ -123,7 +127,7 @@ CREATE TABLE `t_admin_operation_log`  (
   `create_time` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `admin_name`(`admin_name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 181 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户操作记录表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 205 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户操作记录表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of t_admin_operation_log
@@ -296,6 +300,30 @@ INSERT INTO `t_admin_operation_log` VALUES (177, 'app\\index\\logic\\Config::men
 INSERT INTO `t_admin_operation_log` VALUES (178, 'app\\index\\logic\\Config::menuAddSave', 'testadmin', '{\"type\":2,\"oldData\":[],\"data\":{\"actionName\":{\"0\":{\"node_title\":\"\\u9879\\u76ee\\u670d\\u52a1\\u5668\\u5217\\u8868\\u6570\\u636e\",\"show_type\":\"3\",\"node_type\":\"1\",\"is_shortcut\":\"2\",\"sort\":\"\",\"remark\":\"\",\"node_pid\":\"73\",\"data\":\"\\/index\\/Config\\/pjServerListData.html\",\"pj_id\":0,\"status\":1,\"level\":4},\"2\":{\"node_title\":\"\\u9879\\u76ee\\u670d\\u52a1\\u5668\\u65b0\\u589e\\uff0c\\u7f16\\u8f91\\u9875\\u9762\",\"show_type\":\"3\",\"node_type\":\"1\",\"is_shortcut\":\"2\",\"sort\":\"1\",\"remark\":\"\",\"node_pid\":\"73\",\"data\":\"\\/index\\/Config\\/pjServerEdit.html\",\"pj_id\":0,\"status\":1,\"level\":4},\"3\":{\"node_title\":\"\\u9879\\u76ee\\u670d\\u52a1\\u5668\\u65b0\\u589e\\u4fdd\\u5b58\",\"show_type\":\"3\",\"node_type\":\"1\",\"is_shortcut\":\"2\",\"sort\":\"2\",\"remark\":\"\",\"node_pid\":\"73\",\"data\":\"\\/index\\/Config\\/pjServerAddSave.html\",\"pj_id\":0,\"status\":1,\"level\":4},\"4\":{\"node_title\":\"\\u9879\\u76ee\\u670d\\u52a1\\u5668\\u7f16\\u8f91\\u4fdd\\u5b58\",\"show_type\":\"3\",\"node_type\":\"1\",\"is_shortcut\":\"2\",\"sort\":\"3\",\"remark\":\"\",\"node_pid\":\"73\",\"data\":\"\\/index\\/Config\\/pjServerEditSave.html\",\"pj_id\":0,\"status\":1,\"level\":4},\"5\":{\"node_title\":\"\\u9879\\u76ee\\u670d\\u52a1\\u5668\\u5220\\u9664\",\"show_type\":\"3\",\"node_type\":\"1\",\"is_shortcut\":\"2\",\"sort\":\"4\",\"remark\":\"\",\"node_pid\":\"73\",\"data\":\"\\/index\\/Config\\/pjServerDele.html\",\"pj_id\":0,\"status\":1,\"level\":4}},\"roleAccess\":[{\"role_id\":1,\"node_id\":\"74\"},{\"role_id\":12,\"node_id\":\"74\"},{\"role_id\":13,\"node_id\":\"74\"},{\"role_id\":1,\"node_id\":\"75\"},{\"role_id\":12,\"node_id\":\"75\"},{\"role_id\":13,\"node_id\":\"75\"},{\"role_id\":1,\"node_id\":\"76\"},{\"role_id\":12,\"node_id\":\"76\"},{\"role_id\":13,\"node_id\":\"76\"},{\"role_id\":1,\"node_id\":\"77\"},{\"role_id\":12,\"node_id\":\"77\"},{\"role_id\":13,\"node_id\":\"77\"},{\"role_id\":1,\"node_id\":\"78\"},{\"role_id\":12,\"node_id\":\"78\"},{\"role_id\":13,\"node_id\":\"78\"}]}}', 1644376709);
 INSERT INTO `t_admin_operation_log` VALUES (179, 'app\\index\\logic\\Config::pjAddSave', 'testadmin', '{\"type\":2,\"oldData\":[],\"data\":{\"pj_id\":1,\"environ_id\":2,\"pj_logo\":\"issue\",\"pj_name\":\"\\u53d1\\u884c\\u540e\\u53f0 - \\u5916\\u6d4b\",\"is_view\":1}}', 1644389129);
 INSERT INTO `t_admin_operation_log` VALUES (180, 'app\\index\\logic\\Config::pjEditSave', 'testadmin', '{\"type\":1,\"oldData\":{\"id\":7,\"pj_id\":2,\"environ_id\":1,\"pj_logo\":\"sdk\",\"pj_name\":\"sdk - \\u5185\\u7f51\",\"is_view\":1},\"data\":[]}', 1644389141);
+INSERT INTO `t_admin_operation_log` VALUES (181, 'app\\index\\logic\\Config::pjDele', 'testadmin', '{\"type\":3,\"oldData\":{\"id\":3,\"pj_id\":0,\"environ_id\":3,\"pj_logo\":\"system\",\"pj_name\":\"\\u7cfb\\u7edf\\u540e\\u53f0 - \\u6b63\\u5f0f\",\"is_view\":1}}', 1644398310);
+INSERT INTO `t_admin_operation_log` VALUES (182, 'app\\index\\logic\\Config::pjServerAddSave', 'testadmin', '{\"type\":2,\"oldData\":[],\"data\":{\"environ_id\":1,\"pj_id\":2,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1\",\"pj_while_ip\":\"127.0.0.1\"}}', 1644399323);
+INSERT INTO `t_admin_operation_log` VALUES (183, 'app\\index\\logic\\Config::pjServerEditSave', 'testadmin', '{\"type\":1,\"oldData\":{\"id\":4,\"pj_id\":2,\"environ_id\":1,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1\",\"pj_while_ip\":\"127.0.0.1\"},\"data\":{\"environ_id\":1,\"pj_id\":2,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1,127\",\"pj_while_ip\":\"127.0.0.1\"}}', 1644399661);
+INSERT INTO `t_admin_operation_log` VALUES (184, 'app\\index\\logic\\Config::pjServerEditSave', 'testadmin', '{\"type\":1,\"oldData\":{\"id\":4,\"pj_id\":2,\"environ_id\":1,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1,127\",\"pj_while_ip\":\"127.0.0.1\"},\"data\":{\"environ_id\":1,\"pj_id\":2,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1,127\",\"pj_while_ip\":\"127.0.0.1\"}}', 1644457210);
+INSERT INTO `t_admin_operation_log` VALUES (185, 'app\\index\\logic\\Config::pjServerEditSave', 'testadmin', '{\"type\":1,\"oldData\":{\"id\":4,\"pj_id\":2,\"environ_id\":1,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1,127\",\"pj_while_ip\":\"127.0.0.1\"},\"data\":{\"environ_id\":1,\"pj_id\":2,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1,127\",\"pj_while_ip\":\"127.0.0.1\"}}', 1644457239);
+INSERT INTO `t_admin_operation_log` VALUES (186, 'app\\index\\logic\\Config::pjServerEditSave', 'testadmin', '{\"type\":1,\"oldData\":{\"id\":4,\"pj_id\":2,\"environ_id\":1,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1,127\",\"pj_while_ip\":\"127.0.0.1\"},\"data\":{\"environ_id\":1,\"pj_id\":2,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1,127\",\"pj_while_ip\":\"127.0.0.1\"}}', 1644457296);
+INSERT INTO `t_admin_operation_log` VALUES (187, 'app\\index\\logic\\Config::pjServerEditSave', 'testadmin', '{\"type\":1,\"oldData\":{\"id\":4,\"pj_id\":2,\"environ_id\":1,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1,127\",\"pj_while_ip\":\"127.0.0.1\"},\"data\":{\"environ_id\":1,\"pj_id\":2,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1\",\"pj_while_ip\":\"127.0.0.1\"}}', 1644457302);
+INSERT INTO `t_admin_operation_log` VALUES (188, 'app\\index\\logic\\Config::pjServerEditSave', 'testadmin', '{\"type\":1,\"oldData\":{\"id\":4,\"pj_id\":2,\"environ_id\":1,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1\",\"pj_while_ip\":\"127.0.0.1\"},\"data\":{\"environ_id\":1,\"pj_id\":2,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1\",\"pj_while_ip\":\"127.0.0.1\"}}', 1644457331);
+INSERT INTO `t_admin_operation_log` VALUES (189, 'app\\index\\logic\\Config::pjServerEditSave', 'testadmin', '{\"type\":1,\"oldData\":{\"id\":4,\"pj_id\":2,\"environ_id\":1,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1\",\"pj_while_ip\":\"127.0.0.1\"},\"data\":{\"environ_id\":1,\"pj_id\":2,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1\",\"pj_while_ip\":\"127.0.0.1\"}}', 1644457371);
+INSERT INTO `t_admin_operation_log` VALUES (190, 'app\\index\\logic\\Config::pjServerEditSave', 'testadmin', '{\"type\":1,\"oldData\":{\"id\":4,\"pj_id\":2,\"environ_id\":1,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1\",\"pj_while_ip\":\"127.0.0.1\"},\"data\":{\"environ_id\":1,\"pj_id\":2,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1\",\"pj_while_ip\":\"127.0.0.1\"}}', 1644457378);
+INSERT INTO `t_admin_operation_log` VALUES (191, 'app\\index\\logic\\Config::pjServerEditSave', 'testadmin', '{\"type\":1,\"oldData\":{\"id\":4,\"pj_id\":2,\"environ_id\":1,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1\",\"pj_while_ip\":\"127.0.0.1\"},\"data\":{\"environ_id\":1,\"pj_id\":2,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1\",\"pj_while_ip\":\"127.0.0.1\"}}', 1644457490);
+INSERT INTO `t_admin_operation_log` VALUES (192, 'app\\index\\logic\\Config::pjServerEditSave', 'testadmin', '{\"type\":1,\"oldData\":{\"id\":4,\"pj_id\":2,\"environ_id\":1,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1\",\"pj_while_ip\":\"127.0.0.1\"},\"data\":{\"environ_id\":1,\"pj_id\":2,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1\",\"pj_while_ip\":\"127.0.0.1\"}}', 1644457501);
+INSERT INTO `t_admin_operation_log` VALUES (193, 'app\\index\\logic\\Config::pjServerEditSave', 'testadmin', '{\"type\":1,\"oldData\":{\"id\":4,\"pj_id\":2,\"environ_id\":1,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1\",\"pj_while_ip\":\"127.0.0.1\"},\"data\":{\"environ_id\":1,\"pj_id\":2,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1\",\"pj_while_ip\":\"127.0.0.1\"}}', 1644457636);
+INSERT INTO `t_admin_operation_log` VALUES (194, 'app\\index\\logic\\Config::pjServerEditSave', 'testadmin', '{\"type\":1,\"oldData\":{\"id\":4,\"pj_id\":2,\"environ_id\":1,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1\",\"pj_while_ip\":\"127.0.0.1\"},\"data\":{\"environ_id\":1,\"pj_id\":2,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1\",\"pj_while_ip\":\"127.0.0.1\"}}', 1644457645);
+INSERT INTO `t_admin_operation_log` VALUES (195, 'app\\index\\logic\\Config::pjServerEditSave', 'testadmin', '{\"type\":1,\"oldData\":{\"id\":4,\"pj_id\":2,\"environ_id\":1,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1\",\"pj_while_ip\":\"127.0.0.1\"},\"data\":{\"environ_id\":1,\"pj_id\":2,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1\",\"pj_while_ip\":\"127.0.0.1\"}}', 1644457665);
+INSERT INTO `t_admin_operation_log` VALUES (196, 'app\\index\\logic\\Config::pjServerEditSave', 'testadmin', '{\"type\":1,\"oldData\":{\"id\":4,\"pj_id\":2,\"environ_id\":1,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1\",\"pj_while_ip\":\"127.0.0.1\"},\"data\":{\"environ_id\":1,\"pj_id\":2,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1\",\"pj_while_ip\":\"127.0.0.1\"}}', 1644459088);
+INSERT INTO `t_admin_operation_log` VALUES (197, 'app\\index\\logic\\Config::pjServerDele', 'testadmin', '{\"type\":3,\"oldData\":{\"id\":4,\"pj_id\":2,\"environ_id\":1,\"pj_url\":\"tp5-sdk-test3\",\"pj_ip\":\"127.0.0.1\",\"pj_while_ip\":\"127.0.0.1\"}}', 1644460537);
+INSERT INTO `t_admin_operation_log` VALUES (198, 'app\\index\\logic\\Config::menuAddSave', 'testadmin', '{\"type\":2,\"oldData\":[],\"data\":{\"actionName\":[{\"node_title\":\"\\u5f00\\u53d1\\u8005\\u5de5\\u5177\",\"show_type\":\"2\",\"node_type\":\"1\",\"is_shortcut\":\"2\",\"sort\":\"\",\"remark\":\"\",\"node_pid\":\"1\",\"data\":\"\\/\\/\\/.html\",\"pj_id\":0,\"status\":1,\"level\":2}],\"roleAccess\":[{\"role_id\":1,\"node_id\":\"79\"},{\"role_id\":12,\"node_id\":\"79\"},{\"role_id\":13,\"node_id\":\"79\"}]}}', 1644464475);
+INSERT INTO `t_admin_operation_log` VALUES (199, 'app\\index\\logic\\Config::menuDele', 'testadmin', '{\"type\":3,\"oldData\":{\"node_id\":79,\"pj_id\":0,\"node_title\":\"\\u5f00\\u53d1\\u8005\\u5de5\\u5177\",\"show_type\":2,\"node_pid\":1,\"node_type\":1,\"data\":\"\\/\\/\\/.html\",\"status\":1,\"sort\":0,\"level\":2,\"remark\":\"\",\"is_shortcut\":2}}', 1644464533);
+INSERT INTO `t_admin_operation_log` VALUES (200, 'app\\index\\logic\\Config::menuAddSave', 'testadmin', '{\"type\":2,\"oldData\":[],\"data\":{\"actionName\":[{\"node_title\":\"\\u5f00\\u53d1\\u8005\\u5de5\\u5177\",\"show_type\":\"2\",\"node_type\":\"1\",\"is_shortcut\":\"2\",\"sort\":\"\",\"remark\":\"\",\"node_pid\":\"1\",\"data\":[],\"pj_id\":0,\"status\":1,\"level\":2}],\"roleAccess\":[{\"role_id\":1,\"node_id\":\"80\"},{\"role_id\":12,\"node_id\":\"80\"},{\"role_id\":13,\"node_id\":\"80\"}]}}', 1644464548);
+INSERT INTO `t_admin_operation_log` VALUES (201, 'app\\index\\logic\\Config::menuAddSave', 'testadmin', '{\"type\":2,\"oldData\":[],\"data\":{\"actionName\":{\"0\":{\"node_title\":\"\\u7528\\u6237\\u64cd\\u4f5c\\u65e5\\u5fd7\\u5217\\u8868\",\"show_type\":\"1\",\"node_type\":\"1\",\"is_shortcut\":\"1\",\"sort\":\"\",\"remark\":\"\",\"node_pid\":\"80\",\"data\":\"\\/index\\/DevTool\\/userOperationList.html\",\"pj_id\":0,\"status\":1,\"level\":3},\"2\":{\"node_title\":\"\\u7528\\u6237\\u64cd\\u4f5c\\u65e5\\u5fd7\\u5217\\u8868\\u6570\\u636e\",\"show_type\":\"1\",\"node_type\":\"1\",\"is_shortcut\":\"2\",\"sort\":\"1\",\"remark\":\"\",\"node_pid\":\"80\",\"data\":\"\\/index\\/DevTool\\/userOperationListData.html\",\"pj_id\":0,\"status\":1,\"level\":3}},\"roleAccess\":[{\"role_id\":1,\"node_id\":\"81\"},{\"role_id\":12,\"node_id\":\"81\"},{\"role_id\":13,\"node_id\":\"81\"},{\"role_id\":1,\"node_id\":\"82\"},{\"role_id\":12,\"node_id\":\"82\"},{\"role_id\":13,\"node_id\":\"82\"}]}}', 1644464955);
+INSERT INTO `t_admin_operation_log` VALUES (202, 'app\\index\\logic\\Config::menuEditSave', 'testadmin', '{\"type\":1,\"oldData\":{\"node_id\":82,\"pj_id\":0,\"node_title\":\"\\u7528\\u6237\\u64cd\\u4f5c\\u65e5\\u5fd7\\u5217\\u8868\\u6570\\u636e\",\"show_type\":1,\"node_pid\":80,\"node_type\":1,\"data\":\"\\/index\\/DevTool\\/userOperationListData.html\",\"status\":1,\"sort\":1,\"level\":3,\"remark\":\"\",\"is_shortcut\":2},\"data\":{\"node_title\":\"\\u7528\\u6237\\u64cd\\u4f5c\\u65e5\\u5fd7\\u5217\\u8868\\u6570\\u636e\",\"node_pid\":81,\"show_type\":1,\"node_type\":1,\"status\":1,\"data\":\"\\/index\\/DevTool\\/userOperationListData.html\",\"sort\":1,\"is_shortcut\":2}}', 1644464976);
+INSERT INTO `t_admin_operation_log` VALUES (203, 'app\\index\\logic\\Config::menuEditSave', 'testadmin', '{\"type\":1,\"oldData\":{\"node_id\":82,\"pj_id\":0,\"node_title\":\"\\u7528\\u6237\\u64cd\\u4f5c\\u65e5\\u5fd7\\u5217\\u8868\\u6570\\u636e\",\"show_type\":1,\"node_pid\":81,\"node_type\":1,\"data\":\"\\/index\\/DevTool\\/userOperationListData.html\",\"status\":1,\"sort\":1,\"level\":3,\"remark\":\"\",\"is_shortcut\":2},\"data\":{\"node_title\":\"\\u7528\\u6237\\u64cd\\u4f5c\\u65e5\\u5fd7\\u5217\\u8868\\u6570\\u636e\",\"node_pid\":81,\"show_type\":3,\"node_type\":1,\"status\":1,\"data\":\"\\/index\\/DevTool\\/userOperationListData.html\",\"sort\":1,\"is_shortcut\":2}}', 1644464985);
+INSERT INTO `t_admin_operation_log` VALUES (204, 'app\\index\\logic\\Config::menuAddSave', 'testadmin', '{\"type\":2,\"oldData\":[],\"data\":{\"actionName\":[{\"node_title\":\"\\u67e5\\u770b\\u7528\\u6237\\u64cd\\u4f5c\\u65e5\\u5fd7\\u6570\\u636e\\u8be6\\u60c5\",\"show_type\":\"3\",\"node_type\":\"1\",\"is_shortcut\":\"2\",\"sort\":\"\",\"remark\":\"\",\"node_pid\":\"81\",\"data\":\"\\/index\\/DevTool\\/checkUserOperation.html\",\"pj_id\":0,\"status\":1,\"level\":4}],\"roleAccess\":[{\"role_id\":1,\"node_id\":\"83\"},{\"role_id\":12,\"node_id\":\"83\"},{\"role_id\":13,\"node_id\":\"83\"}]}}', 1644484187);
 
 -- ----------------------------
 -- Table structure for t_admin_role
@@ -404,6 +432,10 @@ INSERT INTO `t_admin_role_access` VALUES (1, 75);
 INSERT INTO `t_admin_role_access` VALUES (1, 76);
 INSERT INTO `t_admin_role_access` VALUES (1, 77);
 INSERT INTO `t_admin_role_access` VALUES (1, 78);
+INSERT INTO `t_admin_role_access` VALUES (1, 80);
+INSERT INTO `t_admin_role_access` VALUES (1, 81);
+INSERT INTO `t_admin_role_access` VALUES (1, 82);
+INSERT INTO `t_admin_role_access` VALUES (1, 83);
 INSERT INTO `t_admin_role_access` VALUES (2, 1);
 INSERT INTO `t_admin_role_access` VALUES (2, 4);
 INSERT INTO `t_admin_role_access` VALUES (2, 13);
@@ -500,6 +532,10 @@ INSERT INTO `t_admin_role_access` VALUES (12, 75);
 INSERT INTO `t_admin_role_access` VALUES (12, 76);
 INSERT INTO `t_admin_role_access` VALUES (12, 77);
 INSERT INTO `t_admin_role_access` VALUES (12, 78);
+INSERT INTO `t_admin_role_access` VALUES (12, 80);
+INSERT INTO `t_admin_role_access` VALUES (12, 81);
+INSERT INTO `t_admin_role_access` VALUES (12, 82);
+INSERT INTO `t_admin_role_access` VALUES (12, 83);
 INSERT INTO `t_admin_role_access` VALUES (13, 1);
 INSERT INTO `t_admin_role_access` VALUES (13, 4);
 INSERT INTO `t_admin_role_access` VALUES (13, 8);
@@ -560,6 +596,10 @@ INSERT INTO `t_admin_role_access` VALUES (13, 75);
 INSERT INTO `t_admin_role_access` VALUES (13, 76);
 INSERT INTO `t_admin_role_access` VALUES (13, 77);
 INSERT INTO `t_admin_role_access` VALUES (13, 78);
+INSERT INTO `t_admin_role_access` VALUES (13, 80);
+INSERT INTO `t_admin_role_access` VALUES (13, 81);
+INSERT INTO `t_admin_role_access` VALUES (13, 82);
+INSERT INTO `t_admin_role_access` VALUES (13, 83);
 
 -- ----------------------------
 -- Table structure for t_admin_user
@@ -591,7 +631,7 @@ INSERT INTO `t_admin_user` VALUES (10, 'test2', '0192023a7bbd73250516f069df18b50
 INSERT INTO `t_admin_user` VALUES (11, 'test3', '8ad8757baa8564dc136c1e07507f4a98', '测试3', 3, '6bb8070a3bdfca18d9b62e40545038e5', 1642642534, 1642643985, '', 0);
 INSERT INTO `t_admin_user` VALUES (12, 'test4', '86985e105f79b95d6bc918fb45ec7727', '测试4', 3, '323d35b5150fb2f8513ead9daca2dca1', 1643099246, 1643100654, '', 0);
 INSERT INTO `t_admin_user` VALUES (13, 'test5', 'e3d704f3542b44a621ebed70dc0efe13', '测试5', 2, 'ea145d8e80c765fc8c69eb7c4d1ee36a', 1643100794, 1643179167, '', 0);
-INSERT INTO `t_admin_user` VALUES (17, 'testadmin', '13c33ed280d84810222cb0b77b964162', '测试账号', 1, '4469e3edb7d18d3be872201fefec2db7', 1643178539, 1643184338, '127.0.0.1', 1644389724);
+INSERT INTO `t_admin_user` VALUES (17, 'testadmin', '13c33ed280d84810222cb0b77b964162', '测试账号', 1, '4469e3edb7d18d3be872201fefec2db7', 1643178539, 1643184338, '127.0.0.1', 1644472499);
 
 -- ----------------------------
 -- Table structure for t_bind_admin_role
@@ -688,7 +728,6 @@ CREATE TABLE `t_config_pj`  (
 -- ----------------------------
 INSERT INTO `t_config_pj` VALUES (1, 0, 1, 'system', '系统后台 - 内网', 1);
 INSERT INTO `t_config_pj` VALUES (2, 0, 2, 'system', '系统后台 - 外测', 1);
-INSERT INTO `t_config_pj` VALUES (3, 0, 3, 'system', '系统后台 - 正式', 1);
 INSERT INTO `t_config_pj` VALUES (4, 1, 1, 'issue', '发行后台 - 内网', 1);
 INSERT INTO `t_config_pj` VALUES (7, 2, 1, 'sdk', 'sdk - 内网', 1);
 INSERT INTO `t_config_pj` VALUES (8, 1, 2, 'issue', '发行后台 - 外测', 1);
@@ -743,12 +782,13 @@ CREATE TABLE `t_config_pj_server`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `pj_id`(`pj_id`) USING BTREE,
   INDEX `environ_id`(`environ_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '项目服务器域名配置' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '项目服务器域名配置' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_config_pj_server
 -- ----------------------------
 INSERT INTO `t_config_pj_server` VALUES (1, 0, 1, 'tp5-system-test3', '127.0.0.1', '127.0.0.1');
 INSERT INTO `t_config_pj_server` VALUES (2, 0, 2, 'tp5-system-test3', '127.0.0.1', '127.0.0.1');
+INSERT INTO `t_config_pj_server` VALUES (3, 1, 1, 'tp5-issue-test3', '127.0.0.1', '127.0.0.1');
 
 SET FOREIGN_KEY_CHECKS = 1;
