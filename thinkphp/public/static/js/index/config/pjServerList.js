@@ -7,6 +7,7 @@ var pjFunData = [];
 $(function(){
     let environId = $('select[name="environId"]').val();
     pjData(environId);
+    layuiForm();
 })
 
 form.on('select(environId)', function(data){
@@ -23,12 +24,12 @@ function pjData(environId) {
         dataType: "json",
         success:function(result){
             pjFunData = result;
+            $("#pjId").append($("<option>").val('-1').text('全部'));
             $.each(result, function(key, val) {
                 option = $("<option>").val(key).text(val);
                 $("#pjId").append(option);
                 form.render('select');
             })
-            layuiForm();
         }
     })
 }

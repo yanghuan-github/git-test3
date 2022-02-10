@@ -1,7 +1,8 @@
 <?php
 namespace app\index\controller;
 
-use app\common\constant\Config as ConfigConstant;
+// 引入基础常量
+use app\common\constant\Base as BaseConstant;
 class Config extends BaseController
 {
     
@@ -77,7 +78,9 @@ class Config extends BaseController
      */
     public function paramEditSave()
     {
-        $this->funCheckAuth();
+        if ($this->isRoot == 'no') {
+            return BaseConstant::USER_AUTH_ERROR;
+        }
         $id         = input('id','','int');
         $name       = input('name','','string');
         $value      = input('value','','string');
@@ -97,7 +100,9 @@ class Config extends BaseController
      */
     public function paramAddSave()
     {
-        $this->funCheckAuth();
+        if ($this->isRoot == 'no') {
+            return BaseConstant::USER_AUTH_ERROR;
+        }
         $name       = input('name','','string');
         $value      = input('value','','string');
         $msg        = input('msg','','string');
@@ -116,7 +121,9 @@ class Config extends BaseController
      */
     public function paramDele()
     {
-        $this->funCheckAuth();
+        if ($this->isRoot == 'no') {
+            return BaseConstant::USER_AUTH_ERROR;
+        }
         $id     = input('id','','int');
         return model('Config','logic')->paramDele($id);
     }
@@ -209,7 +216,9 @@ class Config extends BaseController
      */
     public function pjAddSave()
     {
-        $this->funCheckAuth();
+        if ($this->isRoot == 'no') {
+            return BaseConstant::USER_AUTH_ERROR;
+        }
         $pjId       = input('pjId',0,'int');
         $environId  = input('environId',0,'int');
         $pjLogo     = input('pjLogo','','string');
@@ -229,7 +238,9 @@ class Config extends BaseController
      */
     public function pjEditSave()
     {
-        $this->funCheckAuth();
+        if ($this->isRoot == 'no') {
+            return BaseConstant::USER_AUTH_ERROR;
+        }
         $id         = input('id',0,'int');
         $pjId       = input('pjId',0,'int');
         $environId  = input('environId',0,'int');
@@ -251,7 +262,9 @@ class Config extends BaseController
     public function pjDele()
     {
 
-        $this->funCheckAuth();
+        if ($this->isRoot == 'no') {
+            return BaseConstant::USER_AUTH_ERROR;
+        }
         $id     = input('id',0,'int');
         return model('Config','logic')->pjDele($id);
     }
@@ -351,7 +364,7 @@ class Config extends BaseController
         $data = input('post.');
         $nodePid        =   $data['nodePid']; 
         if ($nodePid == 0 && !$this->isRoot) {
-            return ConfigConstant::USER_AUTH_ERROR;
+            return BaseConstant::USER_AUTH_ERROR;
         }
         $modular        =   $data['modular']; 
         $controller     =   $data['controller']; 
@@ -441,7 +454,9 @@ class Config extends BaseController
         $remark     = input('remark','','string');
         $isShortcut = input('isShortcut',0,'int');
 
-        $this->funCheckAuth();
+        if ($this->isRoot == 'no') {
+            return BaseConstant::USER_AUTH_ERROR;
+        }
         // 编辑
         return model('Config','logic')->menuEditSave($nodeId,$nodeTitle,$nodePid,$showType,$nodeType,$status,$modular,$controller,$action,$sort,$remark,$isShortcut);
     }
@@ -456,7 +471,9 @@ class Config extends BaseController
     public function menuDele()
     {
         $nodeId     = input('nodeId',0,'int');
-        $this->funCheckAuth();
+        if ($this->isRoot == 'no') {
+            return BaseConstant::USER_AUTH_ERROR;
+        }
 
         return model('Config','logic')->menuDele($nodeId);
     }
@@ -542,7 +559,9 @@ class Config extends BaseController
      */
     public function dbAddSave()
     {
-        $this->funCheckAuth();
+        if ($this->isRoot == 'no') {
+            return BaseConstant::USER_AUTH_ERROR;
+        }
         $dbId       = input('dbId',0,'int');
         $type       = input('type',0,'int');
         $dbName     = input('dbName','','string');
@@ -561,7 +580,9 @@ class Config extends BaseController
      */
     public function dbEditSave()
     {
-        $this->funCheckAuth();
+        if ($this->isRoot == 'no') {
+            return BaseConstant::USER_AUTH_ERROR;
+        }
         $dbId       = input('dbId',0,'int');
         $type       = input('type',0,'int');
         $dbName     = input('dbName','','string');
@@ -580,7 +601,9 @@ class Config extends BaseController
      */
     public function dbDele()
     {
-        $this->funCheckAuth();
+        if ($this->isRoot == 'no') {
+            return BaseConstant::USER_AUTH_ERROR;
+        }
         $dbId     = input('dbId',0,'int');
         return model('Config','logic')->dbDele($dbId);
     }
@@ -687,9 +710,11 @@ class Config extends BaseController
      */
     public function pjDatabaseAddSave()
     {
-        $this->funCheckAuth();
+        if ($this->isRoot == 'no') {
+            return BaseConstant::USER_AUTH_ERROR;
+        }
         $type       = input('type',0,'int');
-        $environId  = input('environId','','string');
+        $environId  = input('environId',0,'int');
         $dbType     = input('dbType','','string');
         $authId     = input('authId',0,'int');
         $dbHost     = input('dbHost','','string');
@@ -711,7 +736,9 @@ class Config extends BaseController
      */
     public function pjDatabaseEditSave()
     {
-        $this->funCheckAuth();
+        if ($this->isRoot == 'no') {
+            return BaseConstant::USER_AUTH_ERROR;
+        }
         $id         = input('id',0,'int');
         $funType    = input('funType',1,'int');
         $type       = input('type',0,'int');
@@ -737,7 +764,9 @@ class Config extends BaseController
      */
     public function pjDatabaseDele()
     {
-        $this->funCheckAuth();
+        if ($this->isRoot == 'no') {
+            return BaseConstant::USER_AUTH_ERROR;
+        }
         $id     = input('id',0,'int');
         return model('Config','logic')->pjDatabaseDele($id);
     }
@@ -786,6 +815,28 @@ class Config extends BaseController
      */
     public function pjServerEdit()
     {
+        $id         = input('id',0,'int');
+        $pjServerInfo = [
+            'pj_id'         =>  -1,
+            'environ_id'    =>  '',
+            'pj_url'        =>  '',
+            'pj_ip'         =>  '',
+            'pj_while_ip'   =>  '',
+        ];
+        if ($id) {
+            $pjServerInfo = model('Config','logic')->getpjServerInfo('pj_id,environ_id,pj_url,pj_ip,pj_while_ip',$id);
+        }
+        $this->assign([
+            'id'        =>  $id,
+            'pjSelect'  =>  $pjServerInfo['pj_id'], 
+        ]);
+        $this->form([
+            ['select','environId','environId','环境',KV('environType'),$pjServerInfo['environ_id'],'lay-filter=environId'],
+            ['select','pjId','pjId','项目',[]],
+            ['input','pjUrl','pjUrl','项目url','项目url',$pjServerInfo['pj_url']],
+            ['input','pjIp','pjIp','负载IP','负载IP(多个用逗号隔开即可)',$pjServerInfo['pj_ip']],
+            ['input','pjWhileIp','pjWhileIp','白名单IP','白名单IP(多个用逗号隔开即可)',$pjServerInfo['pj_while_ip']],
+        ]);
         return view('pjServerEdit');
     }
 
@@ -798,7 +849,17 @@ class Config extends BaseController
      */
     public function pjServerAddSave()
     {
+        if ($this->isRoot == 'no') {
+            return BaseConstant::USER_AUTH_ERROR;
+        }
+        $environId  = input('environId',0,'int');
+        $pjId       = input('pjId',0,'int');
+        $pjUrl      = input('pjUrl','','string');
+        $pjIp       = input('pjIp','','string');
+        $pjWhileIp  = input('pjWhileIp','','string');
 
+        // 新增
+        return model('Config','logic')->pjServerAddSave($environId,$pjId,$pjUrl,$pjIp,$pjWhileIp);
     }
 
     /**
@@ -808,9 +869,20 @@ class Config extends BaseController
      * @author 1305964327@qq.com
      * @date 2022-02-09
      */
-    public function pjServereEditSave()
+    public function pjServerEditSave()
     {
+        if ($this->isRoot == 'no') {
+            return BaseConstant::USER_AUTH_ERROR;
+        }
+        $id         = input('id',0,'int');
+        $environId  = input('environId',0,'int');
+        $pjId       = input('pjId',0,'int');
+        $pjUrl      = input('pjUrl','','string');
+        $pjIp       = input('pjIp','','string');
+        $pjWhileIp  = input('pjWhileIp','','string');
 
+        // 新增
+        return model('Config','logic')->pjServerEditSave($id,$environId,$pjId,$pjUrl,$pjIp,$pjWhileIp);
     }
 
     /**
@@ -822,6 +894,10 @@ class Config extends BaseController
      */
     public function pjServerDele()
     {
-
+        if ($this->isRoot == 'no') {
+            return BaseConstant::USER_AUTH_ERROR;
+        }
+        $id     = input('id',0,'int');
+        return model('Config','logic')->pjServerDele($id);
     }
 }

@@ -334,7 +334,7 @@ class Config extends BaseLogic
             model('ConfigPj')->commit();
 
             // 刷新缓存
-            vagueDeleteCache('__common_pjIdName_');
+            cacheDele('__common_pjIdName_');
             return ConfigConstant::SUCCESS;
         } catch(\Exception $e) {
             $data = [
@@ -396,7 +396,7 @@ class Config extends BaseLogic
             model('ConfigPj')->commit();
 
             // 刷新缓存
-            vagueDeleteCache('__common_pjIdName_');
+            cacheDele('__common_pjIdName_');
             return ConfigConstant::SUCCESS;
         } catch(\Exception $e) {
             $data = [
@@ -436,7 +436,7 @@ class Config extends BaseLogic
             model('ConfigPj')->commit();
               
             // 刷新缓存
-            vagueDeleteCache('__common_pjIdName_');
+            cacheDele('__common_pjIdName_');
             return ConfigConstant::SUCCESS;
         } catch(\Exception $e) {
             $data = [
@@ -801,9 +801,9 @@ class Config extends BaseLogic
     private function claerMenuCache()
     {
         // 清除缓存
-        vagueDeleteCache('__auth_data_');
-        vagueDeleteCache('__admin_node_access_pj_id_');
-        vagueDeleteCache('__shortcut_node_pj_id');
+        cacheDele('__auth_data_');
+        cacheDele('__admin_node_access_pj_id_');
+        cacheDele('__shortcut_node_pj_id');
     }
 
     /**
@@ -1364,7 +1364,7 @@ class Config extends BaseLogic
             model('ConfigPjDatabase')->commit();
               
             // 刷新缓存
-            vagueDeleteCache('__common_pjIdName_');
+            cacheDele('__common_pjIdName_');
             return ConfigConstant::SUCCESS;
         } catch(\Exception $e) {
             $data = [
@@ -1394,7 +1394,8 @@ class Config extends BaseLogic
         if ($environId) {
             $where[] = ['environ_id','=',$environId];
         }
-        if ($pjId) {
+        // 特殊处理
+        if ($pjId && $pjId != -1) {
             $where[] = ['pj_id','=',$pjId];
         }
         $field  = '*';
@@ -1402,5 +1403,181 @@ class Config extends BaseLogic
         $data   = $model->getList($field,$where,null,$pageLimit);
         $count  = $model->field('id')->where($where)->count();
         return  ['code' => 0, 'msg' => '','count' => $count,'data' => $data];
+    }
+
+    /**
+     * 获取项目服务器信息 - 单条
+     * @param string $field
+     * @param string $id
+     * @param string $order
+     * @return void
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-09
+     */
+    public function getpjServerInfo($field = '*',$id = '',$order = '')
+    {
+        $where = [];
+        if ($id) {
+            $where['id'] = $id;
+        }
+        return model('ConfigPjServer')->getDetail($field,$where,$order);
+    }
+
+    /**
+     * 项目服务器新增保存
+     * @param int $environId
+     * @param int $pjId
+     * @param string $pjUrl
+     * @param string $pjIp
+     * @param string $pjWhileIp
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-09
+     */
+    public function pjServerAddSave($environId,$pjId,$pjUrl,$pjIp,$pjWhileIp)
+    {
+        if (!notEmpty([$environId,$pjId,$pjUrl,$pjIp,$pjWhileIp])) {
+            return ConfigConstant::LACK_PARAMS;
+        }
+        $add = [];
+        if ($environId) {
+            $add['environ_id'] = $environId;
+        }
+        if ($pjId) {
+            $add['pj_id'] = $pjId;
+        }
+        if ($pjUrl) {
+            $add['pj_url'] = $pjUrl;
+        }
+        if ($pjIp) {
+            $add['pj_ip'] = $pjIp;
+        }
+        if ($pjWhileIp) {
+            $add['pj_while_ip'] = $pjWhileIp;
+        }
+        model('ConfigPjServer')->startTrans();
+        try {
+            // 拼装记录数据
+            $data = [
+                'type'      =>  Log::LOG_ADD,
+                'oldData'   =>  [],
+                'data'      =>  $add,
+            ];
+            model('ConfigPjServer')->insert($add);
+            $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
+            model('ConfigPjServer')->commit();
+
+            return ConfigConstant::SUCCESS;
+        } catch(\Exception $e) {
+            $data = [
+                'msg'   =>  $e->getMessage(),
+                'data'  =>  input('post.'),
+            ];
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
+            // 后续都是需要写入日志 和 操作记录的
+            model('ConfigPjServer')->rollback();
+            return ConfigConstant::ERROR;
+        }
+    }
+
+    /**
+     * 项目服务器编辑保存
+     * @param int $id
+     * @param int $environId
+     * @param int $pjId
+     * @param string $pjUrl
+     * @param string $pjIp
+     * @param string $pjWhileIp
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-09
+     */
+    public function pjServerEditSave($id,$environId,$pjId,$pjUrl,$pjIp,$pjWhileIp)
+    {
+        if (!notEmpty([$id,$environId,$pjId,$pjUrl,$pjIp,$pjWhileIp])) {
+            return ConfigConstant::LACK_PARAMS;
+        }
+        $update = [];
+        if ($environId) {
+            $update['environ_id'] = $environId;
+        }
+        if ($pjId) {
+            $update['pj_id'] = $pjId;
+        }
+        if ($pjUrl) {
+            $update['pj_url'] = $pjUrl;
+        }
+        if ($pjIp) {
+            $update['pj_ip'] = $pjIp;
+        }
+        if ($pjWhileIp) {
+            $update['pj_while_ip'] = $pjWhileIp;
+        }
+        model('ConfigPjServer')->startTrans();
+        try {
+            // 拼装记录数据
+            $data = [
+                'type'      =>  Log::LOG_UPDATE,
+                'oldData'   =>  $this->getpjServerInfo('*',$id),
+                'data'      =>  $update,
+            ];
+            model('ConfigPjServer')->where('id',$id)->update($update);
+            // 写入操作记录
+            $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
+            model('ConfigPjServer')->commit();
+
+            return ConfigConstant::SUCCESS;
+        } catch(\Exception $e) {
+            $data = [
+                'msg'   =>  $e->getMessage(),
+                'data'  =>  input('post.'),
+            ];
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
+            // 后续都是需要写入日志 和 操作记录的
+            model('ConfigPjServer')->rollback();
+            return ConfigConstant::ERROR;
+        }
+    }
+
+    /**
+     * 项目服务器删除
+     * @param int $id
+     * @return int
+     * @author yanghuan
+     * @author 1305964327@qq.com
+     * @date 2022-02-10
+     */
+    public function pjServerDele($id)
+    {
+        if (!$id) {
+            return ConfigConstant::LACK_PARAMS;
+        }
+        model('ConfigPjServer')->startTrans();
+        try {
+            // 拼装记录数据
+            $data = [
+                'type'      =>  Log::LOG_DELETE,
+                'oldData'   =>  $this->getpjServerInfo('*',$id),
+            ];
+            model('ConfigPjServer')->where('id',$id)->delete();
+            // 写入操作记录
+            $this->operationLog(__METHOD__,session('loginName'),json_encode($data));
+            model('ConfigPjServer')->commit();
+              
+            $this->dbTypeIdName(true);
+            return ConfigConstant::SUCCESS;
+        } catch(\Exception $e) {
+            $data = [
+                'msg'   =>  $e->getMessage(),
+                'data'  =>  input('post.'),
+            ];
+            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
+            // 后续都是需要写入日志 和 操作记录的
+            model('ConfigPjServer')->rollback();
+            return ConfigConstant::ERROR;
+        }
     }
 }

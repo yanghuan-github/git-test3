@@ -244,7 +244,9 @@ function logs($fileName = '',$data = '',$file = 'fun'){
 }
 
 /**
- * 缓存模糊删除
+ * 缓存删除通用方法
+ * 文件缓存模糊删除
+ * redis缓存根据key删除
  * @param string $name
  * @param string $type
  * @return void
@@ -252,25 +254,44 @@ function logs($fileName = '',$data = '',$file = 'fun'){
  * @author 1305964327@qq.com
  * @date 2022-01-25
  */
-function vagueDeleteCache($name,$type = 'file')
+function cacheDele($name,$type = 'file')
 {
-    $config = C($type,'cache');
-    $root   = $config['path'] . $config['prefix'];
-    $list   = glob($root . "/" . $name . "*");
-    if ($list) {
-        try {
-            foreach ($list as $v) {
-                unlink($v);
-            }
-        } catch (\Exception $e) {
-            $data = [
-                'msg'   =>  $e->getMessage(),
-                'data'  =>  [
-                    'name'     =>  $name,
-                    'type'     =>  $type,
-                ],
-            ];
-            logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
+    if ($type == 'file') {
+        $config = C($type,'cache');
+        $root   = $config['path'] . $config['prefix'];
+        $list   = glob($root . "/" . $name . "*");
+        if ($list) {
+            fileDeleCache($list,$name,$type);
         }
+    } else {
+        Cache::store($type)->rm($name);
+    }
+}
+
+/**
+ * 文件缓存模糊删除
+ * @param array  $list 模糊文件名路径数组合集
+ * @param string $name 模糊文件名
+ * @param string $type 默认为file
+ * @return void
+ * @author yanghuan
+ * @author 1305964327@qq.com
+ * @date 2022-02-10
+ */
+function fileDeleCache($list,$name,$type)
+{
+    try {
+        foreach ($list as $v) {
+            unlink($v);
+        }
+    } catch (\Exception $e) {
+        $data = [
+            'msg'   =>  $e->getMessage(),
+            'data'  =>  [
+                'name'     =>  $name,
+                'type'     =>  $type,
+            ],
+        ];
+        logs(__FUNCTION__,json_encode($data,JSON_UNESCAPED_UNICODE));
     }
 }

@@ -9,9 +9,6 @@ use app\common\logic\Auth;
 // 引入工具类
 use app\common\traits\View;
 
-// 引入基础常量
-use app\common\constant\Base as BaseConstant;
-
 class BaseController extends Controller
 {
 
@@ -123,20 +120,5 @@ class BaseController extends Controller
             $this->cache('redis')->set($cache,$return,3600 * 3);
         }
         return $return;
-    }
-    
-
-    /**
-     * 检查方法是否受限
-     * @return int
-     * @author yanghuan
-     * @author 1305964327@qq.com
-     * @date 2022-01-26
-     */
-    protected function funCheckAuth()
-    {
-        if (!$this->isRoot) {
-            return BaseConstant::USER_AUTH_ERROR;
-        }
     }
 }
