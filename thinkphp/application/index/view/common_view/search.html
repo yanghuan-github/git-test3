@@ -1,3 +1,13 @@
+<script src="__LAYUI__/layui/layui.all.js"></script>
+<script src="__JS__/common/jquery.min.js"></script>
+<style>
+    .layui-form-mid {
+        display: inline-block;
+        float: unset;
+        margin-left: 10px;
+    }
+</style>
+
 {present name="$search"}
     {foreach $search as $key => $val }
         {switch $val[0]}
@@ -29,6 +39,11 @@
             {case input}
                 <!-- 输入框开始 -->
                 {include file="common_view/search/input" }
+                <!-- 输入框结束 -->
+            {/case}
+            {case search_timeRegionView}
+                <!-- 输入框开始 -->
+                {include file="common_view/search/timeRegion" }
                 <!-- 输入框结束 -->
             {/case}
         {/switch}

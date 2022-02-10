@@ -1,0 +1,11 @@
+<div class="layui-form-item">
+    <label class="layui-form-label">环境：</label>
+    <div class="layui-input-block">
+        <select name="environId" id="environId" lay-search="" {present name="environViewFun"} {$environViewFun} {/present}>
+            {foreach $environView as $key => $val}
+                <option value="{$key}"{present name="environViewValue"} {if condition="$key eq $environViewValue" }selected{/if} {/present} >{$val}</option>
+            {/foreach}
+        </select>
+    </div>
+</div>
+<hr>

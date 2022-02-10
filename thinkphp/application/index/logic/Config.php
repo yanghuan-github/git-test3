@@ -542,14 +542,16 @@ class Config extends BaseLogic
      * @author 1305964327@qq.com
      * @date 2022-01-20
      */
-    public function getNodeIdName()
+    public function getNodeIdName($nodeId)
     {
         $data = model('AdminNode')->getColumn([],'node_id,node_pid,level,node_title');
         $data = list_to_tree($data,'node_id','node_pid');
         $data = tree_to_list($data);
         $temp = [];
         foreach ($data as $val) {
-            $temp[$val['node_id']] = str_repeat('|-----',$val['level'] - 1).$val['node_title'];
+            if ($val['node_id'] !=  $nodeId) {
+                $temp[$val['node_id']] = str_repeat('|-----',$val['level'] - 1).$val['node_title'];
+            }
         }
         unset($data);
         return $temp;
@@ -586,14 +588,15 @@ class Config extends BaseLogic
      */
     public function menuAddSave($nodePid,$modular,$controller,$actionName,$role)
     {
-        if (!notEmpty([$modular,$controller])) {
-            return ConfigConstant::LACK_PARAMS;
-        }
         $pjId = C('pj_id');
         $level = $this->getMenuLevel($nodePid);
         foreach ($actionName as $key => $val) {
             $actionName[$key]['node_pid']   = $nodePid;
-            $actionName[$key]['data']       = '/'.$modular.'/'.$controller.'/'.$val['action'].'.html';
+            if ($modular && $controller) {
+                $actionName[$key]['data'] = '/'.$modular.'/'.$controller.'/'.$val['action'].'.html';
+            } else {
+                $actionName[$key]['data'] = [];
+            }
             $actionName[$key]['pj_id']      = $pjId;
             $actionName[$key]['status']     = 1;
             $actionName[$key]['level']      = $level + 1;

@@ -1,7 +1,7 @@
 <div class="layui-form-item">
     <label class="layui-form-label">角色组：</label>
     <div class="layui-input-block">
-        <select name="roleId" id="roleId" lay-search="">
+        <select name="roleId" id="roleId" lay-search="" {present name="roleViewFun"} {$roleViewFun} {/present}>
             {if condition="$id neq 0"}
                 <option value="" selected>未绑定角色组</option>
             {/if}
